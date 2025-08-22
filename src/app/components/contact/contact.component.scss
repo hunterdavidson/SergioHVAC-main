@@ -1,3 +1,4 @@
+/* Validation error text */
 .invalid {
   color: #ffb4b4;
   font-size: 0.9rem;
@@ -5,7 +6,31 @@
   margin-bottom: 0.75rem;
 }
 
+/* --- Contact button styles --- */
+.btn.dynamic-button,
+.dynamic-button {
+  background: #6C91C2;        /* silver-blue */
+  border-color: #6C91C2;
+  color: #FFFFFF;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover */
+.btn.dynamic-button:hover,
+.dynamic-button:hover {
+  background: #5273A8;        /* darker blue on hover */
+  border-color: #5273A8;
+  color: #FFFFFF;
+}
+
+/* Disabled (support both :disabled and [disabled]) */
+.btn.dynamic-button:disabled,
+.btn.dynamic-button[disabled],
+.dynamic-button:disabled,
 .dynamic-button[disabled] {
-  opacity: 0.6;
+  background: #cccccc;        /* light gray when disabled */
+  border-color: #cccccc;
+  color: #FFFFFF;
   cursor: not-allowed;
+  transition: background 0s, border-color 0s;
 }

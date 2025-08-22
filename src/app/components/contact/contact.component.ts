@@ -6,7 +6,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 type LeadPayload = {
   name: string;
   email: string;
-  phone?: string;
+  phone: string; // now required
   message: string;
   page_path?: string;
   utm?: {
@@ -14,7 +14,6 @@ type LeadPayload = {
     medium?: string;
     campaign?: string;
   };
-  // hp?: string; // (optional honeypot if you add one later)
 };
 
 @Component({
@@ -22,14 +21,14 @@ type LeadPayload = {
   standalone: true,
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
-  imports: [CommonModule, FormsModule, HttpClientModule] // 👈 fixes *ngIf, ngModel, ngForm, HttpClient
+  imports: [CommonModule, FormsModule, HttpClientModule]
 })
 export class ContactComponent {
   loading = false;
   isSubmitted = false;
   error = '';
 
-  formData: { name: string; email: string; phone?: string; message: string } = {
+  formData: { name: string; email: string; phone: string; message: string } = {
     name: '',
     email: '',
     phone: '',
@@ -47,7 +46,7 @@ export class ContactComponent {
       const payload: LeadPayload = {
         name: this.formData.name.trim(),
         email: this.formData.email.trim(),
-        phone: this.formData.phone?.trim() || undefined,
+        phone: this.formData.phone.trim(),
         message: this.formData.message.trim(),
         page_path: typeof window !== 'undefined' ? window.location.pathname : '',
         utm: this.getUtm(),

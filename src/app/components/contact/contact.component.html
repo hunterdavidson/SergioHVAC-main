@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <!-- Optional Phone -->
+      <!-- Phone field (required) -->
       <div class="row">
         <div class="col-md-12">
           <input
@@ -49,13 +49,14 @@
             id="phone"
             name="phone"
             class="form-control mb-3"
-            placeholder="Phone (optional)"
+            placeholder="Phone *"
+            required
             [(ngModel)]="formData.phone"
             #phone="ngModel"
             pattern="^[0-9()+\\-\\s\\.]{7,20}$"
           />
           <div class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
-            Please enter a valid phone number.
+            A valid phone number is required.
           </div>
         </div>
       </div>
