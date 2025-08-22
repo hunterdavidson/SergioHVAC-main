@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: #e6e6e6;">
+    <div class="container">
+        <a class="navbar-brand text-dark" href="#page-top">
+            <img src="logo-simple.png" alt="HVAC Solutions Logo" style="height: 30px; margin-right: 10px;" />
+            S.V. HVAC Services
+        </a>
+       <button
+            class="navbar-toggler"
+            type="button"
+            (click)="toggleNavbar()"
+            aria-label="Toggle navigation"
+        >
+            <span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    [ngClass]="togglerIconClass"
+                    class="navbar-toggler-icon-svg"
+                    width="30"
+                    height="30"
+                    fill="#000000"
+                    viewBox="0 0 16 16"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M1.5 12a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13z"
+                    />
+                </svg>
+            </span>
+        </button> 
+        <div [class.show]="isMenuOpen" class="navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#home" style="font-weight: 700;" (click)="closeNavbar()">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#services" style="font-weight: 700;" (click)="closeNavbar()">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#about" style="font-weight: 700;" (click)="closeNavbar()">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#team" style="font-weight: 700;" (click)="closeNavbar()">Team</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="#contact" style="font-weight: 700;" (click)="closeNavbar()">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

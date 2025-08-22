@@ -1,0 +1,99 @@
+<section class="page-section" id="contact">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">Contact Us</h2>
+      <h3 class="section-subheading text-white">We'd love to hear from you.</h3>
+    </div>
+
+    <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+      <div class="row">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control mb-3"
+            placeholder="Your Name *"
+            required
+            [(ngModel)]="formData.name"
+            #name="ngModel"
+          />
+          <div class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">
+            Name is required.
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control mb-3"
+            placeholder="Your Email *"
+            required
+            email
+            [(ngModel)]="formData.email"
+            #email="ngModel"
+          />
+          <div class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">
+            A valid email is required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Phone -->
+      <div class="row">
+        <div class="col-md-12">
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="form-control mb-3"
+            placeholder="Phone (optional)"
+            [(ngModel)]="formData.phone"
+            #phone="ngModel"
+            pattern="^[0-9()+\\-\\s\\.]{7,20}$"
+          />
+          <div class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+            Please enter a valid phone number.
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <textarea
+            id="message"
+            name="message"
+            class="form-control mb-3"
+            rows="5"
+            placeholder="Your Message *"
+            required
+            [(ngModel)]="formData.message"
+            #message="ngModel"
+          ></textarea>
+          <div class="invalid" *ngIf="message.invalid && (message.dirty || message.touched)">
+            Message is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button
+          class="btn btn-xl text-uppercase dynamic-button"
+          type="submit"
+          [disabled]="contactForm.invalid || loading"
+          *ngIf="!isSubmitted"
+        >
+          {{ loading ? 'Sending…' : 'Send Message' }}
+        </button>
+
+        <p class="text-white" *ngIf="isSubmitted">
+          Thank you for your message! We'll get back to you shortly.
+        </p>
+
+        <p class="text-danger mt-2" *ngIf="error && !isSubmitted">{{ error }}</p>
+      </div>
+    </form>
+  </div>
+</section>

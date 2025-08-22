@@ -1,0 +1,53 @@
+/* Ensure the navbar-toggler icon color stays black */
+.navbar-toggler-icon-svg {
+    transition: transform 0.3s ease-in-out; /* Smooth transition for rotation */
+}
+
+/* When the navbar is toggled open (rotate the icon) */
+.navbar-toggler-icon-svg.rotated {
+    transform: rotate(90deg); /* Rotate by 90 degrees when menu is open */
+}
+
+/* Remove focus outline and box-shadow */
+.navbar-toggler:focus {
+    outline: none;
+    box-shadow: none; /* Removes any shadow applied on focus */
+}
+
+.nav-link:focus {
+    outline: none;
+    box-shadow: none; /* Remove focus outline from links */
+}
+
+.nav-link.active {
+    border: none;
+    box-shadow: none;
+}
+
+/* Navbar link hover styles */
+.navbar .nav-link:hover {
+    color: #E64545 !important; /* Soft red on hover */
+    font-weight: bold;
+}
+
+/* Navbar toggler button hover styles */
+.navbar-toggler:hover {
+    background-color: transparent; /* Soft red background on hover */
+    color: #FFFFFF; /* White icon on hover */
+}
+
+.navbar-collapse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  
+    @media (min-width: 992px) {
+      max-height: none;
+      overflow: visible;
+    }
+  }
+  
+  .show {
+    max-height: 500px; /* Adjust based on content */
+  }
+  

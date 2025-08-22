@@ -1,0 +1,49 @@
+html {
+  scroll-behavior: smooth;
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #6C91C2 !important; /* Soft red */
+  border-color: #6C91C2 !important;
+}
+
+.btn-primary:hover {
+  background-color: #5273A8 !important; /* Darker red for hover */
+  border-color: #5273A8 !important;
+}
+
+/* Section Backgrounds */
+.section-light {
+  background-color: #F8F9FA; /* Light gray */
+  color: #212529; /* Text color */
+}
+
+.section-dark {
+  background-color: #6C91C2; /* Silver-blue */
+  color: #FFFFFF; /* White text */
+}
+
+/* Text Colors */
+.text-primary {
+  color: #6C91C2 !important; /* Silver-blue */
+}
+
+.text-danger {
+  color: #E64545 !important; /* Soft red */
+}
+
+/* Footer */
+footer {
+  background-color: #4A678C; /* Darker silver-blue */
+  color: #FFFFFF;
+}
+
+footer a {
+  color: #E64545; /* Soft red links */
+}
+
+footer a:hover {
+  color: #FFFFFF; /* White on hover */
+}
+
