@@ -1,23 +1,30 @@
-// api/leads.js
+// /api/leads.js
+// Force Node runtime on Vercel so we can use server-only libs (Resend, service key)
+module.exports = handler;
+module.exports.config = { runtime: 'nodejs' };
+
 const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
 
 // ---- Env
-const url = process.env['SUPABASE_URL'];
-const serviceKey = process.env['SUPABASE_SERVICE_KEY'];
-const resendKey = process.env['RESEND_API_KEY'];
-const EMAIL_FROM = process.env['EMAIL_FROM'] || 'S.V. HVAC <no-reply@example.com>';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+// Use a safe default so you can test without a custom domain
+const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
-if (!url || !serviceKey) {
-  console.warn('[leads] Missing env vars. SUPABASE_URL or SUPABASE_SERVICE_KEY not set.');
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  console.warn('[leads] Missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
 }
 
-const supabase = createClient(url || '', serviceKey || '');
-const resend = resendKey ? new Resend(resendKey) : null;
+const supabase = createClient(SUPABASE_URL || '', SUPABASE_SERVICE_KEY || '');
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 // ---- Helpers
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e).trim());
 const clean = (v) => (typeof v === 'string' ? v.trim() : v);
+const isValidPhone = (p) => /^[0-9()+\-.\s]{7,20}$/.test(String(p || ''));
+
 function escapeHtml(str = '') {
   return String(str)
     .replace(/&/g,'&amp;')
@@ -28,10 +35,32 @@ function escapeHtml(str = '') {
 }
 
 // ---- Handler
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+async function handler(req, res) {
+  // (optional) very light CORS for local dev; tighten for prod if needed
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Vary', 'Origin');
 
-  const body = req.body || {};
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(204).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  let body = req.body;
+  // In some setups body can be a string — parse it
+  if (typeof body === 'string') {
+    try {
+      body = JSON.parse(body);
+    } catch {
+      return res.status(400).json({ error: 'Invalid JSON body' });
+    }
+  }
+  body = body || {};
+
   const name = clean(body.name);
   const email = clean(body.email);
   const phone = clean(body.phone);
@@ -41,25 +70,27 @@ module.exports = async (req, res) => {
   const hp = clean(body.hp);
 
   // Honeypot
-  if (typeof hp === 'string' && hp !== '') return res.status(200).json({ ok: true });
-
-  // Requireds
-  if (!name || !email || !phone) return res.status(400).json({ error: 'Missing required fields' });
-  if (!isValidEmail(email)) return res.status(400).json({ error: 'Invalid email' });
-
-  // Basic phone sanity (7–20 chars of digits/symbols)
-  if (!/^[0-9()+\-.\s]{7,20}$/.test(phone)) {
-    return res.status(400).json({ error: 'Invalid phone' });
+  if (typeof hp === 'string' && hp !== '') {
+    return res.status(200).json({ ok: true });
   }
 
-  // Optional message length guard
+  // Validation
+  if (!name || !email || !phone) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: 'Invalid email' });
+  }
+  if (!isValidPhone(phone)) {
+    return res.status(400).json({ error: 'Invalid phone' });
+  }
   if (message && String(message).length > 4000) {
     return res.status(400).json({ error: 'Message too long' });
   }
 
   try {
     // 1) Insert lead
-    const { error } = await supabase.from('leads').insert({
+    const { error: insertError } = await supabase.from('leads').insert({
       name,
       email: email.toLowerCase(),
       phone,
@@ -71,36 +102,35 @@ module.exports = async (req, res) => {
       source: 'website'
     });
 
-    if (error) {
-      console.error('[leads] Supabase insert error:', error);
+    if (insertError) {
+      console.error('[leads] Supabase insert error:', insertError);
       return res.status(500).json({ error: 'Database insert failed' });
     }
 
-    // 2) Try notification (do not block request if emailing fails)
+    // 2) Email notification (non-blocking)
     try {
       if (!resend) {
         console.warn('[leads] RESEND_API_KEY not set; skipping email notification.');
       } else {
-        const { data: settings, error: sErr } = await supabase
+        const { data: settings, error: settingsErr } = await supabase
           .from('admin_settings')
           .select('notify_new_lead, email_to')
           .limit(1)
           .maybeSingle();
 
-        if (sErr) {
-          console.warn('[leads] Could not load admin_settings:', sErr);
+        if (settingsErr) {
+          console.warn('[leads] Could not load admin_settings:', settingsErr);
         } else if (settings?.notify_new_lead && settings?.email_to) {
           const html = `
             <div style="font-family:Arial,sans-serif;font-size:14px;color:#111;line-height:1.45">
-              <h2 style="margin:0 0 8px">New Website Lead</h2>
+              <h2 style="margin:0 0 8px">New S.V. HVAC Services Lead</h2>
               <p><b>Name:</b> ${escapeHtml(name)}</p>
               <p><b>Email:</b> ${escapeHtml(email)}</p>
               <p><b>Phone:</b> ${escapeHtml(phone)}</p>
               ${message ? `<p><b>Message:</b><br/>${escapeHtml(message)}</p>` : ''}
-              ${page_path ? `<p><b>Page:</b> ${escapeHtml(page_path)}</p>` : ''}
             </div>
           `;
-
+          // before sending the email (right before resend.emails.send)
           await resend.emails.send({
             from: EMAIL_FROM,
             to: settings.email_to,
@@ -111,7 +141,7 @@ module.exports = async (req, res) => {
       }
     } catch (notifyErr) {
       console.error('[leads] Notification send failed:', notifyErr);
-      // continue — do not fail the request
+      // don’t fail the request just because email failed
     }
 
     // 3) Done
@@ -120,4 +150,4 @@ module.exports = async (req, res) => {
     console.error('[leads] Unexpected error:', err);
     return res.status(500).json({ error: 'Unexpected server error' });
   }
-};
+}
