@@ -68,10 +68,14 @@
             name="message"
             class="form-control mb-3"
             rows="5"
-            placeholder="Message (Optional)"
+            placeholder="Message (optional)"
             [(ngModel)]="formData.message"
             #message="ngModel"
           ></textarea>
+          <!-- Optional: only show helper if it's too long, not “required” -->
+          <div class="invalid" *ngIf="message.value?.length > 4000">
+            Message is too long (max 4000 characters).
+          </div>
         </div>
       </div>
 

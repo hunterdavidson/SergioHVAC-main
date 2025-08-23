@@ -6,14 +6,10 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 type LeadPayload = {
   name: string;
   email: string;
-  phone: string; // now required
-  message: string;
+  phone: string;
+  message?: string | null; // optional
   page_path?: string;
-  utm?: {
-    source?: string;
-    medium?: string;
-    campaign?: string;
-  };
+  utm?: { source?: string; medium?: string; campaign?: string };
 };
 
 @Component({
@@ -32,7 +28,7 @@ export class ContactComponent {
     name: '',
     email: '',
     phone: '',
-    message: '',
+    message: ''
   };
 
   constructor(private http: HttpClient) {}
@@ -47,7 +43,7 @@ export class ContactComponent {
         name: this.formData.name.trim(),
         email: this.formData.email.trim(),
         phone: this.formData.phone.trim(),
-        message: this.formData.message.trim(),
+        message: this.formData.message.trim() ? this.formData.message.trim() : null, // optional
         page_path: typeof window !== 'undefined' ? window.location.pathname : '',
         utm: this.getUtm(),
       };
