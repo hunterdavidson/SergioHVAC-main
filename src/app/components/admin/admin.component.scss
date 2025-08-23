@@ -5,7 +5,7 @@ $text: #212529;
 
 /* ================== Admin Page Layout ================== */
 #admin {
-  margin-top: 3.5rem; // breathing room under fixed navbar
+  margin-top: 3.5rem;
 
   .admin-header {
     margin-bottom: 1.5rem;
@@ -17,9 +17,7 @@ $text: #212529;
     }
   }
 
-  .admin-actions .btn {
-    border-radius: 9999px;
-  }
+  .admin-actions .btn { border-radius: 9999px; }
 
   .state-card {
     display: inline-flex;
@@ -55,10 +53,7 @@ $text: #212529;
       &:hover { background: rgba($brand, .08); }
     }
 
-    td, th {
-      padding: 1rem;
-      vertical-align: middle;
-    }
+    td, th { padding: 1rem; vertical-align: middle; }
 
     td.when {
       font-size: .9rem;
@@ -94,11 +89,16 @@ $text: #212529;
 /* ================== Custom Switch ================== */
 .form-switch {
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: .5rem;
 
+  .form-check-input,
+  .form-check-label {
+    cursor: pointer; // show “clickable” hand
+  }
+
   .form-check-input {
-    margin-top: 0 !important; 
+    margin-top: 0 !important;
     position: relative;
     width: 2.75rem;
     height: 1.5rem;

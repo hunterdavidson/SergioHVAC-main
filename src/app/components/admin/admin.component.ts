@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // ngModel
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { supabase } from '../../core/supabase.client';
@@ -25,7 +25,7 @@ type Lead = {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
   loading = true;
@@ -45,7 +45,10 @@ export class AdminComponent implements OnInit {
 
   async ngOnInit() {
     const ok = await this.auth.isAdmin();
-    if (!ok) { this.router.navigateByUrl('/login'); return; }
+    if (!ok) {
+      this.router.navigateByUrl('/login');
+      return;
+    }
 
     try {
       // load settings (single row)
@@ -93,13 +96,12 @@ export class AdminComponent implements OnInit {
       if (selErr) throw selErr;
 
       let err = null;
-
       if (existing?.id) {
         const { error } = await supabase
           .from('admin_settings')
           .update({
             notify_new_lead: this.notifyNewLead,
-            email_to: this.notifyEmail
+            email_to: this.notifyEmail,
           })
           .eq('id', existing.id);
         err = error;
@@ -108,20 +110,18 @@ export class AdminComponent implements OnInit {
           .from('admin_settings')
           .insert({
             notify_new_lead: this.notifyNewLead,
-            email_to: this.notifyEmail
+            email_to: this.notifyEmail,
           });
         err = error;
       }
 
       if (err) {
-        console.error('saveSettings update/insert error:', err);
         this.saveError = err.message || 'Failed to save settings';
         this.saveOk = false;
       } else {
         this.saveOk = true;
       }
     } catch (e: any) {
-      console.error('saveSettings exception:', e);
       this.saveError = e?.message || 'Failed to save settings';
       this.saveOk = false;
     } finally {
@@ -136,17 +136,26 @@ export class AdminComponent implements OnInit {
   }
 
   exportCsv() {
-    const header = ['created_at','name','email','phone','message'];
-    const rows = this.leads.map(l => [
-      l.created_at, l.name, l.email, l.phone, l.message ?? ''
+    const header = ['created_at', 'name', 'email', 'phone', 'message'];
+    const rows = this.leads.map((l) => [
+      l.created_at,
+      l.name,
+      l.email,
+      l.phone,
+      l.message ?? '',
     ]);
     const csv = [header, ...rows]
-      .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))
+      .map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
       .join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'leads.csv'; a.click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'leads.csv';
+    a.click();
     URL.revokeObjectURL(url);
   }
+
+  trackById = (_: number, l: Lead) => l.id;
 }

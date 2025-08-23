@@ -1,4 +1,4 @@
-<section class="page-section bg-light" id="services">
+<section class="page-section" id="services">
   <div class="container">
     <div class="text-center">
       <h2 class="section-heading text-uppercase">Our Services</h2>
@@ -7,55 +7,50 @@
 
     <div class="d-flex flex-row justify-content-around align-items-start mt-5 flex-wrap">
 
-      <!-- AC Installation -->
-      <div class="service-box text-center mx-3" style="max-width: 320px;">
+      <!-- AC -->
+      <div class="service-box text-center mx-3" style="max-width:320px;">
         <span class="fa-stack fa-4x mb-3">
           <i class="fa-solid fa-circle fa-stack-2x text-primary"></i>
           <i class="fa-solid fa-snowflake fa-stack-1x fa-inverse"></i>
         </span>
-        <h4 class="service-heading">Fast & Efficient AC Installations</h4>
-        <p class="text-muted">Keep cool with pro installs sized for your home and budget.</p>
-        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/" fragment="contact">
-          Get Free AC Quote
+        <h4 class="service-heading">{{ settings.services.ac.title }}</h4>
+        <p class="text-muted">{{ settings.services.ac.body }}</p>
+        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+          {{ settings.services.ac.cta }}
         </a>
       </div>
 
-      <!-- Heating Services -->
-    <div class="service-box text-center mx-3" style="max-width: 320px;">
-      <span class="fa-stack fa-4x mb-3">
-        <i class="fa-solid fa-circle fa-stack-2x text-danger"></i>
-        <i class="fa-solid fa-fire fa-stack-1x fa-inverse"></i>
-      </span>
-      <h4 class="service-heading">Stay Warm: Trusted Heating Services</h4>
-      <p class="text-muted">Repairs and installs to keep your family comfortable all winter.</p>
-      <a class="btn btn-danger btn-sm text-uppercase mt-3 dynamic-button" 
-        routerLink="/" fragment="contact">
-        Book Heating Service
-      </a>
-    </div>
+      <!-- Heating -->
+      <div class="service-box text-center mx-3" style="max-width:320px;">
+        <span class="fa-stack fa-4x mb-3">
+          <i class="fa-solid fa-circle fa-stack-2x text-danger"></i>
+          <i class="fa-solid fa-fire fa-stack-1x fa-inverse"></i>
+        </span>
+        <h4 class="service-heading">{{ settings.services.heat.title }}</h4>
+        <p class="text-muted">{{ settings.services.heat.body }}</p>
+        <a class="btn btn-danger btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+          {{ settings.services.heat.cta }}
+        </a>
+      </div>
 
       <!-- Maintenance -->
-      <div class="service-box text-center mx-3" style="max-width: 320px;">
+      <div class="service-box text-center mx-3" style="max-width:320px;">
         <span class="fa-stack fa-4x mb-3">
           <i class="fa-solid fa-circle fa-stack-2x text-primary"></i>
           <i class="fa-solid fa-screwdriver-wrench fa-stack-1x fa-inverse"></i>
-          <!-- (fa-tools was renamed to fa-screwdriver-wrench in FA6) -->
         </span>
-        <h4 class="service-heading">Book Your Seasonal Maintenance</h4>
-        <p class="text-muted">Prevent breakdowns and lower bills with a quick tune-up.</p>
-        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/" fragment="contact">
-          Schedule Maintenance
+        <h4 class="service-heading">{{ settings.services.maintenance.title }}</h4>
+        <p class="text-muted">{{ settings.services.maintenance.body }}</p>
+        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+          {{ settings.services.maintenance.cta }}
         </a>
       </div>
 
     </div>
 
     <div class="text-center mt-5">
-      <a class="btn btn-primary btn-xl text-uppercase dynamic-button" routerLink="/" fragment="contact">
-        Schedule Service Now
-      </a>
       <p class="mt-3 text-muted">
-        Prefer to talk? <a href="tel:+1XXXXXXXXXX" class="fw-bold">(XXX) XXX-XXXX</a>
+        Prefer to talk? <a [href]="'tel:'+settings.navbar?.phone" class="fw-bold">{{ settings.navbar?.phone }}</a>
       </p>
     </div>
   </div>

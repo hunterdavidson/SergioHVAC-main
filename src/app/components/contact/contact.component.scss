@@ -1,53 +1,121 @@
-/* Validation error text */
-.invalid {
-  color: #ffb4b4;
-  font-size: 0.9rem;
-  margin-top: -0.5rem;
-  margin-bottom: 0.75rem;
+/* ===== Brand tokens (or import your variables) ===== */
+$brand: #6C91C2;        // silver-blue
+$brand-dark: #5273A8;   // hover
+$text: #212529;
+
+/* ===== Contact section ===== */
+#contact {
+  color: $text;
+
+  /* Section headings */
+  .section-heading { color: #fff; }
+  .section-subheading { color: rgba(#fff, .85); }
+
+  /* Make tel links match the theme */
+  a[href^="tel:"] {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .2s ease, text-decoration-color .2s ease;
+    &:hover { color: $brand; text-decoration: underline; }
+    &:focus { outline: none; }
+  }
+
+  /* Inputs / Textareas */
+  .form-control {
+    border-radius: .5rem;
+    border-color: #d1d5db;
+    &:hover { border-color: $brand-dark; }
+    &:focus {
+      border-color: $brand !important;
+      box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+      outline: none !important;
+    }
+  }
+
+  /* Validation/help text */
+  .invalid,
+  .text-danger {
+    color: #ffb4b4;
+    font-size: .9rem;
+    margin-top: .25rem;
+  }
+
+  /* Submit button (reuses your dynamic style) */
+  .dynamic-button,
+  .btn.dynamic-button {
+    background: $brand;
+    border-color: $brand;
+    color: #fff;
+    transition: background .2s ease, border-color .2s ease;
+    &:hover,
+    &:focus {
+      background: $brand-dark;
+      border-color: $brand-dark;
+      color: #fff;
+      outline: none;
+      box-shadow: 0 0 0 .25rem rgba(108,145,194,.35);
+    }
+    &:disabled {
+      background: #ccc;
+      border-color: #ccc;
+      color: #fff;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  /* Brand switch inside contact (if used) */
+  .form-switch .form-check-input {
+    appearance: none;
+    position: relative;
+    width: 2.75rem; height: 1.5rem; border-radius: 2rem;
+    background: #ccc !important; border: 1px solid #aaa !important;
+    background-image: none !important;
+    transition: background-color .2s, border-color .2s, box-shadow .2s;
+
+    &::before {
+      content: ""; position: absolute; top: 50%; left: .15rem;
+      width: 1.1rem; height: 1.1rem; transform: translateY(-50%);
+      border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+      transition: left .2s ease;
+    }
+
+    &:checked {
+      background: $brand !important; border-color: $brand-dark !important;
+      &::before { left: calc(100% - 1.25rem); }
+    }
+
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+    }
+  }
 }
 
-/* --- Contact button styles --- */
-.btn.dynamic-button,
-.dynamic-button {
-  background: #6C91C2;        /* silver-blue */
-  border-color: #6C91C2;
-  color: #FFFFFF;
-  transition: background 0.3s ease, border-color 0.3s ease;
+/* Selection highlight (blue) for any text in contact) */
+#contact ::selection {
+  background: rgba(108,145,194,.35);
+  color: #111;
 }
 
-/* Hover */
-.btn.dynamic-button:hover,
-.dynamic-button:hover {
-  background: #5273A8;        /* darker blue on hover */
-  border-color: #5273A8;
-  color: #FFFFFF;
+/* optional: shrink overall vertical padding for this section */
+#contact.compact-section { padding-top: 2rem; padding-bottom: 2rem; }
+
+/* ===== Compact spacing overrides (force) ===== */
+/* Make the contact section compact regardless of global .page-section rules */
+:host {
+  display: block;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 
-/* Disabled (support both :disabled and [disabled]) */
-.btn.dynamic-button:disabled,
-.btn.dynamic-button[disabled],
-.dynamic-button:disabled,
-.dynamic-button[disabled] {
-  background: #cccccc;        /* light gray when disabled */
-  border-color: #cccccc;
-  color: #FFFFFF;
-  cursor: not-allowed;
-  transition: background 0s, border-color 0s;
-}
+/* Tighten common big margins/paddings only within this component */
+:host .section-heading { margin-bottom: .5rem !important; }
+:host .section-subheading { margin-bottom: 1rem !important; }
+:host .divider-custom { margin: .75rem 0 !important; }
 
-/* Phone link override inside Contact section */
-#contact a[href^="tel:"] {
-  color: #fff;              /* white text to match the contact section */
-  font-weight: 600;         /* bold for emphasis */
-  text-decoration: none;    /* remove underline */
-  transition: color 0.3s ease;
-}
-
-#contact a[href^="tel:"]:hover {
-  color: #6C91C2;           /* brand blue on hover */
-  text-decoration: underline;
-}
-
-#contact .section-heading {
-  color: #fff !important;  /* win against theme defaults */
-}
+/* Clamp oversized Bootstrap utilities when they appear inside contact */
+:host .mb-5 { margin-bottom: 1rem !important; }
+:host .mt-5 { margin-top: 1rem !important; }
+:host .py-5 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }

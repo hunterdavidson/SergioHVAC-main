@@ -10,7 +10,6 @@ bootstrapApplication(AppComponent, {
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled'
-        // no scrollOffset here in your Angular version
       })
     )
   ]

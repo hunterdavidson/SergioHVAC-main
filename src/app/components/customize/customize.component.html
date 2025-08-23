@@ -1,0 +1,226 @@
+<section id="customize" class="page-section page-section--tight">
+  <div class="container container-narrow">
+    <!-- Header -->
+    <div class="customize-header">
+      <h2 class="text-uppercase mb-0">Customize Site Content</h2>
+    </div>
+
+    <!-- Status -->
+    <div *ngIf="loading" class="state-card">
+      <div class="spinner-border" role="status" aria-label="Loading"></div>
+      <span class="ms-2">Loading settings…</span>
+    </div>
+    <div *ngIf="!loading && error" class="state-card error">
+      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
+    </div>
+
+    <ng-container *ngIf="!loading && !error && model() as m">
+      <!-- ========== HOME PAGE ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-house me-2"></i>Home Page</h3>
+        <div class="card shadow-sm">
+          <div class="card-body grid-2">
+            <div class="form-group">
+              <label class="form-label">Home → Headline</label>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Home → Subhead</label>
+              <input class="form-control" [(ngModel)]="m.home.subhead" name="homeSubhead">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Home → Primary CTA Text</label>
+              <input class="form-control" [(ngModel)]="m.home.ctaText" name="homeCtaText">
+            </div>
+            <div class="form-group span-2">
+              <label class="form-label">Home → Hero Background Image (URL)</label>
+              <input class="form-control" [(ngModel)]="m.home.heroUrl" name="homeHeroUrl" placeholder="https://…/hero.jpg">
+              <small class="text-muted d-block mt-1">If you upload a file below, your app code should set this URL after upload.</small>
+
+              <div class="d-flex align-items-center gap-3 mt-3 flex-wrap">
+                <div>
+                  <label class="form-label mb-1">Upload Image</label>
+                  <input type="file" accept="image/*" class="form-control" (change)="onHeroSelected($event)" />
+                </div>
+                <div *ngIf="m.home.heroUrl" class="hero-preview">
+                  <img [src]="m.home.heroUrl" alt="Hero preview" style="max-height:80px;border-radius:8px;border:1px solid #e5e7eb;" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== NAVBAR ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-bars me-2"></i>Navbar</h3>
+        <div class="card shadow-sm">
+          <div class="card-body grid-2">
+            <div class="form-group">
+              <label class="form-label">Navbar → Phone Number</label>
+              <input class="form-control" [(ngModel)]="m.navbar!.phone" name="navbarPhone" placeholder="(555) 555-5555">
+              <small class="text-muted d-block mt-1">Used for the phone button and tel: links.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== SERVICES PAGE ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-screwdriver-wrench me-2"></i>Services Page</h3>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="grid-3">
+              <div class="panel">
+                <h6 class="panel-title">Services → AC</h6>
+                <label class="form-label">Title</label>
+                <input class="form-control" [(ngModel)]="m.services.ac.title" name="svcAcTitle">
+                <label class="form-label mt-3">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="m.services.ac.body" name="svcAcBody"></textarea>
+                <label class="form-label mt-3">CTA</label>
+                <input class="form-control" [(ngModel)]="m.services.ac.cta" name="svcAcCta">
+              </div>
+
+              <div class="panel">
+                <h6 class="panel-title">Services → Heating</h6>
+                <label class="form-label">Title</label>
+                <input class="form-control" [(ngModel)]="m.services.heat.title" name="svcHeatTitle">
+                <label class="form-label mt-3">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="m.services.heat.body" name="svcHeatBody"></textarea>
+                <label class="form-label mt-3">CTA</label>
+                <input class="form-control" [(ngModel)]="m.services.heat.cta" name="svcHeatCta">
+              </div>
+
+              <div class="panel">
+                <h6 class="panel-title">Services → Maintenance</h6>
+                <label class="form-label">Title</label>
+                <input class="form-control" [(ngModel)]="m.services.maintenance.title" name="svcMaintTitle">
+                <label class="form-label mt-3">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="m.services.maintenance.body" name="svcMaintBody"></textarea>
+                <label class="form-label mt-3">CTA</label>
+                <input class="form-control" [(ngModel)]="m.services.maintenance.cta" name="svcMaintCta">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== ABOUT PAGE ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-building me-2"></i>About Page</h3>
+        <div class="card shadow-sm">
+          <div class="card-body grid-3">
+            <div class="panel" *ngFor="let item of ensureAboutItems(); let i = index">
+              <h6 class="panel-title">About → Timeline Item {{ i + 1 }}</h6>
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="aboutHidden{{i}}" [(ngModel)]="item.hidden" name="aboutHidden{{i}}">
+                <label class="form-check-label" for="aboutHidden{{i}}">Hide this timeline item</label>
+              </div>
+              <label class="form-label">Year</label>
+              <input class="form-control" [(ngModel)]="item.year" name="aboutYear{{i}}">
+              <label class="form-label mt-3">Title</label>
+              <input class="form-control" [(ngModel)]="item.title" name="aboutTitle{{i}}">
+              <label class="form-label mt-3">Body</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="item.body" name="aboutBody{{i}}"></textarea>
+              <label class="form-label mt-3">Color</label>
+              <select class="form-select" [(ngModel)]="item.color" name="aboutColor{{i}}">
+                <option [ngValue]="undefined">Default</option>
+                <option value="blue">Blue</option>
+                <option value="red">Red</option>
+              </select>
+              <label class="form-label mt-3">Icon (Font Awesome class)</label>
+              <input class="form-control" [(ngModel)]="item.icon" name="aboutIcon{{i}}" placeholder="fa-solid fa-screwdriver-wrench">
+              <small class="text-muted d-block mt-1">Shown in the About timeline circle. Leave blank to use default.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== TEAM PAGE ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-people-group me-2"></i>Team Page</h3>
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="grid-2 mb-3">
+              <div class="form-group">
+                <label class="form-label">Team → Heading</label>
+                <input class="form-control" [(ngModel)]="m.team.heading" name="teamHeading">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Team → Subheading</label>
+                <input class="form-control" [(ngModel)]="m.team.subheading" name="teamSubheading">
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div class="panel" *ngFor="let mem of ensureTeamMembers(); let idx = index">
+                <h6 class="panel-title">Team → Member {{ idx + 1 }}</h6>
+                <label class="form-label">Name</label>
+                <input class="form-control" [(ngModel)]="mem.name" name="teamName{{idx}}">
+                <label class="form-label mt-3">Role</label>
+                <input class="form-control" [(ngModel)]="mem.role" name="teamRole{{idx}}">
+                <label class="form-label mt-3">Icon (Font Awesome)</label>
+                <input class="form-control" [(ngModel)]="mem.icon" name="teamIcon{{idx}}" placeholder="fa-user-gear">
+
+                <div class="mt-3">
+                  <label class="form-label">Photo (URL)</label>
+                  <input class="form-control" [(ngModel)]="mem.photoUrl" name="teamPhotoUrl{{idx}}" placeholder="https://…/member.jpg">
+                  <small class="text-muted d-block mt-1">If you upload a file, your app code should set this URL after upload.</small>
+                  <div class="d-flex align-items-center gap-3 mt-2 flex-wrap">
+                    <div>
+                      <label class="form-label mb-1">Upload Photo</label>
+                      <input type="file" accept="image/*" class="form-control" (change)="onTeamPhotoSelected($event, idx)" />
+                    </div>
+                    <div *ngIf="mem.photoUrl" class="team-photo-preview">
+                      <img [src]="mem.photoUrl" alt="Team preview" style="max-height:64px;border-radius:8px;border:1px solid #e5e7eb;" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-check form-switch mt-3">
+                  <input class="form-check-input" type="checkbox" id="teamHidden{{idx}}" [(ngModel)]="mem.hidden" name="teamHidden{{idx}}">
+                  <label class="form-check-label" for="teamHidden{{idx}}">Hide this member</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== CONTACT PAGE ========== -->
+      <section class="section">
+        <h3 class="section-title"><i class="fa-solid fa-phone me-2"></i>Contact Page</h3>
+        <div class="card shadow-sm">
+          <div class="card-body grid-2">
+            <div class="form-group">
+              <label class="form-label">Contact → Heading</label>
+              <input class="form-control" [(ngModel)]="m.contact.heading" name="contactHeading">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact → Subheading</label>
+              <input class="form-control" [(ngModel)]="m.contact.subheading" name="contactSubheading">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact → CTA Button Text</label>
+              <input class="form-control" [(ngModel)]="m.contact.cta" name="contactCta">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact → Lead Phone Prefix</label>
+              <input class="form-control" [(ngModel)]="m.contact.phoneLead" name="contactPhoneLead" placeholder="Prefer to talk?">
+            </div>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+  </div>
+
+  <!-- Sticky bottom saver -->
+  <div class="save-bar">
+    <div class="container container-narrow d-flex justify-content-end align-items-center gap-2">
+      <span *ngIf="saved" class="badge bg-success-subtle text-success border border-success-subtle">Saved</span>
+      <span *ngIf="saveError" class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ saveError }}</span>
+      <button class="btn btn-outline-secondary" [disabled]="saving || !canSave()" (click)="save()">
+        {{ saving ? 'Saving…' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</section>

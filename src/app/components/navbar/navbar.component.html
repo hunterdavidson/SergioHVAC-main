@@ -1,55 +1,66 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: #e6e6e6;">
-    <div class="container">
-      <!-- Brand -->
-      <a class="navbar-brand text-dark" routerLink="/" fragment="home" (click)="closeNavbar()">
-        <img src="logo-simple.png" alt="HVAC Solutions Logo" style="height: 30px; margin-right: 10px;" />
-        S.V. HVAC Services
-      </a>
-  
-      <!-- Toggler -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        (click)="toggleNavbar()"
-        aria-label="Toggle navigation"
-      >
-        <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            [ngClass]="togglerIconClass"
-            class="navbar-toggler-icon-svg"
-            width="30"
-            height="30"
-            fill="#000000"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M1.5 12a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13z"
-            />
-          </svg>
-        </span>
-      </button>
-  
-      <!-- Menu -->
-      <div [class.show]="isMenuOpen" class="navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand text-dark" routerLink="/" fragment="home" (click)="closeNavbar()">
+      <img src="logo-simple.png" alt="HVAC Solutions Logo" style="height: 30px; margin-right: 10px;" />
+      S.V. HVAC Services
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" aria-label="Toggle navigation">
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             [ngClass]="togglerIconClass"
+             class="navbar-toggler-icon-svg"
+             width="30" height="30" fill="#000000" viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M1.5 12a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13z"/>
+        </svg>
+      </span>
+    </button>
+
+    <!-- Menu -->
+    <div [class.show]="isMenuOpen" class="navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0 align-items-lg-center">
+        <!-- Public nav -->
+        <ng-container *ngIf="!isAdminNav; else adminLinks">
           <li class="nav-item">
-            <a class="nav-link text-dark" routerLink="/" fragment="home" style="font-weight: 700;" (click)="closeNavbar()">Home</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="home" (click)="closeNavbar()">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" routerLink="/" fragment="services" style="font-weight: 700;" (click)="closeNavbar()">Services</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="services" (click)="closeNavbar()">Services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" routerLink="/" fragment="about" style="font-weight: 700;" (click)="closeNavbar()">About</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="about" (click)="closeNavbar()">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" routerLink="/" fragment="team" style="font-weight: 700;" (click)="closeNavbar()">Team</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="team" (click)="closeNavbar()">Team</a>
+          </li>
+          <li class="nav-item me-lg-2">
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="contact" (click)="closeNavbar()">Contact</a>
+          </li>
+        </ng-container>
+
+        <!-- Admin nav -->
+        <ng-template #adminLinks>
+          <li class="nav-item">
+            <a class="nav-link text-dark fw-bold" routerLink="/" fragment="home" (click)="closeNavbar()">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" routerLink="/" fragment="contact" style="font-weight: 700;" (click)="closeNavbar()">Contact</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/admin" (click)="closeNavbar()">Leads</a>
           </li>
-        </ul>
-      </div>
+          <li class="nav-item me-lg-2">
+            <a class="nav-link text-dark fw-bold" routerLink="/admin/customize" (click)="closeNavbar()">Customize</a>
+          </li>
+        </ng-template>
+
+        <!-- Call button (outlined, themed, slight separation) -->
+        <li *ngIf="!isAdminNav" class="nav-item ms-lg-3">
+          <a class="btn btn-sm nav-call-btn" [href]="telHref" (click)="closeNavbar()">
+            <i class="fa-solid fa-phone me-1"></i>{{ displayPhone }}
+          </a>
+        </li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>

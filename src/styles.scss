@@ -2,6 +2,8 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Note: Global styles below are scoped to sections (#contact, #services, etc.) to avoid overriding navbar styles. */
+
 /* Button Styles */
 .btn-primary {
   background-color: #6C91C2 !important; /* Soft red */
@@ -47,10 +49,114 @@ footer a:hover {
   color: #FFFFFF; /* White on hover */
 }
 
-/* Smooth animation (optional) */
-html { scroll-behavior: smooth; }
-
 /* Offset anchors for fixed navbar (~80px tall) */
 #home, #services, #about, #team, #contact {
   scroll-margin-top: 80px; /* adjust if your navbar height changes */
+}
+
+/* ===== Brand tokens ===== */
+$brand: #6C91C2;
+$brand-dark: #5273A8;
+
+/* ---------- CONTACT (global, guaranteed to win) ---------- */
+#contact .form-control:focus {
+  border-color: $brand !important;
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+  outline: none !important;
+}
+
+#contact a[href^="tel:"],
+#contact .tel-link {
+  color: #fff !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+#contact a[href^="tel:"]:hover,
+#contact .tel-link:hover {
+  color: $brand !important;
+  text-decoration: underline;
+}
+
+#contact .form-switch .form-check-input {
+  appearance: none;
+  position: relative;
+  width: 2.75rem; height: 1.5rem; border-radius: 2rem;
+  background: #ccc !important; border: 1px solid #aaa !important;
+  background-image: none !important;
+  transition: background-color .2s, border-color .2s, box-shadow .2s;
+}
+#contact .form-switch .form-check-input::before {
+  content: "";
+  position: absolute; top: 50%; left: .15rem;
+  width: 1.1rem; height: 1.1rem; transform: translateY(-50%);
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+  transition: left .2s ease;
+}
+#contact .form-switch .form-check-input:checked {
+  background: $brand !important; border-color: $brand-dark !important;
+}
+#contact .form-switch .form-check-input:checked::before { left: calc(100% - 1.25rem); }
+#contact .form-switch .form-check-input:focus {
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+}
+
+/* Selection color (Chrome + Firefox) */
+#contact ::selection { background: rgba(108,145,194,.35); color: #111; }
+#contact ::-moz-selection { background: rgba(108,145,194,.35); color: #111; }
+
+/* ---------- SERVICES (phone + CTAs) ---------- */
+#services a[href^="tel:"],
+#services .tel-link {
+  color: $brand-dark !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+#services a[href^="tel:"]:hover,
+#services .tel-link:hover {
+  color: $brand !important;
+  text-decoration: underline;
+}
+
+#services .dynamic-button,
+#services .btn.dynamic-button {
+  background: $brand !important;
+  border-color: $brand !important;
+  color: #fff !important;
+}
+#services .dynamic-button:hover,
+#services .dynamic-button:focus,
+#services .btn.dynamic-button:hover,
+#services .btn.dynamic-button:focus {
+  background: $brand-dark !important;
+  border-color: $brand-dark !important;
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.35) !important;
+  outline: none !important;
+}
+
+/* Selection color for services */
+#services ::selection { background: rgba(108,145,194,.25); color: #111; }
+#services ::-moz-selection { background: rgba(108,145,194,.25); color: #111; }
+
+/* ---------- CUSTOMIZE (page-scoped spacing & rhythm) ---------- */
+/* These only affect the Customize page when it's wrapped in #customize (which we added). */
+#customize .section {
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+#customize .section + .section {
+  margin-top: 0.75rem !important;
+}
+
+/* Trim card spacing on the Customize page only */
+#customize .card {
+  margin-bottom: 0.5rem;
+}
+#customize .card-body {
+  padding: 0.875rem 1rem;
+}
+
+/* Tighter vertical gutter between Bootstrap rows on Customize page */
+#customize .row {
+  --bs-gutter-y: 0.75rem;
 }

@@ -1,20 +1,46 @@
-/* Phone link override inside Services section */
-#services a[href^="tel:"] {
-    color: #212529;       /* dark gray/black text */
-    font-weight: 600;     /* keep it bold */
-    text-decoration: none; /* remove underline */
-  }
-  
-  #services a[href^="tel:"]:hover {
-    color: #6C91C2;       /* match your brand blue on hover */
-    text-decoration: underline;
-  }
-  
-  .service-box .btn {
-    margin-top: 1.5rem; // instead of 1rem (mt-3 is ~1rem)
+/* ===== Brand tokens ===== */
+$brand: #6C91C2;
+$brand-dark: #5273A8;
+
+/* Scope to services section */
+#services {
+  /* Phone number link(s) to match theme */
+  a[href^="tel:"],
+  .tel-link {
+    color: $brand-dark;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .2s ease, text-decoration-color .2s ease;
+    &:hover { color: $brand; text-decoration: underline; }
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 .2rem rgba(108,145,194,.35);
+      border-radius: .25rem;
+    }
   }
 
-  .btn-sm {
-    margin-bottom: 1.5rem;
+  /* Optional: CTA buttons in cards */
+  .dynamic-button,
+  .btn.dynamic-button {
+    background: $brand;
+    border-color: $brand;
+    color: #fff;
+    &:hover,
+    &:focus {
+      background: $brand-dark;
+      border-color: $brand-dark;
+      color: #fff;
+      box-shadow: 0 0 0 .25rem rgba(108,145,194,.35);
+      outline: none;
+    }
   }
-  
+
+  /* Optional: make small muted text align with theme slightly */
+  .text-muted { color: #6b7280 !important; }
+}
+
+/* Selection highlight on services section too */
+#services ::selection {
+  background: rgba(108,145,194,.25);
+  color: #111;
+}

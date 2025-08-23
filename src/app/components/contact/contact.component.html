@@ -1,12 +1,11 @@
-<section class="page-section" id="contact">
+<section class="page-section compact-section" id="contact">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase text-white">Request Service</h2>
-      <h3 class="section-subheading text-white">
-        Tell us what you need and we’ll get right back to you.
-      </h3>
-      <p class="mt-3 text-white">
-        Prefer to talk? <a href="tel:+1XXXXXXXXXX" class="fw-bold">(XXX) XXX-XXXX</a>
+      <h2 class="section-heading text-uppercase mb-2">{{ settings.contact.heading }}</h2>
+      <h3 class="section-subheading text-white mb-2">{{ settings.contact.subheading }}</h3>
+      <p class="mt-1 text-white">
+        {{ settings.contact.phoneLead }}
+        <a [href]="'tel:'+settings.navbar?.phone" class="fw-bold text-white">{{ settings.navbar?.phone }}</a>
       </p>
     </div>
 
@@ -15,113 +14,52 @@
         <!-- Name -->
         <div class="col-md-6">
           <label for="name" class="visually-hidden">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            class="form-control mb-3"
-            placeholder="Name *"
-            required
-            autocomplete="name"
-            [(ngModel)]="formData.name"
-            #name="ngModel"
-            aria-describedby="nameError"
-          />
-          <div id="nameError" class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)" aria-live="polite">
-            Name is required.
-          </div>
+          <input type="text" id="name" name="name" class="form-control mb-2"
+                 placeholder="Name *" required autocomplete="name"
+                 [(ngModel)]="formData.name" #name="ngModel" />
+          <div class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">Name is required.</div>
         </div>
 
         <!-- Email -->
         <div class="col-md-6">
           <label for="email" class="visually-hidden">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-control mb-3"
-            placeholder="Email *"
-            required
-            email
-            autocomplete="email"
-            [(ngModel)]="formData.email"
-            #email="ngModel"
-            aria-describedby="emailError"
-          />
-          <div id="emailError" class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)" aria-live="polite">
-            A valid email is required.
-          </div>
+          <input type="email" id="email" name="email" class="form-control mb-2"
+                 placeholder="Email *" required autocomplete="email"
+                 [(ngModel)]="formData.email" #email="ngModel" />
+          <div class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">A valid email is required.</div>
         </div>
       </div>
 
-      <!-- Phone (required) -->
+      <!-- Phone -->
       <div class="row">
         <div class="col-md-12">
           <label for="phone" class="visually-hidden">Phone</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            class="form-control mb-3"
-            placeholder="Phone *"
-            required
-            inputmode="tel"
-            autocomplete="tel-national"
-            [(ngModel)]="formData.phone"
-            #phone="ngModel"
-            pattern="^[0-9()+\-.\s]{7,20}$"
-            aria-describedby="phoneError"
-          />
-          <div id="phoneError" class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)" aria-live="polite">
-            A valid phone number is required.
-          </div>
+          <input type="tel" id="phone" name="phone" class="form-control mb-2"
+                 placeholder="Phone *" required autocomplete="tel"
+                 [(ngModel)]="formData.phone" #phone="ngModel" />
+          <div class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">A valid phone number is required.</div>
         </div>
       </div>
 
-      <!-- Message (optional) -->
+      <!-- Message -->
       <div class="row">
         <div class="col-md-12">
           <label for="message" class="visually-hidden">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            class="form-control mb-3"
-            rows="5"
-            placeholder="Message (optional)"
-            [(ngModel)]="formData.message"
-            #message="ngModel"
-            maxlength="4000"
-            aria-describedby="messageHelp"
-          ></textarea>
-          <div id="messageHelp" class="invalid" *ngIf="message.value?.length > 4000" aria-live="polite">
-            Message is too long (max 4000 characters).
-          </div>
+          <textarea id="message" name="message" class="form-control mb-2" rows="5"
+                    placeholder="Message (optional)" [(ngModel)]="formData.message"
+                    #message="ngModel" maxlength="4000"></textarea>
         </div>
       </div>
 
-      <!-- Honeypot (spam trap) -->
-      <div style="position:absolute; left:-9999px;">
-        <label for="hp">Do not fill this field</label>
-        <input id="hp" name="hp" autocomplete="off" tabindex="-1" />
-      </div>
-
       <div class="text-center">
-        <button
-          class="btn btn-xl text-uppercase dynamic-button"
-          type="submit"
-          [disabled]="contactForm.invalid || loading"
-          *ngIf="!isSubmitted"
-        >
-          {{ loading ? 'Sending…' : 'Request Service Now' }}
+        <button class="btn btn-xl text-uppercase dynamic-button" type="submit" [disabled]="contactForm.invalid || loading" *ngIf="!isSubmitted">
+          {{ settings.contact.cta }}
         </button>
 
-        <p class="text-white mt-3" *ngIf="isSubmitted">
-          Thank you! Your request was sent. We’ll follow up shortly.
-        </p>
-
+        <p class="text-white mt-2" *ngIf="isSubmitted">Thank you! Your request was sent. We’ll follow up shortly.</p>
         <p class="text-danger mt-2" *ngIf="error && !isSubmitted">{{ error }}</p>
 
-        <p class="text-white-50 mt-3">
+        <p class="text-white-50 mt-2">
           By submitting, you agree we may contact you about your request.
         </p>
       </div>
