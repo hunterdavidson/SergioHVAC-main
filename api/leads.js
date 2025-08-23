@@ -127,14 +127,14 @@ async function handler(req, res) {
               <p><b>Name:</b> ${escapeHtml(name)}</p>
               <p><b>Email:</b> ${escapeHtml(email)}</p>
               <p><b>Phone:</b> ${escapeHtml(phone)}</p>
-              ${message ? `<p><b>Message:</b><br/>${escapeHtml(message)}</p>` : ''}
+              <p><b>Message:</b><br/>${escapeHtml(message)}</p>
             </div>
           `;
           // before sending the email (right before resend.emails.send)
           await resend.emails.send({
             from: EMAIL_FROM,
             to: settings.email_to,
-            subject: 'New Lead from Website',
+            subject: 'New S.V. HVAC Services Lead',
             html
           });
         }
