@@ -10,3 +10,6 @@
     text-decoration: underline;
   }
   
+  .service-box .btn {
+    margin-top: 1.5rem; // instead of 1rem (mt-3 is ~1rem)
+  }

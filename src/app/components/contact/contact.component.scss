@@ -34,3 +34,20 @@
   cursor: not-allowed;
   transition: background 0s, border-color 0s;
 }
+
+/* Phone link override inside Contact section */
+#contact a[href^="tel:"] {
+  color: #fff;              /* white text to match the contact section */
+  font-weight: 600;         /* bold for emphasis */
+  text-decoration: none;    /* remove underline */
+  transition: color 0.3s ease;
+}
+
+#contact a[href^="tel:"]:hover {
+  color: #6C91C2;           /* brand blue on hover */
+  text-decoration: underline;
+}
+
+#contact .section-heading {
+  color: #fff !important;  /* win against theme defaults */
+}

@@ -7,7 +7,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router'; // 👈 add thes
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [CommonModule, RouterLink, RouterLinkActive], // 👈 include here
+  imports: [CommonModule, RouterLink], // 👈 include here
 })
 export class NavbarComponent {
   isMenuOpen = false;

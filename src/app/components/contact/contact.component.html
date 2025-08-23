@@ -1,12 +1,12 @@
 <section class="page-section" id="contact">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase">Request Service</h2>
+      <h2 class="section-heading text-uppercase text-white">Request Service</h2>
       <h3 class="section-subheading text-white">
         Tell us what you need and we’ll get right back to you.
       </h3>
-      <p class="mt-2 text-white">
-        Prefer to talk? <a href="tel:+1XXXXXXXXXX" class="fw-bold text-white">(XXX) XXX-XXXX</a>
+      <p class="mt-3 text-white">
+        Prefer to talk? <a href="tel:+1XXXXXXXXXX" class="fw-bold">(XXX) XXX-XXXX</a>
       </p>
     </div>
 
@@ -27,7 +27,7 @@
             #name="ngModel"
             aria-describedby="nameError"
           />
-          <div id="nameError" class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div id="nameError" class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)" aria-live="polite">
             Name is required.
           </div>
         </div>
@@ -48,7 +48,7 @@
             #email="ngModel"
             aria-describedby="emailError"
           />
-          <div id="emailError" class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">
+          <div id="emailError" class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)" aria-live="polite">
             A valid email is required.
           </div>
         </div>
@@ -66,13 +66,13 @@
             placeholder="Phone *"
             required
             inputmode="tel"
-            autocomplete="tel"
+            autocomplete="tel-national"
             [(ngModel)]="formData.phone"
             #phone="ngModel"
-            pattern="^[0-9()+\-\\s\\.]{7,20}$"
+            pattern="^[0-9()+\-.\s]{7,20}$"
             aria-describedby="phoneError"
           />
-          <div id="phoneError" class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+          <div id="phoneError" class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)" aria-live="polite">
             A valid phone number is required.
           </div>
         </div>
@@ -93,13 +93,13 @@
             maxlength="4000"
             aria-describedby="messageHelp"
           ></textarea>
-          <div id="messageHelp" class="invalid" *ngIf="message.value?.length > 4000">
+          <div id="messageHelp" class="invalid" *ngIf="message.value?.length > 4000" aria-live="polite">
             Message is too long (max 4000 characters).
           </div>
         </div>
       </div>
 
-      <!-- Honeypot (spam trap) – keep visible to screen readers but off-screen visually -->
+      <!-- Honeypot (spam trap) -->
       <div style="position:absolute; left:-9999px;">
         <label for="hp">Do not fill this field</label>
         <input id="hp" name="hp" autocomplete="off" tabindex="-1" />

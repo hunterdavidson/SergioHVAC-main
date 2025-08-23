@@ -5,7 +5,7 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('hero.jpg');
     background-size: cover;
     background-position: center;
-    padding: 120px 0;
+    padding: 140px 0; /* increased from 120px */
   "
   role="banner"
   aria-label="Hero section with site call to action"
@@ -13,22 +13,21 @@
   <div class="container d-flex flex-column align-items-center">
 
     <!-- Strong headline -->
-    <h1 class="masthead-subheading mb-3 fw-bold">
+    <h1 class="masthead-subheading mb-4 fw-bold">
       Need HVAC Service Today? <br />
       We’re Just a Click Away
     </h1>
 
     <!-- Supportive subhead -->
     <p
-      class="masthead-heading text-uppercase mt-2 mb-4"
+      class="masthead-heading text-uppercase mt-2 mb-5"
       style="font-size: 1.25rem; font-weight: 500;"
     >
       Reliable, Fast, and Local — Book Your Appointment in Minutes
     </p>
 
     <!-- CTA buttons -->
-    <div class="d-flex flex-column flex-md-row gap-3">
-      <!-- Scroll to contact section on the home route -->
+    <div class="d-flex flex-column flex-md-row gap-4">
       <a
         class="btn btn-primary btn-xl text-uppercase dynamic-button"
         routerLink="/"
@@ -38,7 +37,6 @@
         Schedule Your Free Quote
       </a>
 
-      <!-- Replace with your real phone number -->
       <a
         class="btn btn-outline-light btn-xl text-uppercase dynamic-button"
         href="tel:+1XXXXXXXXXX"
