@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-services',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],   // add modules here if you use directives like *ngIf, *ngFor
   templateUrl: './services.component.html',
-  styleUrl: './services.component.scss'
+  styleUrls: ['./services.component.scss']  // <-- plural
 })
-export class ServicesComponent {
-
-}
+export class ServicesComponent {}

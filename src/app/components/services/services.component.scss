@@ -1,0 +1,12 @@
+/* Phone link override inside Services section */
+#services a[href^="tel:"] {
+    color: #212529;       /* dark gray/black text */
+    font-weight: 600;     /* keep it bold */
+    text-decoration: none; /* remove underline */
+  }
+  
+  #services a[href^="tel:"]:hover {
+    color: #6C91C2;       /* match your brand blue on hover */
+    text-decoration: underline;
+  }
+  

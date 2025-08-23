@@ -1,13 +1,20 @@
 <section class="page-section" id="contact">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase">Contact Us</h2>
-      <h3 class="section-subheading text-white">We'd love to hear from you.</h3>
+      <h2 class="section-heading text-uppercase">Request Service</h2>
+      <h3 class="section-subheading text-white">
+        Tell us what you need and we’ll get right back to you.
+      </h3>
+      <p class="mt-2 text-white">
+        Prefer to talk? <a href="tel:+1XXXXXXXXXX" class="fw-bold text-white">(XXX) XXX-XXXX</a>
+      </p>
     </div>
 
     <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
       <div class="row">
+        <!-- Name -->
         <div class="col-md-6">
+          <label for="name" class="visually-hidden">Name</label>
           <input
             type="text"
             id="name"
@@ -15,15 +22,19 @@
             class="form-control mb-3"
             placeholder="Name *"
             required
+            autocomplete="name"
             [(ngModel)]="formData.name"
             #name="ngModel"
+            aria-describedby="nameError"
           />
-          <div class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div id="nameError" class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">
             Name is required.
           </div>
         </div>
 
+        <!-- Email -->
         <div class="col-md-6">
+          <label for="email" class="visually-hidden">Email</label>
           <input
             type="email"
             id="email"
@@ -32,18 +43,21 @@
             placeholder="Email *"
             required
             email
+            autocomplete="email"
             [(ngModel)]="formData.email"
             #email="ngModel"
+            aria-describedby="emailError"
           />
-          <div class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">
+          <div id="emailError" class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">
             A valid email is required.
           </div>
         </div>
       </div>
 
-      <!-- Phone field (required) -->
+      <!-- Phone (required) -->
       <div class="row">
         <div class="col-md-12">
+          <label for="phone" class="visually-hidden">Phone</label>
           <input
             type="tel"
             id="phone"
@@ -51,18 +65,23 @@
             class="form-control mb-3"
             placeholder="Phone *"
             required
+            inputmode="tel"
+            autocomplete="tel"
             [(ngModel)]="formData.phone"
             #phone="ngModel"
-            pattern="^[0-9()+\\-\\s\\.]{7,20}$"
+            pattern="^[0-9()+\-\\s\\.]{7,20}$"
+            aria-describedby="phoneError"
           />
-          <div class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+          <div id="phoneError" class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
             A valid phone number is required.
           </div>
         </div>
       </div>
 
+      <!-- Message (optional) -->
       <div class="row">
         <div class="col-md-12">
+          <label for="message" class="visually-hidden">Message</label>
           <textarea
             id="message"
             name="message"
@@ -71,12 +90,19 @@
             placeholder="Message (optional)"
             [(ngModel)]="formData.message"
             #message="ngModel"
+            maxlength="4000"
+            aria-describedby="messageHelp"
           ></textarea>
-          <!-- Optional: only show helper if it's too long, not “required” -->
-          <div class="invalid" *ngIf="message.value?.length > 4000">
+          <div id="messageHelp" class="invalid" *ngIf="message.value?.length > 4000">
             Message is too long (max 4000 characters).
           </div>
         </div>
+      </div>
+
+      <!-- Honeypot (spam trap) – keep visible to screen readers but off-screen visually -->
+      <div style="position:absolute; left:-9999px;">
+        <label for="hp">Do not fill this field</label>
+        <input id="hp" name="hp" autocomplete="off" tabindex="-1" />
       </div>
 
       <div class="text-center">
@@ -86,14 +112,18 @@
           [disabled]="contactForm.invalid || loading"
           *ngIf="!isSubmitted"
         >
-          {{ loading ? 'Sending…' : 'Send Message' }}
+          {{ loading ? 'Sending…' : 'Request Service Now' }}
         </button>
 
-        <p class="text-white" *ngIf="isSubmitted">
-          Thank you for your message! We'll get back to you shortly.
+        <p class="text-white mt-3" *ngIf="isSubmitted">
+          Thank you! Your request was sent. We’ll follow up shortly.
         </p>
 
         <p class="text-danger mt-2" *ngIf="error && !isSubmitted">{{ error }}</p>
+
+        <p class="text-white-50 mt-3">
+          By submitting, you agree we may contact you about your request.
+        </p>
       </div>
     </form>
   </div>
