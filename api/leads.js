@@ -47,8 +47,8 @@ module.exports = async (req, res) => {
   const { error } = await supabase.from('leads').insert({
     name,
     email,
-    phone: phone,
-    message,
+    phone,
+    message: message || null,
     page_path: page_path || null,
     utm_source: utm?.source || null,
     utm_medium: utm?.medium || null,

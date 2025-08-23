@@ -13,7 +13,7 @@
             id="name"
             name="name"
             class="form-control mb-3"
-            placeholder="Your Name *"
+            placeholder="Name *"
             required
             [(ngModel)]="formData.name"
             #name="ngModel"
@@ -29,7 +29,7 @@
             id="email"
             name="email"
             class="form-control mb-3"
-            placeholder="Your Email *"
+            placeholder="Email *"
             required
             email
             [(ngModel)]="formData.email"
@@ -68,14 +68,10 @@
             name="message"
             class="form-control mb-3"
             rows="5"
-            placeholder="Your Message *"
-            required
+            placeholder="Message (Optional)"
             [(ngModel)]="formData.message"
             #message="ngModel"
           ></textarea>
-          <div class="invalid" *ngIf="message.invalid && (message.dirty || message.touched)">
-            Message is required.
-          </div>
         </div>
       </div>
 
