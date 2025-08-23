@@ -1,30 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router'; // 👈 add these
 
 @Component({
   selector: 'app-navbar',
+  standalone: true,
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterLinkActive], // 👈 include here
 })
 export class NavbarComponent {
-  isMenuOpen: boolean = false;
+  isMenuOpen = false;
 
-  closeNavbar(): void {
-    if (this.isMenuOpen) {
-      this.isMenuOpen = false;
-    }
-  }
-  
-  toggleNavbar(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-  
-  
+  toggleNavbar(): void { this.isMenuOpen = !this.isMenuOpen; }
+  closeNavbar(): void { if (this.isMenuOpen) this.isMenuOpen = false; }
 
-  // Optional: Dynamically assign the rotation class for toggler icon
-  get togglerIconClass(): string {
-    return this.isMenuOpen ? 'rotated' : ''; // Apply 'rotated' when open
-  }
+  get togglerIconClass(): string { return this.isMenuOpen ? 'rotated' : ''; }
 }

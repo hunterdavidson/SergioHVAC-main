@@ -1,0 +1,15 @@
+<!-- src/app/pages/login/login.component.html -->
+<section class="page-section" id="login">
+    <div class="container" style="max-width:560px">
+      <h2 class="text-uppercase text-center mb-4">Admin Login</h2>
+  
+      <form (ngSubmit)="submit()">
+        <input class="form-control mb-3" type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+        <input class="form-control mb-3" type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
+        <button class="btn btn-primary dynamic-button w-100" [disabled]="loading" type="submit">
+          {{ loading ? 'Signing in…' : 'Sign In' }}
+        </button>
+        <p class="text-danger mt-3" *ngIf="error">{{ error }}</p>
+      </form>
+    </div>
+  </section>

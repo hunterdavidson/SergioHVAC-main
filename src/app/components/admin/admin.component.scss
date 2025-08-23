@@ -1,0 +1,115 @@
+$brand: #6C91C2;        // silver-blue
+$brand-dark: #5273A8;   // hover
+$text: #212529;
+
+#admin {
+  margin-top: 3.5rem; // breathing room under fixed navbar
+
+  .admin-header {
+    margin-bottom: 1.5rem;
+    h2 { color: $text; letter-spacing: .02em; font-weight: 700; }
+  }
+
+  .admin-actions .btn {
+    border-radius: 9999px;
+  }
+
+  .state-card {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    color: $text;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    margin-bottom: 1rem;
+
+    &.error {
+      border-color: #e5e7eb;
+      background: #fff5f5;
+      color: $text;
+    }
+  }
+
+  .card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+  }
+
+  .admin-table {
+    thead th {
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #6b7280;
+      background: #f9fafb;
+    }
+
+    tbody tr {
+      transition: background-color .15s ease;
+      &:hover { background: rgba($brand, .08); }
+    }
+
+    td, th {
+      padding: 1rem;
+      vertical-align: middle;
+    }
+
+    td.when {
+      font-size: .9rem;
+      color: #555;
+    }
+
+    td.contact {
+      .name { font-size: 1rem; margin-bottom: .25rem; }
+      .info { display: flex; flex-direction: column; gap: .25rem; }
+      .contact-link {
+        font-size: .9rem;
+        color: $brand-dark;
+        text-decoration: none;
+        &:hover { text-decoration: underline; }
+      }
+    }
+
+    td.message {
+      font-size: .95rem;
+      max-width: 480px;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+/* Brand-matching Bootstrap switch (no yellow) */
+.form-switch .form-check-input:not(:checked) {
+  background-color: #ccc !important;
+  border-color: #aaa !important;
+}
+.form-switch .form-check-input:checked {
+  background-color: #6C91C2 !important;
+  border-color: #5273A8 !important;
+}
+.form-switch .form-check-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 .25rem rgba(108, 145, 194, 0.45) !important;
+}
+
+#admin .card-body .form-control {
+    flex: 1;
+  }
+  
+  #admin .card-body button {
+    white-space: nowrap; /* keep "Save" button tight */
+  }
+  
+  #admin .card-body .badge {
+    font-size: 0.8rem;
+    padding: 0.35em 0.6em;
+  }
+
+/* optional: white inner icons elsewhere */
+.icon-inverse { color: #fff; }
+
+@media (max-width: 576px) {
+  #admin .admin-table td.message { max-width: 260px; }
+}

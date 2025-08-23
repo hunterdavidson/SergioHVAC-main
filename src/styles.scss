@@ -47,3 +47,10 @@ footer a:hover {
   color: #FFFFFF; /* White on hover */
 }
 
+/* Smooth animation (optional) */
+html { scroll-behavior: smooth; }
+
+/* Offset anchors for fixed navbar (~80px tall) */
+#home, #services, #about, #team, #contact {
+  scroll-margin-top: 80px; /* adjust if your navbar height changes */
+}
