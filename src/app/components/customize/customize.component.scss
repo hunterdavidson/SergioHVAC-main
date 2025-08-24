@@ -1,173 +1,32 @@
-/* Customize Component Styles */
+/* The spacing/trim for Customize already handled under #customize in styles.scss.
+   Keep only truly unique accents here. */
+
 #customize {
-    margin-top: 3.5rem; // breathing room under navbar
-  
-    .customize-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem; // tighten header spacing
-  
-      h2 {
-        font-weight: 700;
-        letter-spacing: .02em;
-      }
-  
-      .actions {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-      }
-    }
-  
-    .section-title {
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-  
-    .card {
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-    }
-  
-    .card-body {
-      padding: 1rem;
-    }
-  
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-  
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-  
-    .panel {
-      border: 1px solid #f0f0f0;
-      border-radius: 8px;
-      padding: .75rem;
-      background: #fff;
-  
-      .panel-title {
-        font-weight: 600;
-        margin-bottom: .5rem;
-      }
-    }
-  
-    .save-bar {
-      position: sticky;
-      bottom: 0;
-      background: #fff;
-      border-top: 1px solid #e5e7eb;
-      padding: .75rem 0;
-      margin-top: 1rem;
-    }
+  .panel-title { font-weight: 600; }
+  .img-preview {
+    max-height: 80px; border-radius: 8px; border: 1px solid #e5e7eb;
+  }
 }
 
-/* Page-scoped "global" tightening (corrected selectors) */
-:host ::ng-deep #customize .page-section {
-  padding-top: 1.25rem !important;
-  padding-bottom: 1.25rem !important;
+.save-bar {
+  position: fixed;
+  left: 0;         /* span full viewport width */
+  right: 0;
+  bottom: 0;
+  z-index: 1030;   /* above cards, below navbar */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: saturate(180%) blur(6px);
+  border-top: 1px solid #e5e7eb;
+  padding: .75rem 0; /* vertical only */
+  box-shadow: 0 -4px 8px rgba(0,0,0,.03);
 }
 
-
-
-:host ::ng-deep #customize h1,
-:host ::ng-deep #customize h2,
-:host ::ng-deep #customize h3,
-:host ::ng-deep #customize h4 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.375rem;
-}
-
-:host ::ng-deep #customize p {
-  margin-bottom: 0.5rem;
-}
-
-/* Ensure stacked sections don't accumulate big gaps */
-:host ::ng-deep #customize .page-section + .page-section {
-  margin-top: 0.75rem !important;
-}
-
-/* Tighter default spacing between Bootstrap rows on this page */
-:host ::ng-deep #customize .row {
-  --bs-gutter-y: 0.75rem;
-}
-
-/* ================== Form Controls ================== */
-.form-control:focus {
-  border-color: #6C91C2 !important;
-  box-shadow: 0 0 0 .25rem rgba(82,115,168,.55) !important;
-  outline: none !important;
-}
-
-/* ================== Custom Switch (match Admin theme) ================== */
-:host ::ng-deep #customize .form-switch {
+.save-bar .container {
   display: flex;
   align-items: center;
-  gap: .5rem; /* space between switch and label */
+  justify-content: flex-end; /* push button to the container's right edge */
+  gap: .75rem;
 }
 
-:host ::ng-deep #customize .form-switch .form-check-input {
-  margin-top: 0 !important; /* remove default bootstrap offset */
-  position: relative;
-  width: 2.75rem;
-  height: 1.5rem;
-  border-radius: 2rem;
-
-  /* track (OFF) */
-  background-color: #ccc !important;
-  border: 1px solid #aaa !important;
-
-  /* remove Bootstrap’s bg-image that can look yellow */
-  background-image: none !important;
-  --bs-form-switch-bg-image: none !important;
-
-  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
-
-  /* knob */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: .15rem;
-    width: 1.1rem;
-    height: 1.1rem;
-    transform: translateY(-50%);
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(0,0,0,.25);
-    transition: left .2s ease;
-  }
-
-  &:checked {
-    background-color: #6C91C2 !important;  /* brand */
-    border-color: #5273A8 !important;      /* brand-dark */
-
-    &::before { left: calc(100% - 1.25rem); }
-  }
-
-  &:focus {
-    outline: none !important;
-    box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important; /* brand ring */
-  }
-
-  /* Better tap feel + pointer */
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
-}
-
-:host ::ng-deep #customize .form-switch .form-check-input:hover {
-  cursor: pointer;
-}
-
-:host ::ng-deep #customize .form-switch .form-check-label {
-  margin-bottom: 0;
-  line-height: 1.4;
-  cursor: pointer; /* clicking label toggles switch */
-}
+/* Spacer to keep last card from hiding under fixed save bar */
+.save-bar-spacer { height: 72px; }

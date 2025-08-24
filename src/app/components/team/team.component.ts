@@ -12,7 +12,7 @@ export class TeamComponent {
   constructor(public settings: SettingsService) {}
 
   get visibleMembers() {
-    return (this.settings.value.team.members || []).filter(m => !m?.hidden);
+    return (this.settings.value.team?.members || []).filter(m => !m?.hidden);
   }
 
   iconClass(icon?: string) {

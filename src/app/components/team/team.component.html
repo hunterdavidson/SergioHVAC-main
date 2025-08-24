@@ -1,26 +1,27 @@
 <section class="page-section bg-light" id="team">
   <div class="container">
-    <div class="text-center">
-      <h2 class="section-heading text-uppercase">{{ settings.value.team.heading }}</h2>
-      <h3 class="section-subheading text-muted">{{ settings.value.team.subheading }}</h3>
+    <div class="text-center mb-5">
+      <h2 class="section-heading text-uppercase">{{ settings.value.team.heading ?? 'Our Team' }}</h2>
+      <h3 class="section-subheading text-muted">{{ settings.value.team.subheading ?? 'Meet the team behind our success.' }}</h3>
     </div>
 
-    <div class="row">
-      <div class="col-lg-4" *ngFor="let m of visibleMembers">
-        <div class="team-member text-center">
+    <div class="row justify-content-center">
+      <div *ngFor="let m of visibleMembers" class="col-md-4 mb-4 d-flex align-items-stretch">
+        <div class="team-member text-center w-100">
           <div class="mb-3">
             <ng-container *ngIf="m.photoUrl; else iconOnly">
-              <img [src]="m.photoUrl" class="rounded-circle" alt="{{m.name}}" style="width:160px;height:160px;object-fit:cover;">
+              <img [src]="m.photoUrl" class="rounded-circle mx-auto d-block" [alt]="m.name ?? 'Team member photo'" style="width:160px; height:160px; object-fit:cover;">
             </ng-container>
             <ng-template #iconOnly>
-              <div class="rounded-circle d-flex align-items-center justify-content-center"
-                   style="width:160px;height:160px;background:#6C91C2;color:#fff;">
-                <i [class]="iconClass(m.icon)" style="font-size:48px;"></i>
+              <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                   style="width:160px; height:160px; background:#6C91C2; color:#fff;">
+                <i [class]="iconClass(m.icon)" aria-hidden="true" style="font-size:48px;"></i>
+                <span class="sr-only">{{ m.name ?? 'Team member icon' }}</span>
               </div>
             </ng-template>
           </div>
-          <h4>{{ m.name }}</h4>
-          <p class="text-muted">{{ m.role }}</p>
+          <h4>{{ m.name ?? 'Unnamed Member' }}</h4>
+          <p class="text-muted">{{ m.role ?? '' }}</p>
         </div>
       </div>
     </div>

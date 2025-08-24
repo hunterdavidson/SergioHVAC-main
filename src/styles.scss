@@ -1,162 +1,171 @@
-html {
-  scroll-behavior: smooth;
+@use "sass:color";
+
+/* =========================================
+   Global theme & utilities
+   ========================================= */
+
+/* ---- Brand tokens ---- */
+$brand: #6C91C2;        // primary silver-blue
+$brand-dark: #5273A8;   // hover/darker
+$brand-red: #E64545;    // navbar hover red
+$text: #212529;
+
+
+.text-brand {
+  color: $brand !important;   // $brand = #6C91C2
 }
 
-/* Note: Global styles below are scoped to sections (#contact, #services, etc.) to avoid overriding navbar styles. */
+/* ---- Base document tweaks ---- */
+html { scroll-behavior: smooth; }
 
-/* Button Styles */
+/* Offset anchors for fixed navbar (~80px) */
+#home, #services, #about, #team, #contact { scroll-margin-top: 80px; }
+
+/* ---- Buttons (keeps your existing look) ---- */
 .btn-primary {
-  background-color: #6C91C2 !important; /* Soft red */
-  border-color: #6C91C2 !important;
-}
-
-.btn-primary:hover {
-  background-color: #5273A8 !important; /* Darker red for hover */
-  border-color: #5273A8 !important;
-}
-
-/* Section Backgrounds */
-.section-light {
-  background-color: #F8F9FA; /* Light gray */
-  color: #212529; /* Text color */
-}
-
-.section-dark {
-  background-color: #6C91C2; /* Silver-blue */
-  color: #FFFFFF; /* White text */
-}
-
-/* Text Colors */
-.text-primary {
-  color: #6C91C2 !important; /* Silver-blue */
-}
-
-.text-danger {
-  color: #E64545 !important; /* Soft red */
-}
-
-/* Footer */
-footer {
-  background-color: #4A678C; /* Darker silver-blue */
-  color: #FFFFFF;
-}
-
-footer a {
-  color: #E64545; /* Soft red links */
-}
-
-footer a:hover {
-  color: #FFFFFF; /* White on hover */
-}
-
-/* Offset anchors for fixed navbar (~80px tall) */
-#home, #services, #about, #team, #contact {
-  scroll-margin-top: 80px; /* adjust if your navbar height changes */
-}
-
-/* ===== Brand tokens ===== */
-$brand: #6C91C2;
-$brand-dark: #5273A8;
-
-/* ---------- CONTACT (global, guaranteed to win) ---------- */
-#contact .form-control:focus {
+  background-color: $brand !important;
   border-color: $brand !important;
-  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
-  outline: none !important;
-}
-
-#contact a[href^="tel:"],
-#contact .tel-link {
   color: #fff !important;
-  font-weight: 600;
-  text-decoration: none;
 }
-#contact a[href^="tel:"]:hover,
-#contact .tel-link:hover {
-  color: $brand !important;
-  text-decoration: underline;
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: $brand-dark !important;
+  border-color: $brand-dark !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
 }
 
-#contact .form-switch .form-check-input {
+/* Reusable “dynamic” button class you used across sections */
+.dynamic-button,
+.btn.dynamic-button {
+  background: $brand !important;
+  border: 2px solid $brand !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s, transform .1s;
+  &:hover,
+  &:focus {
+    background: $brand-dark !important;
+    border-color: $brand-dark !important;
+    color: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
+  }
+  &:disabled {
+    background: color.adjust($brand, $lightness: 25%) !important;
+    border-color: color.adjust($brand, $lightness: 25%) !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+  }
+  &:active { transform: translateY(1px); }
+}
+
+/* ---- Forms (shared controls) ---- */
+.form-control {
+  border-radius: .5rem;
+  border-color: #d1d5db;
+  &:hover { border-color: $brand-dark; }
+  &:focus {
+    border-color: $brand !important;
+    box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+    outline: none !important;
+  }
+}
+
+/* Bootstrap switch re-style (used in Customize/Admin) */
+.form-switch .form-check-input {
   appearance: none;
   position: relative;
   width: 2.75rem; height: 1.5rem; border-radius: 2rem;
   background: #ccc !important; border: 1px solid #aaa !important;
   background-image: none !important;
   transition: background-color .2s, border-color .2s, box-shadow .2s;
-}
-#contact .form-switch .form-check-input::before {
-  content: "";
-  position: absolute; top: 50%; left: .15rem;
-  width: 1.1rem; height: 1.1rem; transform: translateY(-50%);
-  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
-  transition: left .2s ease;
-}
-#contact .form-switch .form-check-input:checked {
-  background: $brand !important; border-color: $brand-dark !important;
-}
-#contact .form-switch .form-check-input:checked::before { left: calc(100% - 1.25rem); }
-#contact .form-switch .form-check-input:focus {
-  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+
+  &::before {
+    content: ""; position: absolute; top: 50%; left: .15rem;
+    width: 1.1rem; height: 1.1rem; transform: translateY(-50%);
+    border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+    transition: left .2s ease;
+  }
+
+  &:checked {
+    background: $brand !important; border-color: $brand-dark !important;
+    &::before { left: calc(100% - 1.25rem); }
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
+  }
 }
 
-/* Selection color (Chrome + Firefox) */
-#contact ::selection { background: rgba(108,145,194,.35); color: #111; }
-#contact ::-moz-selection { background: rgba(108,145,194,.35); color: #111; }
+/* ---- Validation text (make visible over gray) ---- */
+.text-danger,
+.invalid {
+  color: #ff3a3a !important;
+}
 
-/* ---------- SERVICES (phone + CTAs) ---------- */
+/* ---- Sections (helpers) ---- */
+.section-light { background-color: #F8F9FA; color: $text; }
+.section-dark  { background-color: $brand; color: #fff; }
+
+/* ---- Navbar styling (your original feel) ---- */
+.navbar {
+  &.navbar-dark { background-color: #e6e6e6 !important; } /* your light gray bar */
+  .nav-link {
+    color: #111 !important;
+    font-weight: 700;
+    &:hover { color: $brand-red !important; font-weight: 700; }
+    &:focus { outline: none; box-shadow: none; }
+  }
+  .navbar-toggler:focus { outline: none; box-shadow: none; }
+}
+
+/* Toggler rotation helper (kept) */
+.navbar-toggler-icon-svg { transition: transform .3s ease-in-out; }
+.navbar-toggler-icon-svg.rotated { transform: rotate(90deg); }
+
+/* Collapse animation helper (kept) */
+.navbar-collapse {
+  max-height: 0; overflow: hidden; transition: max-height .3s ease-in-out;
+  @media (min-width: 992px) { max-height: none; overflow: visible; }
+}
+.navbar-collapse.show { max-height: 500px; }
+
+/* ---- “Call” pill in navbar (outlined & spaced) ---- */
+.navbar .call-pill {
+  margin-left: .5rem;
+  border: 2px solid $brand;
+  color: #111 !important;
+  padding: .35rem .6rem;
+  border-radius: .5rem;
+  font-weight: 700;
+  background: #fff;
+  text-decoration: none;
+  &:hover { background: $brand; color: #fff !important; border-color: $brand-dark; }
+}
+
+/* ---- Services-specific tiny helpers (global so you can remove per-file copies) ---- */
 #services a[href^="tel:"],
 #services .tel-link {
   color: $brand-dark !important;
   font-weight: 700;
   text-decoration: none;
-}
-#services a[href^="tel:"]:hover,
-#services .tel-link:hover {
-  color: $brand !important;
-  text-decoration: underline;
+  &:hover { color: $brand !important; text-decoration: underline; }
 }
 
-#services .dynamic-button,
-#services .btn.dynamic-button {
-  background: $brand !important;
-  border-color: $brand !important;
-  color: #fff !important;
-}
-#services .dynamic-button:hover,
-#services .dynamic-button:focus,
-#services .btn.dynamic-button:hover,
-#services .btn.dynamic-button:focus {
-  background: $brand-dark !important;
-  border-color: $brand-dark !important;
-  box-shadow: 0 0 0 .25rem rgba(108,145,194,.35) !important;
-  outline: none !important;
-}
-
-/* Selection color for services */
 #services ::selection { background: rgba(108,145,194,.25); color: #111; }
 #services ::-moz-selection { background: rgba(108,145,194,.25); color: #111; }
 
-/* ---------- CUSTOMIZE (page-scoped spacing & rhythm) ---------- */
-/* These only affect the Customize page when it's wrapped in #customize (which we added). */
-#customize .section {
-  padding-top: 0.75rem !important;
-  padding-bottom: 0.75rem !important;
-}
+/* ---- Customize page compact spacing (scoped by container id) ---- */
+#customize .section { padding-top: .75rem !important; padding-bottom: .75rem !important; }
+#customize .section + .section { margin-top: .75rem !important; }
+#customize .card { margin-bottom: .5rem; }
+#customize .card-body { padding: .875rem 1rem; }
+#customize .row { --bs-gutter-y: .75rem; }
 
-#customize .section + .section {
-  margin-top: 0.75rem !important;
-}
-
-/* Trim card spacing on the Customize page only */
-#customize .card {
-  margin-bottom: 0.5rem;
-}
-#customize .card-body {
-  padding: 0.875rem 1rem;
-}
-
-/* Tighter vertical gutter between Bootstrap rows on Customize page */
-#customize .row {
-  --bs-gutter-y: 0.75rem;
+/* Footers (as you had) */
+footer { background-color: #4A678C; color: #fff;
+  a { color: $brand-red; &:hover { color: #fff; } }
 }

@@ -1,38 +1,48 @@
 import { Injectable } from '@angular/core';
 import { supabase } from './supabase.client';
 
+export type TeamMember = {
+  name?: string;
+  role?: string;
+  icon?: string;            // e.g. "fa-user" (Font Awesome class)
+  hidden?: boolean;
+  photoPath?: string;       // storage key in bucket
+  photoUrl?: string;        // public URL to display
+};
+
+export type AboutItem = {
+  year?: string;
+  title?: string;
+  body?: string;
+  color?: 'blue' | 'red';
+  hidden?: boolean;
+  icon?: string;
+};
+
 export type SiteSettings = {
   home: {
     headline: string;
     subhead: string;
     ctaText: string;
-    heroUrl?: string;           // optional hero background image
+    heroPath?: string;
+    heroUrl?: string;
   };
   services: {
-    ac: { title: string; body: string; cta: string };
-    heat: { title: string; body: string; cta: string };
-    maintenance: { title: string; body: string; cta: string };
+    sectionHeading?: string;
+    sectionSubheading?: string;
+    ac: { title: string; body: string; cta: string; hidden?: boolean };
+    heat: { title: string; body: string; cta: string; hidden?: boolean };
+    maintenance: { title: string; body: string; cta: string; hidden?: boolean };
   };
   about: {
-    items: Array<{
-      year?: string;
-      title?: string;
-      body?: string;
-      color?: 'blue' | 'red';
-      icon?: string;            // fa- class (shown in About)
-      hidden?: boolean;         // toggle visibility
-    }>;
+    heading?: string;
+    subheading?: string;
+    items: AboutItem[];
   };
   team: {
     heading?: string;
     subheading?: string;
-    members: Array<{
-      name?: string;
-      role?: string;
-      icon?: string;            // fallback icon
-      photoUrl?: string;        // optional photo (Team only)
-      hidden?: boolean;         // toggle visibility
-    }>;
+    members: TeamMember[];
   };
   contact: {
     heading?: string;
@@ -41,7 +51,7 @@ export type SiteSettings = {
     phoneLead?: string;
   };
   navbar?: {
-    phone?: string; // e.g. "(555) 555-5555"
+    phone?: string; // "(555) 555-5555"
   };
 };
 
@@ -50,26 +60,34 @@ const DEFAULT_SETTINGS: SiteSettings = {
     headline: 'Need HVAC Service Today? We’re Just a Click Away',
     subhead: 'Reliable, Fast, and Local — Book Your Appointment in Minutes',
     ctaText: 'Schedule Your Free Quote',
-    heroUrl: '',
+    heroPath: undefined,
+    heroUrl: undefined,
   },
   services: {
+    sectionHeading: 'Our Services',
+    sectionSubheading: 'Cooling, heating, and maintenance—done right',
     ac: {
       title: 'Fast & Efficient AC Installations',
       body: 'Keep cool with pro installs sized for your home and budget.',
       cta: 'Get Free AC Quote',
+      hidden: false,
     },
     heat: {
       title: 'Stay Warm: Trusted Heating Services',
       body: 'Repairs and installs to keep your family comfortable all winter.',
       cta: 'Book Heating Service',
+      hidden: false,
     },
     maintenance: {
       title: 'Book Your Seasonal Maintenance',
       body: 'Prevent breakdowns and lower bills with a quick tune-up.',
       cta: 'Schedule Maintenance',
+      hidden: false,
     },
   },
   about: {
+    heading: 'About Us',
+    subheading: 'A quick timeline of our story.',
     items: [{}, {}, {}],
   },
   team: {
@@ -90,68 +108,76 @@ const DEFAULT_SETTINGS: SiteSettings = {
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
+  /** Current settings snapshot used by app components */
   private _current: SiteSettings = structuredClone(DEFAULT_SETTINGS);
 
-  get value(): SiteSettings {
-    return this._current;
-  }
-
+  /** Load settings from DB (site_settings.data JSONB). If missing, seed defaults. */
   async load(): Promise<void> {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('data')
-        .limit(1)
-        .maybeSingle();
-      if (error) throw error;
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('data')
+      .limit(1)
+      .maybeSingle();
 
-      if (data?.data) {
-        this._current = this._mergeWithDefaults(data.data as SiteSettings);
-        this._saveLocal(this._current);
-        return;
-      }
-
-      // seed row if missing
-      const seeded = this._mergeWithDefaults(DEFAULT_SETTINGS);
-      const { error: insertErr } = await supabase
-        .from('site_settings')
-        .insert({ data: seeded });
-      if (insertErr) console.warn('[settings] seed insert failed:', insertErr.message);
-      this._current = seeded;
-      this._saveLocal(seeded);
-    } catch (e) {
-      console.warn('[settings] load failed, fallback to local/defaults:', (e as any)?.message);
+    if (error) {
+      console.warn('[settings] load failed, falling back to defaults:', error.message);
       const local = this._loadLocal();
       this._current = local ?? structuredClone(DEFAULT_SETTINGS);
+      return;
     }
+
+    if (data?.data) {
+      this._current = this._mergeWithDefaults(data.data as SiteSettings);
+      this._saveLocal(this._current);
+      return;
+    }
+
+    // No row yet — seed one with defaults
+    const seeded = this._mergeWithDefaults(DEFAULT_SETTINGS);
+    const { error: upsertErr } = await supabase.from('site_settings').insert({ data: seeded });
+    if (upsertErr) console.warn('[settings] seed insert failed:', upsertErr.message);
+    this._current = seeded;
+    this._saveLocal(seeded);
   }
 
+  /** Save to DB and mirror to localStorage */
   async save(next: SiteSettings): Promise<void> {
     const payload = this._mergeWithDefaults(next);
     const { error } = await supabase
       .from('site_settings')
-      .upsert({ data: payload }, { onConflict: 'id' });
+      .upsert({ data: payload }, { onConflict: 'id' }); // assumes a unique row
     if (error) throw new Error(error.message || 'Failed to save settings');
     this._current = payload;
     this._saveLocal(payload);
   }
 
-  // ---------- helpers ----------
+  /** Read-only snapshot for components */
+  get value(): SiteSettings {
+    return this._current;
+  }
+
+  // -------- helpers --------
+
   private _mergeWithDefaults(input: Partial<SiteSettings> | undefined): SiteSettings {
     const base = structuredClone(DEFAULT_SETTINGS);
-    return {
+
+    const out: SiteSettings = {
       ...base,
       ...input,
       home: { ...base.home, ...(input?.home ?? {}) },
       services: {
         ...base.services,
         ...(input?.services ?? {}),
+        sectionHeading: input?.services?.sectionHeading ?? base.services.sectionHeading,
+        sectionSubheading: input?.services?.sectionSubheading ?? base.services.sectionSubheading,
         ac: { ...base.services.ac, ...(input?.services?.ac ?? {}) },
         heat: { ...base.services.heat, ...(input?.services?.heat ?? {}) },
         maintenance: { ...base.services.maintenance, ...(input?.services?.maintenance ?? {}) },
       },
       about: {
         ...base.about,
+        heading: input?.about?.heading ?? base.about.heading,
+        subheading: input?.about?.subheading ?? base.about.subheading,
         items: input?.about?.items?.length ? input.about.items : base.about.items,
       },
       team: {
@@ -163,18 +189,34 @@ export class SettingsService {
       contact: { ...base.contact, ...(input?.contact ?? {}) },
       navbar: { ...base.navbar, ...(input?.navbar ?? {}) },
     };
+
+    // Ensure structures exist
+    out.about.items ??= [];
+    out.team.members ??= [];
+    out.navbar ??= { phone: '(XXX) XXX-XXXX' };
+    out.services.sectionHeading ??= base.services.sectionHeading;
+    out.services.sectionSubheading ??= base.services.sectionSubheading;
+    out.services.ac.hidden ??= false;
+    out.services.heat.hidden ??= false;
+    out.services.maintenance.hidden ??= false;
+
+    return out;
   }
 
   private _loadLocal(): SiteSettings | null {
     try {
       const raw = localStorage.getItem('site_settings');
       return raw ? (JSON.parse(raw) as SiteSettings) : null;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }
 
   private _saveLocal(s: SiteSettings): void {
     try {
       localStorage.setItem('site_settings', JSON.stringify(s));
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 }

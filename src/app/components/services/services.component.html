@@ -1,47 +1,47 @@
 <section class="page-section" id="services">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase">Our Services</h2>
-      <h3 class="section-subheading text-muted">Fast response. Honest pricing. Work done right.</h3>
+      <h2 class="section-heading text-uppercase">{{ settings.services.sectionHeading || 'Our Services' }}</h2>
+      <h3 class="section-subheading text-muted">{{ settings.services.sectionSubheading || 'Fast response. Honest pricing. Work done right.' }}</h3>
     </div>
 
     <div class="d-flex flex-row justify-content-around align-items-start mt-5 flex-wrap">
 
       <!-- AC -->
-      <div class="service-box text-center mx-3" style="max-width:320px;">
+      <div class="service-box text-center mx-3" style="max-width:320px;" *ngIf="!settings.services.ac.hidden">
         <span class="fa-stack fa-4x mb-3">
-          <i class="fa-solid fa-circle fa-stack-2x text-primary"></i>
+          <i class="fa-solid fa-circle fa-stack-2x text-brand"></i>
           <i class="fa-solid fa-snowflake fa-stack-1x fa-inverse"></i>
         </span>
         <h4 class="service-heading">{{ settings.services.ac.title }}</h4>
         <p class="text-muted">{{ settings.services.ac.body }}</p>
-        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/" fragment="contact">
           {{ settings.services.ac.cta }}
         </a>
       </div>
 
       <!-- Heating -->
-      <div class="service-box text-center mx-3" style="max-width:320px;">
+      <div class="service-box text-center mx-3" style="max-width:320px;" *ngIf="!settings.services.heat.hidden">
         <span class="fa-stack fa-4x mb-3">
           <i class="fa-solid fa-circle fa-stack-2x text-danger"></i>
           <i class="fa-solid fa-fire fa-stack-1x fa-inverse"></i>
         </span>
         <h4 class="service-heading">{{ settings.services.heat.title }}</h4>
         <p class="text-muted">{{ settings.services.heat.body }}</p>
-        <a class="btn btn-danger btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+        <a class="btn btn-danger btn-sm text-uppercase mt-3 dynamic-button" routerLink="/" fragment="contact">
           {{ settings.services.heat.cta }}
         </a>
       </div>
 
       <!-- Maintenance -->
-      <div class="service-box text-center mx-3" style="max-width:320px;">
+      <div class="service-box text-center mx-3" style="max-width:320px;" *ngIf="!settings.services.maintenance.hidden">
         <span class="fa-stack fa-4x mb-3">
-          <i class="fa-solid fa-circle fa-stack-2x text-primary"></i>
+          <i class="fa-solid fa-circle fa-stack-2x text-brand"></i>
           <i class="fa-solid fa-screwdriver-wrench fa-stack-1x fa-inverse"></i>
         </span>
         <h4 class="service-heading">{{ settings.services.maintenance.title }}</h4>
         <p class="text-muted">{{ settings.services.maintenance.body }}</p>
-        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/contact">
+        <a class="btn btn-primary btn-sm text-uppercase mt-3 dynamic-button" routerLink="/" fragment="contact">
           {{ settings.services.maintenance.cta }}
         </a>
       </div>

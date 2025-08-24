@@ -11,8 +11,16 @@ import { SettingsService } from '../../core/settings.service';
 export class AboutComponent {
   constructor(public settings: SettingsService) {}
 
+  get heading(): string {
+    return this.settings.value?.about?.heading || 'About Us';
+  }
+
+  get subheading(): string {
+    return this.settings.value?.about?.subheading || 'Learn more about our journey and vision.';
+  }
+
   get items() {
-    return (this.settings.value.about.items || []).filter(it => !it?.hidden);
+    return this.settings.value?.about?.items?.filter(it => !it.hidden) ?? [];
   }
 
   colorBg(color?: 'blue'|'red') {

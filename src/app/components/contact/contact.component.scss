@@ -1,121 +1,36 @@
-/* ===== Brand tokens (or import your variables) ===== */
-$brand: #6C91C2;        // silver-blue
-$brand-dark: #5273A8;   // hover
-$text: #212529;
-
-/* ===== Contact section ===== */
+/* Section-specific text & spacing for contact */
 #contact {
   color: $text;
 
-  /* Section headings */
   .section-heading { color: #fff; }
   .section-subheading { color: rgba(#fff, .85); }
 
-  /* Make tel links match the theme */
+  /* Make tel links white in this dark section */
   a[href^="tel:"] {
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
+    color: #fff; font-weight: 600; text-decoration: none;
     transition: color .2s ease, text-decoration-color .2s ease;
     &:hover { color: $brand; text-decoration: underline; }
-    &:focus { outline: none; }
-  }
-
-  /* Inputs / Textareas */
-  .form-control {
-    border-radius: .5rem;
-    border-color: #d1d5db;
-    &:hover { border-color: $brand-dark; }
-    &:focus {
-      border-color: $brand !important;
-      box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
-      outline: none !important;
-    }
-  }
-
-  /* Validation/help text */
-  .invalid,
-  .text-danger {
-    color: #ffb4b4;
-    font-size: .9rem;
-    margin-top: .25rem;
-  }
-
-  /* Submit button (reuses your dynamic style) */
-  .dynamic-button,
-  .btn.dynamic-button {
-    background: $brand;
-    border-color: $brand;
-    color: #fff;
-    transition: background .2s ease, border-color .2s ease;
-    &:hover,
-    &:focus {
-      background: $brand-dark;
-      border-color: $brand-dark;
-      color: #fff;
-      outline: none;
-      box-shadow: 0 0 0 .25rem rgba(108,145,194,.35);
-    }
-    &:disabled {
-      background: #ccc;
-      border-color: #ccc;
-      color: #fff;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-  }
-
-  /* Brand switch inside contact (if used) */
-  .form-switch .form-check-input {
-    appearance: none;
-    position: relative;
-    width: 2.75rem; height: 1.5rem; border-radius: 2rem;
-    background: #ccc !important; border: 1px solid #aaa !important;
-    background-image: none !important;
-    transition: background-color .2s, border-color .2s, box-shadow .2s;
-
-    &::before {
-      content: ""; position: absolute; top: 50%; left: .15rem;
-      width: 1.1rem; height: 1.1rem; transform: translateY(-50%);
-      border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
-      transition: left .2s ease;
-    }
-
-    &:checked {
-      background: $brand !important; border-color: $brand-dark !important;
-      &::before { left: calc(100% - 1.25rem); }
-    }
-
-    &:focus {
-      outline: none !important;
-      box-shadow: 0 0 0 .25rem rgba(108,145,194,.45) !important;
-    }
   }
 }
 
-/* Selection highlight (blue) for any text in contact) */
-#contact ::selection {
-  background: rgba(108,145,194,.35);
-  color: #111;
-}
+/* Selection highlight only inside contact */
+#contact ::selection { background: rgba(108,145,194,.35); color: #111; }
 
-/* optional: shrink overall vertical padding for this section */
+/* Compact section padding if you use .compact-section on the wrapper */
 #contact.compact-section { padding-top: 2rem; padding-bottom: 2rem; }
 
-/* ===== Compact spacing overrides (force) ===== */
-/* Make the contact section compact regardless of global .page-section rules */
+/* Force compact vertical spacing inside this component if needed */
 :host {
   display: block;
   padding-top: 2rem !important;
   padding-bottom: 2rem !important;
 }
-
-/* Tighten common big margins/paddings only within this component */
 :host .section-heading { margin-bottom: .5rem !important; }
 :host .section-subheading { margin-bottom: 1rem !important; }
 :host .divider-custom { margin: .75rem 0 !important; }
-
-/* Clamp oversized Bootstrap utilities when they appear inside contact */
 :host .mb-5 { margin-bottom: 1rem !important; }
 :host .mt-5 { margin-top: 1rem !important; }
 :host .py-5 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+
+/* (Optional) extra space between inputs in this section only */
+#contact .form-group + .form-group { margin-top: 1rem; }

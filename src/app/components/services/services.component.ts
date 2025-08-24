@@ -10,5 +10,6 @@ import { SettingsService } from '../../core/settings.service';
   templateUrl: './services.component.html',
 })
 export class ServicesComponent {
+  // Read-only settings snapshot for the template
   settings = inject(SettingsService).value;
 }

@@ -1,11 +1,20 @@
-.masthead-subheading {
-    margin-bottom: 5rem !important; // more space below headline
+#home-hero {
+  position: relative;
+  min-height: 60vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  /* subtle dark gradient for contrast behind text */
+  &::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15));
+    pointer-events: none;
   }
-  
-  .masthead-heading {
-    margin-bottom: 8rem !important; // more space before the buttons
+
+  .hero-inner {
+    position: relative; /* keep content above overlay */
+    text-shadow: 0 2px 6px rgba(0,0,0,.35);
   }
-  
-  .masthead .btn {
-    padding: 1em 2.25rem; // a touch larger for breathing room
-  }
+}

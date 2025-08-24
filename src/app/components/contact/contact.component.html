@@ -14,19 +14,17 @@
         <!-- Name -->
         <div class="col-md-6">
           <label for="name" class="visually-hidden">Name</label>
-          <input type="text" id="name" name="name" class="form-control mb-2"
+          <input type="text" id="name" name="name" class="form-control mb-4"
                  placeholder="Name *" required autocomplete="name"
                  [(ngModel)]="formData.name" #name="ngModel" />
-          <div class="invalid" *ngIf="name.invalid && (name.dirty || name.touched)">Name is required.</div>
         </div>
 
         <!-- Email -->
         <div class="col-md-6">
           <label for="email" class="visually-hidden">Email</label>
-          <input type="email" id="email" name="email" class="form-control mb-2"
-                 placeholder="Email *" required autocomplete="email"
+          <input type="email" id="email" name="email" class="form-control mb-4"
+                 placeholder="Email *" required email autocomplete="email"
                  [(ngModel)]="formData.email" #email="ngModel" />
-          <div class="invalid" *ngIf="email.invalid && (email.dirty || email.touched)">A valid email is required.</div>
         </div>
       </div>
 
@@ -34,10 +32,9 @@
       <div class="row">
         <div class="col-md-12">
           <label for="phone" class="visually-hidden">Phone</label>
-          <input type="tel" id="phone" name="phone" class="form-control mb-2"
-                 placeholder="Phone *" required autocomplete="tel"
+          <input type="tel" id="phone" name="phone" class="form-control mb-4"
+                 placeholder="Phone *" required pattern="^[0-9\-\+\s\(\)]{7,15}$" autocomplete="tel"
                  [(ngModel)]="formData.phone" #phone="ngModel" />
-          <div class="invalid" *ngIf="phone.invalid && (phone.dirty || phone.touched)">A valid phone number is required.</div>
         </div>
       </div>
 
@@ -52,12 +49,17 @@
       </div>
 
       <div class="text-center">
-        <button class="btn btn-xl text-uppercase dynamic-button" type="submit" [disabled]="contactForm.invalid || loading" *ngIf="!isSubmitted">
+        <button
+          class="btn btn-xl text-uppercase dynamic-button mt-3"
+          type="submit"
+          [disabled]="contactForm.invalid || loading"
+          *ngIf="!isSubmitted"
+        >
           {{ settings.contact.cta }}
         </button>
 
-        <p class="text-white mt-2" *ngIf="isSubmitted">Thank you! Your request was sent. We’ll follow up shortly.</p>
-        <p class="text-danger mt-2" *ngIf="error && !isSubmitted">{{ error }}</p>
+        <p class="text-white mt-3" *ngIf="isSubmitted">Thank you! Your request was sent. We’ll follow up shortly.</p>
+        <p class="text-danger mt-3" *ngIf="error && !isSubmitted">{{ error }}</p>
 
         <p class="text-white-50 mt-2">
           By submitting, you agree we may contact you about your request.

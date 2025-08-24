@@ -1,0 +1,9 @@
+#team {
+  .member-card {
+    text-align: center;
+    .photo {
+      width: 160px; height: 160px; object-fit: cover;
+      border-radius: 50%; box-shadow: 0 6px 14px rgba(0,0,0,.15);
+    }
+  }
+}

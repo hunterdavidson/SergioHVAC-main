@@ -1,58 +1,10 @@
-/* Keep your existing styles */
-.navbar-toggler-icon-svg { transition: transform 0.3s ease-in-out; }
-.navbar-toggler-icon-svg.rotated { transform: rotate(90deg); }
+/* Keep only what the navbar uniquely needs; globals handle most of it */
+
+/* Remove focus rings */
 .navbar-toggler:focus { outline: none; box-shadow: none; }
 .nav-link:focus { outline: none; box-shadow: none; }
 .nav-link.active { border: none; box-shadow: none; }
 
-/* Default link look close to hover; hover goes soft red */
-.navbar .nav-link {
-  font-weight: 700;
-  color: #1f3a60 !important; /* bold-ish blue */
-}
-.navbar .nav-link:hover {
-  color: #E64545 !important; /* soft red on hover */
-  font-weight: 700;
-}
-
-/* Toggler hover (keep transparent bg) */
-.navbar-toggler:hover {
-  background-color: transparent;
-  color: #FFFFFF;
-}
-
-/* Smooth collapse */
-.navbar-collapse {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-
-  @media (min-width: 992px) {
-    max-height: none;
-    overflow: visible;
-  }
-}
-.show { max-height: 500px; }
-
-/* Phone button: outlined, slight separation */
-.nav-call-btn {
-  border: 2px solid #6C91C2;
-  color: #ffffff !important;
-  background-color: #6C91C2;
-  font-weight: 700;
-  border-radius: 9999px;
-  padding: 0.35rem 0.75rem;
-  line-height: 1;
-
-  /* separate from regular links on large screens */
-  @media (min-width: 992px) {
-    margin-left: .25rem;
-  }
-
-  &:hover {
-    background-color: #E64545;   /* soft red hover */
-    border-color: #E64545;
-    color: #ffffff !important;
-    text-decoration: none;
-  }
-}
+/* Toggler rotation class already globally styled; kept here only if you prefer scope */
+.navbar-toggler-icon-svg { transition: transform .3s ease-in-out; }
+.navbar-toggler-icon-svg.rotated { transform: rotate(90deg); }
