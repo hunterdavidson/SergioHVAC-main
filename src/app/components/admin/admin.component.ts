@@ -20,6 +20,14 @@ type Lead = {
   source?: string | null;
 };
 
+type UserSettingsRow = {
+  id?: number;
+  user_id: string;
+  notify_new_lead: boolean;
+  email_to: string | null;
+  updated_at?: string;
+};
+
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -28,11 +36,16 @@ type Lead = {
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+  // auth / user
+  userId: string | null = null;
+  userEmail: string | null = null;
+
+  // page state
   loading = true;
   error = '';
   leads: Lead[] = [];
 
-  // notification settings
+  // per-user notification settings
   notifyNewLead = false;
   notifyEmail = '';
 
@@ -44,6 +57,7 @@ export class AdminComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router) {}
 
   async ngOnInit() {
+    // Must be admin to view page
     const ok = await this.auth.isAdmin();
     if (!ok) {
       this.router.navigateByUrl('/login');
@@ -51,20 +65,31 @@ export class AdminComponent implements OnInit {
     }
 
     try {
-      // load settings (single row)
+      // get current user
+      const { data: userData, error: uErr } = await supabase.auth.getUser();
+      if (uErr || !userData?.user?.id) throw uErr ?? new Error('Not signed in');
+      this.userId = userData.user.id;
+      this.userEmail = userData.user.email ?? null;
+
+      // load THIS USER'S settings row
       const { data: settings, error: sErr } = await supabase
         .from('admin_settings')
-        .select('id, notify_new_lead, email_to')
-        .limit(1)
+        .select('user_id, notify_new_lead, email_to')
+        .eq('user_id', this.userId)
         .maybeSingle();
 
       if (sErr) throw sErr;
+
       if (settings) {
         this.notifyNewLead = !!settings.notify_new_lead;
-        this.notifyEmail = settings.email_to || '';
+        this.notifyEmail = settings.email_to ?? '';
+      } else {
+        // No row yet—don’t create one until they save.
+        this.notifyNewLead = false;
+        this.notifyEmail = '';
       }
 
-      // load leads
+      // load leads (unchanged)
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -80,47 +105,31 @@ export class AdminComponent implements OnInit {
   }
 
   async saveSettings() {
+    if (!this.userId) return;
+
     this.saveOk = false;
     this.saveError = '';
     this.saving = true;
 
     try {
-      if (!this.notifyEmail) this.notifyNewLead = false;
+      // if email is empty, force toggle off
+      const email = (this.notifyEmail || '').trim();
+      const notify = !!email && !!this.notifyNewLead;
 
-      // check if row exists
-      const { data: existing, error: selErr } = await supabase
+      // upsert per-user row (unique on user_id)
+      const row: UserSettingsRow = {
+        user_id: this.userId,
+        notify_new_lead: notify,
+        email_to: email || null,
+      };
+
+      const { error } = await supabase
         .from('admin_settings')
-        .select('id')
-        .limit(1)
-        .maybeSingle();
-      if (selErr) throw selErr;
+        .upsert(row, { onConflict: 'user_id' });
 
-      let err = null;
-      if (existing?.id) {
-        const { error } = await supabase
-          .from('admin_settings')
-          .update({
-            notify_new_lead: this.notifyNewLead,
-            email_to: this.notifyEmail,
-          })
-          .eq('id', existing.id);
-        err = error;
-      } else {
-        const { error } = await supabase
-          .from('admin_settings')
-          .insert({
-            notify_new_lead: this.notifyNewLead,
-            email_to: this.notifyEmail,
-          });
-        err = error;
-      }
+      if (error) throw error;
 
-      if (err) {
-        this.saveError = err.message || 'Failed to save settings';
-        this.saveOk = false;
-      } else {
-        this.saveOk = true;
-      }
+      this.saveOk = true;
     } catch (e: any) {
       this.saveError = e?.message || 'Failed to save settings';
       this.saveOk = false;
