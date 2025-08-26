@@ -34,3 +34,12 @@
 
 /* (Optional) extra space between inputs in this section only */
 #contact .form-group + .form-group { margin-top: 1rem; }
+
+a.btn {
+      max-width: 700px;
+      margin: 0 auto;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      font-size: 1.2rem;
+      padding: 0 2rem;
+    }

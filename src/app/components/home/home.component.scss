@@ -1,20 +1,91 @@
-#home-hero {
+#home.masthead {
   position: relative;
-  min-height: 60vh;
-  background-position: center;
-  background-size: cover;
+  background-color: #0f172a; /* fallback if no image */
   background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 
-  /* subtle dark gradient for contrast behind text */
-  &::before {
+  /* Let flexbox do vertical centering */
+  min-height: 50vh; /* slightly shorter */
+  display: flex;
+  align-items: center;  /* vertical centering */
+  justify-content: center;
+  padding-bottom: 2rem; /* reduce extra bottom space */
+
+  @media (min-width: 768px) {
+    min-height: 75vh;
+  }
+  @media (min-width: 1200px) {
+    min-height: 90vh;
+  }
+
+  .overlay {
     content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15));
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .75) 0%,
+      rgba(0, 0, 0, .65) 40%,
+      rgba(0, 0, 0, .65) 60%,
+      rgba(0, 0, 0, .85) 100%
+    );
     pointer-events: none;
   }
 
   .hero-inner {
-    position: relative; /* keep content above overlay */
-    text-shadow: 0 2px 6px rgba(0,0,0,.35);
+    position: relative;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .45);
+  }
+
+  .masthead-heading {
+    line-height: 1.2;
+  }
+
+  .masthead-subheading {
+    line-height: 1.45;
+  }
+
+  .hero-cta {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+
+    a.btn {
+      max-width: 700px;
+      margin: 0 auto;
+      height: 4.4rem;
+      line-height: 4.4rem;
+      font-size: 1.2rem;
+      padding: 0 2rem;
+    }
+
+    .btn-call {
+      border: 2px solid rgba(255,255,255,.85);
+      color: #fff;
+      font-weight: 500;
+      background: transparent;
+
+      &:hover,
+      &:focus {
+        background: rgba(255,255,255,.12);
+        color: #fff;
+        text-decoration: none;
+        outline: none;
+        box-shadow: 0 0 0 .2rem rgba(255,255,255,.25);
+      }
+    }
+
+    .phone-link {
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .2s ease;
+
+      &:hover {
+        color: #9bb2d6; /* lightened brand */
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@
 $brand: #6C91C2;        // primary silver-blue
 $brand-dark: #5273A8;   // hover/darker
 $brand-red: #E64545;    // navbar hover red
+$brand-dark-red: #ca3b3b; 
 $text: #212529;
 
 
@@ -54,6 +55,32 @@ html { scroll-behavior: smooth; }
   &:disabled {
     background: color.adjust($brand, $lightness: 25%) !important;
     border-color: color.adjust($brand, $lightness: 25%) !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+  }
+  &:active { transform: translateY(1px); }
+}
+
+// Red variant for danger buttons, matching dynamic-button structure
+.btn-danger,
+.btn.btn-danger {
+  background: $brand-red !important;
+  border: 2px solid $brand-red !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s, transform .1s;
+  &:hover,
+  &:focus {
+    background: $brand-dark-red !important;
+    border-color: $brand-dark-red !important;
+    color: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 .25rem rgba(202,59,59,.35) !important;
+  }
+  &:disabled {
+    background: color.adjust($brand-red, $lightness: 25%) !important;
+    border-color: color.adjust($brand-red, $lightness: 25%) !important;
     color: #fff !important;
     cursor: not-allowed !important;
     box-shadow: none !important;
