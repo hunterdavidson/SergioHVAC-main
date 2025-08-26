@@ -28,6 +28,7 @@
             id="notifySwitch"
             [(ngModel)]="notifyNewLead"
             (change)="saveSettings()"
+            [disabled]="saving"
           />
           <label class="form-check-label ms-2" for="notifySwitch">
             Email me when a new lead arrives
@@ -37,18 +38,26 @@
         <!-- Email + Save + Status inline -->
         <div class="d-flex align-items-center flex-wrap gap-2 flex-grow-1">
           <input
+            id="notifyEmail"
             class="form-control"
             type="email"
+            autocomplete="email"
             placeholder="Notification email"
             [(ngModel)]="notifyEmail"
             (blur)="saveSettings()"
+            (keyup.enter)="saveSettings()"
+            [ngModelOptions]="{ updateOn: 'blur' }"
+            aria-describedby="notifyHelp"
             style="min-width:240px; max-width:320px;"
+            [disabled]="saving"
           />
+          <small id="notifyHelp" class="text-muted ms-1">We'll send new lead alerts here.</small>
           <button
             class="btn btn-outline-secondary ms-2"
             type="button"
             (click)="saveSettings()"
             [disabled]="saving"
+            [attr.aria-busy]="saving ? 'true' : 'false'"
           >
             {{ saving ? 'Saving…' : 'Save' }}
           </button>
@@ -89,18 +98,18 @@
         <table class="table align-middle mb-0 admin-table">
           <thead>
             <tr>
-              <th>Received</th>
-              <th>Contact Info</th>
-              <th>Message</th>
+              <th scope="col">Received</th>
+              <th scope="col">Contact Info</th>
+              <th scope="col">Message</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let lead of leads; trackBy: trackById">
-              <td class="when">
+            <tr *ngFor="let lead of leads; trackBy: trackById" role="row">
+              <td class="when" role="cell">
                 <div class="time">{{ lead.created_at | date : 'short' }}</div>
               </td>
 
-              <td class="contact">
+              <td class="contact" role="cell">
                 <div class="name fw-semibold">{{ lead.name }}</div>
                 <div class="info">
                   <a [href]="'mailto:'+lead.email" class="contact-link">
@@ -112,7 +121,7 @@
                 </div>
               </td>
 
-              <td class="message">
+              <td class="message" role="cell">
                 <span *ngIf="lead.message; else noMsg">{{ lead.message }}</span>
                 <ng-template #noMsg><span class="text-muted">—</span></ng-template>
               </td>

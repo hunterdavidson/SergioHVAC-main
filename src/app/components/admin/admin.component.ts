@@ -20,14 +20,6 @@ type Lead = {
   source?: string | null;
 };
 
-type UserSettingsRow = {
-  id?: number;
-  user_id: string;
-  notify_new_lead: boolean;
-  email_to: string | null;
-  updated_at?: string;
-};
-
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -36,16 +28,11 @@ type UserSettingsRow = {
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  // auth / user
-  userId: string | null = null;
-  userEmail: string | null = null;
-
-  // page state
   loading = true;
   error = '';
   leads: Lead[] = [];
 
-  // per-user notification settings
+  // notification settings (per signed-in user)
   notifyNewLead = false;
   notifyEmail = '';
 
@@ -54,42 +41,39 @@ export class AdminComponent implements OnInit {
   saveOk = false;
   saveError = '';
 
+  // current user
+  private userId: string | null = null;
+
   constructor(private auth: AuthService, private router: Router) {}
 
   async ngOnInit() {
-    // Must be admin to view page
     const ok = await this.auth.isAdmin();
-    if (!ok) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
+    if (!ok) { this.router.navigateByUrl('/login'); return; }
 
     try {
-      // get current user
-      const { data: userData, error: uErr } = await supabase.auth.getUser();
-      if (uErr || !userData?.user?.id) throw uErr ?? new Error('Not signed in');
-      this.userId = userData.user.id;
-      this.userEmail = userData.user.email ?? null;
+      // who is signed in?
+      const { data: udata, error: uerr } = await supabase.auth.getUser();
+      if (uerr) throw uerr;
+      this.userId = udata.user?.id ?? null;
+      if (!this.userId) throw new Error('No authenticated user.');
 
-      // load THIS USER'S settings row
-      const { data: settings, error: sErr } = await supabase
+      // load this user's settings row (if any)
+      const { data: mySettings, error: sErr } = await supabase
         .from('admin_settings')
         .select('user_id, notify_new_lead, email_to')
         .eq('user_id', this.userId)
         .maybeSingle();
 
-      if (sErr) throw sErr;
-
-      if (settings) {
-        this.notifyNewLead = !!settings.notify_new_lead;
-        this.notifyEmail = settings.email_to ?? '';
-      } else {
-        // No row yet—don’t create one until they save.
-        this.notifyNewLead = false;
-        this.notifyEmail = '';
+      if (sErr && sErr.code !== 'PGRST116') { // PGRST116 = no rows
+        throw sErr;
       }
 
-      // load leads (unchanged)
+      if (mySettings) {
+        this.notifyNewLead = !!mySettings.notify_new_lead;
+        this.notifyEmail = mySettings.email_to || '';
+      }
+
+      // load leads for the table
       const { data, error } = await supabase
         .from('leads')
         .select('*')
@@ -106,31 +90,37 @@ export class AdminComponent implements OnInit {
 
   async saveSettings() {
     if (!this.userId) return;
-
     this.saveOk = false;
     this.saveError = '';
     this.saving = true;
 
     try {
-      // if email is empty, force toggle off
-      const email = (this.notifyEmail || '').trim();
-      const notify = !!email && !!this.notifyNewLead;
+      // basic normalization
+      this.notifyEmail = (this.notifyEmail || '').trim();
+      if (!this.notifyEmail) this.notifyNewLead = false;
 
-      // upsert per-user row (unique on user_id)
-      const row: UserSettingsRow = {
-        user_id: this.userId,
-        notify_new_lead: notify,
-        email_to: email || null,
-      };
-
+      // Use UPSERT keyed by user_id so it creates the row if missing
+      // Requires a unique constraint on admin_settings.user_id (see note below)
       const { error } = await supabase
         .from('admin_settings')
-        .upsert(row, { onConflict: 'user_id' });
+        .upsert(
+          {
+            user_id: this.userId,
+            notify_new_lead: this.notifyNewLead,
+            email_to: this.notifyEmail || null,
+          },
+          { onConflict: 'user_id' }
+        );
 
-      if (error) throw error;
-
-      this.saveOk = true;
+      if (error) {
+        console.error('saveSettings upsert error:', error);
+        this.saveError = error.message || 'Failed to save settings';
+        this.saveOk = false;
+      } else {
+        this.saveOk = true;
+      }
     } catch (e: any) {
+      console.error('saveSettings exception:', e);
       this.saveError = e?.message || 'Failed to save settings';
       this.saveOk = false;
     } finally {
@@ -145,26 +135,21 @@ export class AdminComponent implements OnInit {
   }
 
   exportCsv() {
-    const header = ['created_at', 'name', 'email', 'phone', 'message'];
-    const rows = this.leads.map((l) => [
-      l.created_at,
-      l.name,
-      l.email,
-      l.phone,
-      l.message ?? '',
+    const header = ['created_at','name','email','phone','message'];
+    const rows = this.leads.map(l => [
+      l.created_at, l.name, l.email, l.phone, l.message ?? ''
     ]);
     const csv = [header, ...rows]
-      .map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))
       .join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'leads.csv';
-    a.click();
+    const a = document.createElement('a'); a.href = url; a.download = 'leads.csv'; a.click();
     URL.revokeObjectURL(url);
   }
 
-  trackById = (_: number, l: Lead) => l.id;
+  trackById(index: number, lead: Lead): string {
+    return lead.id;
+  }
 }
