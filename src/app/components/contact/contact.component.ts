@@ -71,6 +71,21 @@ export class ContactComponent {
       // Success
       this.isSubmitted = true;
       form.resetForm();
+
+      // Ask Supabase Edge Function to email all opted-in admins
+      try {
+        const { error: fnErr } = await supabase.functions.invoke('send-email', {
+          body: {
+            lead: payload
+          }
+        });
+        if (fnErr) {
+          console.error('[functions.send-email] error:', fnErr);
+        }
+      } catch (fnEx) {
+        console.error('[functions.send-email] exception:', fnEx);
+      }
+
     } catch (e: any) {
       console.error('[contact submit] exception:', e);
       this.error = e?.message || 'Failed to send your request.';
