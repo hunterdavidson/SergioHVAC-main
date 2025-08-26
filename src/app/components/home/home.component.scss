@@ -1,3 +1,21 @@
+:host {
+  display: block;
+
+  /* tune these to match your actual navbar height */
+  --nav-h-sm: 64px;    /* small/mobile nav height */
+  --nav-h-md: 72px;    /* medium+ nav height */
+  --section-gap: 2.5rem; /* breathing room under nav */
+  --extra-hero-gap: 2rem; /* extra buffer you asked for */
+}
+
+/* scroll offset when navigating via anchor links (#home) */
+#home {
+  scroll-margin-top: calc(var(--nav-h-sm) + var(--section-gap) + var(--extra-hero-gap));
+  @media (min-width: 768px) {
+    scroll-margin-top: calc(var(--nav-h-md) + var(--section-gap) + var(--extra-hero-gap));
+  }
+}
+
 #home.masthead {
   position: relative;
   background-color: #0f172a; /* fallback if no image */
@@ -5,16 +23,20 @@
   background-size: cover;
   background-position: center;
 
-  /* Let flexbox do vertical centering */
-  min-height: 50vh; /* slightly shorter */
+  /* more spacing below nav */
+  padding-top: calc(var(--nav-h-sm) + var(--section-gap) + var(--extra-hero-gap) + env(safe-area-inset-top));
+  padding-bottom: 2rem;
+
+  min-height: 50vh;
   display: flex;
-  align-items: center;  /* vertical centering */
+  align-items: center;
   justify-content: center;
-  padding-bottom: 2rem; /* reduce extra bottom space */
 
   @media (min-width: 768px) {
     min-height: 75vh;
+    padding-top: calc(var(--nav-h-md) + var(--section-gap) + var(--extra-hero-gap) + env(safe-area-inset-top));
   }
+
   @media (min-width: 1200px) {
     min-height: 90vh;
   }
@@ -31,19 +53,26 @@
       rgba(0, 0, 0, .85) 100%
     );
     pointer-events: none;
+    z-index: 0;
   }
 
   .hero-inner {
     position: relative;
+    z-index: 1; /* keep text above overlay */
     text-shadow: 0 2px 6px rgba(0, 0, 0, .45);
+    padding-inline: 0.75rem;
   }
 
   .masthead-heading {
     line-height: 1.2;
+    font-size: clamp(1.75rem, 5.5vw, 3.5rem); /* responsive */
+    margin-bottom: 1rem;
   }
 
   .masthead-subheading {
     line-height: 1.45;
+    font-size: clamp(1rem, 3.2vw, 1.5rem); /* responsive */
+    margin-bottom: 1.25rem;
   }
 
   .hero-cta {
@@ -55,10 +84,16 @@
     a.btn {
       max-width: 700px;
       margin: 0 auto;
-      height: 4.4rem;
-      line-height: 4.4rem;
-      font-size: 1.2rem;
-      padding: 0 2rem;
+      min-height: 3.5rem;
+      line-height: 3.5rem;
+      font-size: 1.05rem;
+      padding: 0 1.5rem;
+      @media (min-width: 576px) {
+        min-height: 4.2rem;
+        line-height: 4.2rem;
+        font-size: 1.15rem;
+        padding: 0 2rem;
+      }
     }
 
     .btn-call {
@@ -87,5 +122,12 @@
         color: #9bb2d6; /* lightened brand */
       }
     }
+  }
+}
+
+/* tighter tweak for extra-small devices */
+@media (max-width: 360px) {
+  #home.masthead {
+    padding-top: calc(var(--nav-h-sm) + var(--section-gap) + var(--extra-hero-gap) + 1rem + env(safe-area-inset-top));
   }
 }
