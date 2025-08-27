@@ -44,7 +44,20 @@ export class AdminComponent implements OnInit {
   // current user
   private userId: string | null = null;
 
+  // pagination
+  page = 1;
+  pageSize = 10;
+  total = 0;
+  totalPages = 1;
+  pages: number[] = [];
+
   constructor(private auth: AuthService, private router: Router) {}
+
+  private computePages() {
+    this.totalPages = Math.max(1, Math.ceil(this.total / this.pageSize));
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    if (this.page > this.totalPages) this.page = this.totalPages;
+  }
 
   async ngOnInit() {
     const ok = await this.auth.isAdmin();
@@ -72,21 +85,65 @@ export class AdminComponent implements OnInit {
         this.notifyNewLead = !!mySettings.notify_new_lead;
         this.notifyEmail = mySettings.email_to || '';
       }
-
-      // load leads for the table
-      const { data, error } = await supabase
-        .from('leads')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      this.leads = (data ?? []) as Lead[];
+      // load first page of leads
+      await this.loadLeads(1);
     } catch (e: any) {
       this.error = e?.message || 'Failed to load admin data';
     } finally {
       this.loading = false;
     }
   }
+
+  async loadLeads(page: number = 1) {
+    this.loading = true;
+    this.error = '';
+
+    // guard: never request negative ranges
+    const desiredPage = Math.max(1, page);
+    const from = (desiredPage - 1) * this.pageSize;
+    const to = from + this.pageSize - 1;
+
+    try {
+      const { data, error, count } = await supabase
+        .from('leads')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      if (error) throw error;
+
+      // If API ever returns undefined count, derive a fallback when on first page
+      this.total = typeof count === 'number' ? count : (from === 0 ? (data?.length ?? 0) : this.total);
+      this.leads = (data ?? []) as Lead[];
+
+      // If we somehow navigated beyond the last page (e.g., items deleted), pull the last page
+      this.computePages();
+      if (this.leads.length === 0 && desiredPage > 1 && this.total > 0) {
+        const last = Math.max(1, Math.ceil(this.total / this.pageSize));
+        if (last !== desiredPage) {
+          await this.loadLeads(last);
+          return;
+        }
+      }
+
+      this.page = desiredPage;
+    } catch (e: any) {
+      this.error = e?.message || 'Failed to load leads';
+      this.leads = [];
+      // keep existing total so pagination UI doesn’t jump to 0 on transient error
+    } finally {
+      this.computePages();
+      this.loading = false;
+    }
+  }
+
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.page) return;
+    void this.loadLeads(page);
+  }
+
+  nextPage() { this.changePage(this.page + 1); }
+  prevPage() { this.changePage(this.page - 1); }
 
   async saveSettings() {
     if (!this.userId) return;

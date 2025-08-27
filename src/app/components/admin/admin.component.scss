@@ -152,3 +152,36 @@ $text: #212529;
 @media (max-width: 576px) {
   #admin .admin-table td.message { max-width: 260px; }
 }
+
+/* Themed pagination to match brand */
+.hvac-pagination .page-link {
+  color: #6C91C2;
+  border-color: #dfe3e8;
+}
+.hvac-pagination .page-link:hover,
+.hvac-pagination .page-item:not(.disabled) .page-link:focus {
+  color: #fff;
+  background-color: #5273A8;
+  border-color: #5273A8;
+  box-shadow: 0 0 0 .2rem rgba(108,145,194,.25);
+}
+.hvac-pagination .page-item.active .page-link {
+  color: #fff;
+  background-color: #6C91C2;
+  border-color: #6C91C2;
+}
+.hvac-pagination .page-item.disabled .page-link {
+  color: #9aa4af;
+  background-color: #f8f9fb;
+}
+
+/* Make empty/error states consistent */
+.state-card {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: 1rem; border: 1px solid #e5e7eb; border-radius: .5rem; background: #fff;
+}
+.state-card.error { border-color: #ffd1d1; background: #fff7f7; color: #b42318; }
+
+/* Tighten table */
+.admin-table td.when .time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.admin-table .contact .contact-link { margin-right: .5rem; }

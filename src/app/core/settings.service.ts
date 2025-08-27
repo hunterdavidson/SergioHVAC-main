@@ -108,6 +108,17 @@ const DEFAULT_SETTINGS: SiteSettings = {
 
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
+  /** Preload readiness */
+  private _loaded = false;
+  private _loadedPromise: Promise<void>;
+  private _resolveLoaded: (() => void) | null = null;
+
+  constructor() {
+    this._loadedPromise = new Promise<void>((resolve) => {
+      this._resolveLoaded = resolve;
+    });
+  }
+
   /** Current settings snapshot used by app components */
   private _current: SiteSettings = structuredClone(DEFAULT_SETTINGS);
 
@@ -123,12 +134,14 @@ export class SettingsService {
       console.warn('[settings] load failed, falling back to defaults:', error.message);
       const local = this._loadLocal();
       this._current = local ?? structuredClone(DEFAULT_SETTINGS);
+      this._markLoaded();
       return;
     }
 
     if (data?.data) {
       this._current = this._mergeWithDefaults(data.data as SiteSettings);
       this._saveLocal(this._current);
+      this._markLoaded();
       return;
     }
 
@@ -138,6 +151,7 @@ export class SettingsService {
     if (upsertErr) console.warn('[settings] seed insert failed:', upsertErr.message);
     this._current = seeded;
     this._saveLocal(seeded);
+    this._markLoaded();
   }
 
   /** Save to DB and mirror to localStorage */
@@ -154,6 +168,24 @@ export class SettingsService {
   /** Read-only snapshot for components */
   get value(): SiteSettings {
     return this._current;
+  }
+
+  /** True once settings have finished loading (or defaulted). */
+  get loaded(): boolean {
+    return this._loaded;
+  }
+
+  /** Promise that resolves when settings are ready. Useful for APP_INITIALIZER. */
+  ready(): Promise<void> {
+    return this._loadedPromise;
+  }
+
+  private _markLoaded(): void {
+    if (!this._loaded) {
+      this._loaded = true;
+      this._resolveLoaded?.();
+      this._resolveLoaded = null;
+    }
   }
 
   // -------- helpers --------

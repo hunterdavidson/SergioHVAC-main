@@ -130,5 +130,22 @@
         </table>
       </div>
     </div>
+
+    <!-- Pagination -->
+    <nav *ngIf="!loading && !error && totalPages > 1" aria-label="Leads pagination" class="mt-3 d-flex justify-content-center">
+      <ul class="pagination hvac-pagination mb-0">
+        <li class="page-item" [class.disabled]="page === 1">
+          <button class="page-link" type="button" (click)="prevPage()" aria-label="Previous">«</button>
+        </li>
+
+        <li class="page-item" *ngFor="let p of pages" [class.active]="p === page">
+          <button class="page-link" type="button" (click)="changePage(p)">{{ p }}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="page === totalPages">
+          <button class="page-link" type="button" (click)="nextPage()" aria-label="Next">»</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </section>
