@@ -1,4 +1,30 @@
 // src/app/core/supabase.client.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-export const supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
+
+// Use globalThis so it works in browsers and won't explode if SSR is ever added
+declare global {
+  // eslint-disable-next-line no-var
+  var __sb__: SupabaseClient | undefined;
+}
+
+function makeClient(): SupabaseClient {
+  return createClient(environment.supabaseUrl, environment.supabaseAnonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      // Unique key to prevent lock collisions with other projects/domains
+      storageKey: 'sb-ptuytccsuledaktkntzu-auth',
+      // (optional) detect the OAuth redirect hash if you ever add OAuth
+      detectSessionInUrl: true,
+    },
+  });
+}
+
+// HMR-safe singleton (Angular’s Vite builder can hot-replace modules)
+export const supabase: SupabaseClient =
+  (typeof window === 'undefined'
+    ? // Not in a browser (just in case): create a throwaway client
+      makeClient()
+    : // Browser: stash a single instance on globalThis
+      (globalThis.__sb__ ||= makeClient()));

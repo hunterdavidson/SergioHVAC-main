@@ -5,34 +5,31 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2GNW86D06Y"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
-
       gtag('config', 'G-2GNW86D06Y');
     </script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <base href="/" /> <!-- critical for Angular routing -->
+    <base href="/" />
 
     <!-- Preconnect to Supabase for faster image loading -->
     <link rel="preconnect" href="https://ptuytccsuledaktkntzu.supabase.co" crossorigin>
 
-    <!-- Font Awesome and Bootstrap (update integrity hashes from CDN) -->
-    <link rel="stylesheet"
+    <!-- Font Awesome (CSS only) -->
+    <link
+      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
-      integrity="sha384-..." crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-..." crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    />
 
     <title>Sergio HVAC</title>
-    <link rel="icon" href="assets/favicon.ico">
     <meta property="og:title" content="Sergio HVAC">
     <meta property="og:description" content="Fast, reliable HVAC services.">
-    <meta property="og:image" content="https://your-domain/og-image.jpg">
     <meta name="theme-color" content="#0d6efd">
   </head>
   <body>
-    <!-- Angular app mounts here -->
     <app-root></app-root>
   </body>
 </html>
