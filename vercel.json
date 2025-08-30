@@ -1,10 +1,17 @@
 {
-    "rewrites": [
-      { "source": "/api/(.*)", "destination": "/api/$1" },
-      {
-        "source": "/((?!api|assets|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)",
-        "destination": "/"
-      }
-    ]
-  }
-  
+  "framework": "angular",
+  "devCommand": "ng serve --host 127.0.0.1 --port 4200",
+  "buildCommand": "ng build --configuration=production",
+  "outputDirectory": "dist/sergio-hvac/browser",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}
