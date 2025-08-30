@@ -9,13 +9,14 @@ declare global {
 }
 
 function makeClient(): SupabaseClient {
+  console.info('[supabase] client created'); // Should log once per full reload
   return createClient(environment.supabaseUrl, environment.supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
       // Unique key to prevent lock collisions with other projects/domains
       storageKey: 'sb-ptuytccsuledaktkntzu-auth',
-      // (optional) detect the OAuth redirect hash if you ever add OAuth
+      // Detect OAuth redirect hash if you add OAuth
       detectSessionInUrl: true,
     },
   });
@@ -24,7 +25,5 @@ function makeClient(): SupabaseClient {
 // HMR-safe singleton (Angular’s Vite builder can hot-replace modules)
 export const supabase: SupabaseClient =
   (typeof window === 'undefined'
-    ? // Not in a browser (just in case): create a throwaway client
-      makeClient()
-    : // Browser: stash a single instance on globalThis
-      (globalThis.__sb__ ||= makeClient()));
+    ? makeClient() // Not in a browser (just in case)
+    : (globalThis.__sb__ ||= makeClient())); // Browser: stash single instance
