@@ -1,7 +1,23 @@
 .service-hero {
   position: relative; isolation: isolate;
+  /* Ensure content never hides under fixed navbar and leave extra breathing room */
+  /* Fallback for browsers without svh support */
+  padding-top: clamp(6rem, 12vh, 12rem);
+  padding-bottom: clamp(1.5rem, 6vh, 5rem);
+  /* Prefer small viewport units where supported (iOS dynamic bars) */
+  padding-top: clamp(6rem, 12svh, 12rem);
+  padding-bottom: clamp(1.5rem, 6svh, 5rem);
   min-height: 52vh; display:flex; align-items:center; justify-content:center;
   background: linear-gradient(180deg, color-mix(in srgb, var(--accent, #6C91C2) 14%, #000 0%), #111 85%);
+}
+@media (min-width: 992px) {
+  .service-hero {
+    /* On larger screens allow more breathing room while remaining responsive */
+    padding-top: clamp(8rem, 14vh, 14rem);
+    padding-bottom: clamp(2rem, 8vh, 6rem);
+    padding-top: clamp(8rem, 14svh, 14rem);
+    padding-bottom: clamp(2rem, 8svh, 6rem);
+  }
 }
 .service-hero .hero-bg {
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2;

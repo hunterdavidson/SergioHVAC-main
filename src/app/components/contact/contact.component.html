@@ -44,7 +44,7 @@
           <label for="phone" class="visually-hidden">Phone</label>
           <input type="tel" id="phone" name="phone" class="form-control mb-4"
                  placeholder="Phone *" required pattern="^[0-9\-\+\s\(\)]{7,15}$" autocomplete="tel"
-                 [(ngModel)]="formData.phone" #phone="ngModel" />
+                 [(ngModel)]="formData.phone" #phone="ngModel" (input)="onPhoneInput($event)" />
           <div class="text-danger small mt-n3 mb-3" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || fieldErrors.phone">
             {{ fieldErrors.phone || (phone.errors?.['required'] ? 'Please enter your phone number.' : (phone.errors?.['pattern'] ? 'Please enter a valid phone number.' : '')) }}
           </div>

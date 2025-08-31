@@ -1,14 +1,13 @@
 // /api/leads.js
-// Force Node runtime on Vercel so we can use server-only libs (Resend, service key)
+// Vercel API: validate + rate-limit, then forward to Supabase Edge Function
 module.exports = handler;
-module.exports.config = { runtime: 'nodejs' };
+module.exports.config = { runtime: 'nodejs20.x' };
 
-const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
 
 // ---- Env
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 // Use a safe default so you can test without a custom domain
 const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
@@ -16,11 +15,6 @@ const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 // Example: https://<project-ref>.supabase.co/functions/v1/send-email
 const SEND_EMAIL_FUNCTION_URL = process.env.SEND_EMAIL_FUNCTION_URL || '';
 
-if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-  console.warn('[leads] Missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
-}
-
-const supabase = createClient(SUPABASE_URL || '', SUPABASE_SERVICE_KEY || '');
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 // ---- Helpers
@@ -74,6 +68,12 @@ async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Require Edge Function URL; no service key needed on Vercel
+  if (!SEND_EMAIL_FUNCTION_URL) {
+    console.error('[leads] Missing SEND_EMAIL_FUNCTION_URL');
+    return res.status(500).json({ error: 'Server not configured' });
+  }
+
   // Simple per-IP rate-limit
   const ip = getIp(req);
   if (isRateLimited(ip)) {
@@ -120,22 +120,9 @@ async function handler(req, res) {
 
   try {
     // 1) Insert lead
-    const { error: insertError } = await supabase.from('leads').insert({
-      name,
-      email: email.toLowerCase(),
-      phone,
-      message: message || null,
-      page_path: page_path || null,
-      utm_source: clean(utm.source) || null,
-      utm_medium: clean(utm.medium) || null,
-      utm_campaign: clean(utm.campaign) || null,
-      source: 'website'
-    });
+    /* DB insert handled by Supabase Edge Function */
 
-    if (insertError) {
-      console.error('[leads] Supabase insert error:', insertError);
-      return res.status(500).json({ error: 'Database insert failed' });
-    }
+    
 
     // 2) Email notification (prefer Edge Function, fallback to Resend if not configured)
     try {
@@ -161,8 +148,8 @@ async function handler(req, res) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
-              'apikey': SUPABASE_SERVICE_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY || ''}`,
+              'apikey': SUPABASE_ANON_KEY || '',
             },
             body: JSON.stringify(payload),
             signal: controller.signal,
@@ -171,6 +158,7 @@ async function handler(req, res) {
           if (!edgeResp?.ok) {
             const t = edgeResp?.text ? await edgeResp.text() : 'no response';
             console.warn('[leads] send-email edge function failed:', edgeResp?.status, t?.slice?.(0, 300));
+            return res.status(502).json({ error: 'Notification function failed' });
           }
         } finally {
           clearTimeout(timer);

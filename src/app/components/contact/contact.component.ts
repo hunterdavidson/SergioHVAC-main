@@ -36,6 +36,24 @@ export class ContactComponent {
   // simple honeypot field (bots tend to fill it)
   hp: string = '';
 
+  // Format US phone number as (xxx) xxx-xxxx while typing
+  onPhoneInput(evt: Event) {
+    const target = evt.target as HTMLInputElement | null;
+    if (!target) return;
+    const digits = (target.value || '').replace(/\D/g, '').slice(0, 10);
+    let formatted = '';
+    if (digits.length > 0) {
+      if (digits.length <= 3) {
+        formatted = `(${digits}`;
+      } else if (digits.length <= 6) {
+        formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+      } else {
+        formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+      }
+    }
+    this.formData.phone = formatted;
+  }
+
   private getUtmParams() {
     const p = new URLSearchParams(window.location.search);
     return {

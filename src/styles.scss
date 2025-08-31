@@ -19,6 +19,12 @@ $text: #212529;
 /* ---- Base document tweaks ---- */
 html { scroll-behavior: smooth; }
 
+/* Fix mobile container padding: ensure base .container has gutters */
+.container {
+  padding-right: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+  padding-left: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+}
+
 /* Accessible focus outline for interactive elements */
 :where(a, button, input, textarea, select, summary, [role="button"])::moz-focus-inner { border: 0; }
 :where(a, button, input, textarea, select, summary, [role="button"]):focus-visible {
