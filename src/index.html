@@ -7,15 +7,50 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
-      gtag('config', 'G-2GNW86D06Y');  
+      gtag('config', 'G-2GNW86D06Y');
     </script>
 
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <base href="/" />
 
-    <!-- Preconnect to Supabase for faster image loading -->
+    <title>SV HVAC | Fast, Reliable Heating & Cooling in Grapevine, TX</title>
+    <meta name="description" content="SV HVAC provides fast, reliable heating and air conditioning repair, installation, and maintenance in Grapevine, TX and nearby areas. Call for same-day service." />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="googlebot" content="index,follow" />
+    <link rel="canonical" href="https://svhvac.com/">
+    <link rel="alternate" href="https://svhvac.com/" hreflang="en-US">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SV HVAC">
+    <meta property="og:title" content="SV HVAC | Fast, Reliable Heating & Cooling">
+    <meta property="og:description" content="Trusted HVAC service in Grapevine, TX: repair, install, and maintenance with honest pricing and quick turnaround.">
+    <meta property="og:url" content="https://svhvac.com/">
+    <meta property="og:image" content="https://svhvac.com/img/og-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SV HVAC logo and service tagline">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SV HVAC | Fast, Reliable Heating & Cooling">
+    <meta name="twitter:description" content="HVAC repair & installs in Grapevine, TX and nearby. Same-day service available.">
+    <meta name="twitter:image" content="https://svhvac.com/img/og-card.png">
+
+    <!-- Mobile UI colors (force white; no dark variant) -->
+    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light">
+    <meta name="msapplication-TileColor" content="#ffffff">
+
+    <!-- Preconnect (Supabase) -->
     <link rel="preconnect" href="https://ptuytccsuledaktkntzu.supabase.co" crossorigin>
+
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <!-- Font Awesome (CSS only) -->
     <link
@@ -24,12 +59,37 @@
       crossorigin="anonymous"
     />
 
-    <title>Sergio HVAC</title>
-    <meta property="og:title" content="Sergio HVAC">
-    <meta property="og:description" content="Fast, reliable HVAC services.">
-    <meta name="theme-color" content="#0d6efd">
+    <!-- Page + loader styles -->
+    <style>
+      :root { --brand:#6C91C2; }
+      html, body { background:#fff; min-height:100%; }
+      body { margin:0; }
+
+      /* Simple pre-boot loader */
+      #app-loader {
+        position: fixed; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: #fff; z-index: 9999;
+        transition: opacity .25s ease, visibility .25s ease;
+      }
+      #app-loader.hidden { opacity: 0; visibility: hidden; }
+
+      .loader {
+        width: 48px; height: 48px;
+        border: 4px solid #e5e7eb; border-top-color: var(--brand);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
   </head>
   <body>
+    <!-- Pre-boot loading overlay -->
+    <div id="app-loader" role="status" aria-live="polite" aria-label="Loading">
+      <img src="/icon.svg" alt="SV HVAC" height="40" style="margin-right:12px;opacity:.9">
+      <div class="loader" aria-hidden="true"></div>
+    </div>
+
     <app-root></app-root>
   </body>
 </html>
