@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SettingsService } from '../../core/settings.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgOptimizedImage],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   constructor(public settings: SettingsService) {}
 
   get heroUrl(): string | null {
@@ -29,5 +30,19 @@ export class HomeComponent {
 
   get ctaText(): string | null {
     return this.settings.value.home?.ctaText || null;
+  }
+
+  ngOnInit(): void {
+    // If a hero image is configured, hint the browser to preload it for LCP
+    const url = this.heroUrl;
+    if (url && typeof document !== 'undefined') {
+      try {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = url;
+        document.head.appendChild(link);
+      } catch {}
+    }
   }
 }

@@ -1,90 +1,13 @@
-/* ===== Brand tokens ===== */
-$brand: #6C91C2;        // blue theme
-$brand-dark: #5273A8;   // darker blue
-$brand-red: #E64545;    // red for heating
-$brand-red-dark: #C53030; // darker red hover
-$text: #212529;
-
-/* Scope to services section */
-#services {
-  /* Phone number link(s) to match theme */
-  a[href^="tel:"],
-  .tel-link {
-    color: $brand-dark;
-    font-weight: 700;
-    text-decoration: none;
-    transition: color .2s ease, text-decoration-color .2s ease;
-    &:hover { color: $brand; text-decoration: underline; }
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 .2rem rgba(108,145,194,.35);
-      border-radius: .25rem;
-    }
-  }
-
-  /* Make cards breathe a bit */
-  .service-box {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: .75rem;
-    box-shadow: 0 2px 8px rgba(16,24,40,.04);
-  }
-
-  /* Icon colors and sizes */
-  .text-brand { color: $brand !important; }
-  .fa-stack { line-height: 1; }
-
-  /* Blue theme buttons (AC & Maintenance) */
-  .dynamic-button,
-  .btn.dynamic-button,
-  .btn-primary {
-    background: $brand;
-    border: 2px solid $brand;
-    color: #fff;
-    font-weight: 600;
-    transition: background .2s ease, border-color .2s ease, box-shadow .2s, transform .1s;
-    &:hover,
-    &:focus {
-      background: $brand-dark;
-      border-color: $brand-dark;
-      color: #fff;
-      box-shadow: 0 0 0 .25rem rgba(82,115,168,.35);
-      outline: none;
-    }
-    &:active { transform: translateY(1px); }
-  }
-
-  /* Red theme button (Heating) */
-  .dynamic-button-danger,
-  .btn.dynamic-button-danger,
-  .btn-danger {
-    background: $brand-red;
-    border: 2px solid $brand-red;
-    color: #fff;
-    font-weight: 600;
-    transition: background .2s ease, border-color .2s ease, box-shadow .2s, transform .1s;
-    &:hover,
-    &:focus {
-      background: $brand-red-dark;
-      border-color: $brand-red-dark;
-      color: #fff;
-      outline: none;
-      box-shadow: 0 0 0 .25rem rgba(230,69,69,.35); /* red shadow */
-    }
-    &:active { transform: translateY(1px); }
-  }
-
-  /* Muted text tint */
-  .text-muted { color: #6b7280 !important; }
-
-  /* Extra spacing on very small screens */
-  @media (max-width: 575.98px) {
-    .service-box { padding: 1.25rem 1rem; }
-  }
+.service-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
-/* Selection highlight */
-#services ::selection {
-  background: rgba(108,145,194,.25);
-  color: #111;
-}
+.bg-brand { background: #6C91C2; }
+.bg-danger { background: #E64545; }
+

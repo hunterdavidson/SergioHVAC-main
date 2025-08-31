@@ -3,12 +3,7 @@
   <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2GNW86D06Y"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-2GNW86D06Y');
-    </script>
+    <script src="/js/gtag-init.js"></script>
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -27,7 +22,7 @@
     <meta property="og:title" content="SV HVAC | Fast, Reliable Heating & Cooling">
     <meta property="og:description" content="Trusted HVAC service in Grapevine, TX: repair, install, and maintenance with honest pricing and quick turnaround.">
     <meta property="og:url" content="https://svhvac.com/">
-    <meta property="og:image" content="https://svhvac.com/img/og-card.png">
+    <meta property="og:image" content="https://svhvac.com/assets/img/og-card.webp">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="SV HVAC logo and service tagline">
@@ -37,7 +32,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SV HVAC | Fast, Reliable Heating & Cooling">
     <meta name="twitter:description" content="HVAC repair & installs in Grapevine, TX and nearby. Same-day service available.">
-    <meta name="twitter:image" content="https://svhvac.com/img/og-card.png">
+    <meta name="twitter:image" content="https://svhvac.com/assets/img/og-card.webp">
+    <meta name="twitter:site" content="@svhvac">
 
     <!-- Mobile UI colors (force white; no dark variant) -->
     <meta name="theme-color" content="#ffffff">
@@ -46,18 +42,17 @@
 
     <!-- Preconnect (Supabase) -->
     <link rel="preconnect" href="https://ptuytccsuledaktkntzu.supabase.co" crossorigin>
+    <!-- Preconnect helpful third-party origins -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
 
     <!-- Icons -->
-    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 
-    <!-- Font Awesome (CSS only) -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
-      crossorigin="anonymous"
-    />
+    <!-- Inline SVGs are used for icons; no heavy icon font needed. -->
 
     <!-- Page + loader styles -->
     <style>
@@ -81,15 +76,80 @@
         animation: spin 1s linear infinite;
       }
       @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Skip to content link (a11y) */
+      .skip-link {
+        position: fixed; left: 8px; top: 8px;
+        transform: translateY(-200%);
+        background:#111; color:#fff; padding:.5rem .75rem; border-radius:.5rem;
+        z-index: 10000; text-decoration:none;
+        transition: transform .15s ease;
+        max-width: calc(100vw - 16px);
+      }
+      .skip-link:focus { transform: translateY(0); outline: 2px solid #6C91C2; }
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <!-- Static JSON-LD (Organization) -->
+    <script type="application/ld+json" id="ld-global">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "SV HVAC",
+        "url": "https://svhvac.com/"
+      }
+    </script>
+
+    <!-- Static JSON-LD (Local Business) -->
+    <script type="application/ld+json" id="ld-localbusiness-static">
+      {
+        "@context": "https://schema.org",
+        "@type": "HVACBusiness",
+        "name": "SV HVAC",
+        "url": "https://svhvac.com/",
+        "image": "https://svhvac.com/assets/img/og-card.webp",
+        "logo": "https://svhvac.com/logo-simple.webp",
+        "telephone": "+1-817-724-5507",
+        "contactPoint": [{
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-817-724-5507",
+          "areaServed": "Grapevine, TX",
+          "availableLanguage": ["English"]
+        }],
+        "areaServed": {
+          "@type": "City",
+          "name": "Grapevine",
+          "addressRegion": "TX",
+          "addressCountry": "US"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Grapevine",
+          "addressRegion": "TX",
+          "addressCountry": "US",
+          "postalCode": "76051"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 32.9343, "longitude": -97.0781 },
+        "sameAs": [],
+        "openingHoursSpecification": [{
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+          ],
+          "opens": "09:00",
+          "closes": "19:00"
+        }],
+        "priceRange": "$$"
+      }
+    </script>
     <!-- Pre-boot loading overlay -->
     <div id="app-loader" role="status" aria-live="polite" aria-label="Loading">
       <img src="/icon.svg" alt="SV HVAC" height="40" style="margin-right:12px;opacity:.9">
       <div class="loader" aria-hidden="true"></div>
     </div>
 
-    <app-root></app-root>
+    <app-root id="main" role="main"></app-root>
   </body>
 </html>

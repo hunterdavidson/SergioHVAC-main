@@ -1,0 +1,30 @@
+.service-hero {
+  position: relative; isolation: isolate;
+  min-height: 52vh; display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent, #6C91C2) 14%, #000 0%), #111 85%);
+}
+.service-hero .hero-bg {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2;
+}
+.service-hero .overlay {
+  position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.6)); z-index:-1;
+}
+.feature-list { list-style:none; padding:0; margin:0; }
+.feature-list li { display:flex; align-items:flex-start; gap:.5rem; margin:.5rem 0; }
+.feature-list .check { color: var(--accent, #6C91C2); font-weight:700; line-height:1.2; }
+
+.info-card { background:#fff; border:1px solid #e5e7eb; border-radius:.75rem; }
+
+.gallery { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.gallery img { width:100%; height:180px; object-fit:cover; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+.gallery .placeholder { height:180px; border:2px dashed #d1d5db; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#9ca3af; font-size:.9rem; gap:.35rem; background:#f9fafb; }
+
+/* Mobile: 2-column only */
+@media (max-width: 575.98px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+
+/* Simple lightbox */
+.lightbox { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:1050; display:flex; align-items:center; justify-content:center; flex-direction:column; padding: 1rem; }
+.lightbox img { max-width: 92vw; max-height: 72vh; object-fit: contain; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+.lightbox .close { margin-top: .75rem; background: transparent; color:#fff; border:none; font-size:2rem; line-height:1; cursor:pointer; }
+.lightbox .caption { color:#e5e7eb; margin-top:.25rem; }
+.lightbox .hint { color:#9ca3af; font-size:.85rem; margin-top:.25rem; }

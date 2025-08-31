@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SettingsService } from '../../core/settings.service';
@@ -8,8 +8,10 @@ import { SettingsService } from '../../core/settings.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './services.component.html',
+  styleUrls: ['./services.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesComponent {
-  // Read-only settings snapshot for the template
-  settings = inject(SettingsService).value;
+  // Keep a reference to the service so updates reflect live
+  public settings: SettingsService = inject(SettingsService);
 }

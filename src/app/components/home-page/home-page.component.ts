@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from '../home/home.component';
 import { ServicesComponent } from '../services/services.component';
@@ -11,6 +11,7 @@ import { ContactComponent } from '../contact/contact.component';
   standalone: true,
   imports: [CommonModule, HomeComponent, ServicesComponent, AboutComponent, TeamComponent, ContactComponent],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss']
+  styleUrls: ['./home-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent {}

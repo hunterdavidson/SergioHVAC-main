@@ -46,11 +46,25 @@ export class CustomizeComponent implements OnInit {
     this.draft.team ||= { members: [] };
     this.draft.team.members ||= [];
     while (this.draft.team.members.length < 3) {
-      this.draft.team.members.push({ name: '', role: '', icon: 'fa-user', hidden: false });
+      this.draft.team.members.push({ name: '', role: '', icon: 'user', hidden: false });
     }
 
     this.draft.navbar ||= { phone: '(XXX) XXX-XXXX' };
     this.draft.home ||= { headline: '', subhead: '', ctaText: '' };
+
+    // Ensure service pages exist with arrays
+    this.draft.servicePages ||= {
+      ac: { features: [], gallery: [] },
+      heat: { features: [], gallery: [] },
+      maintenance: { features: [], gallery: [] },
+    } as any;
+    for (const k of ['ac','heat','maintenance'] as const) {
+      const p: any = (this.draft.servicePages as any)[k] || {};
+      p.features ||= [];
+      p.gallery ||= [];
+      while (p.gallery.length < 3) p.gallery.push({});
+      (this.draft.servicePages as any)[k] = p;
+    }
   }
 
   // --- Save ---------------------------------------------------------------
@@ -190,6 +204,109 @@ export class CustomizeComponent implements OnInit {
     member.photoUrl = undefined;
 
     await this.save();
+  }
+
+  // --- Service pages: hero & gallery uploads -----------------------------
+  private _svcKeys: Array<'ac'|'heat'|'maintenance'> = ['ac','heat','maintenance'];
+
+  async onServiceHeroSelected(evt: Event, key: 'ac'|'heat'|'maintenance') {
+    const input = evt.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    const page = this.draft.servicePages?.[key];
+    if (!page) return;
+
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `services/${key}/hero-${Date.now()}.${ext}`;
+
+    if (page.heroPath) await this._removeStorageQuiet(page.heroPath);
+
+    const { error: upErr } = await supabase.storage.from('assets').upload(path, file, {
+      cacheControl: '3600', upsert: true,
+    });
+    if (upErr) { alert('Upload failed: ' + upErr.message); return; }
+
+    const { data } = supabase.storage.from('assets').getPublicUrl(path);
+    page.heroPath = path; page.heroUrl = data?.publicUrl;
+    await this.save();
+    input.value = '';
+  }
+
+  async clearServiceHero(key: 'ac'|'heat'|'maintenance') {
+    const page = this.draft.servicePages?.[key];
+    if (!page) return;
+
+    const ok = confirm('Remove this service hero image? This deletes the file from storage.');
+    if (!ok) return;
+
+    let removed = false;
+    if (page.heroPath) removed = await this._removeStorageQuiet(page.heroPath);
+    else if (page.heroUrl) {
+      const keyPath = this._pathFromPublicUrl(page.heroUrl);
+      if (keyPath) removed = await this._removeStorageQuiet(keyPath);
+    }
+    if (!removed) alert('Could not delete from storage. Check policies.');
+    page.heroPath = undefined; page.heroUrl = undefined;
+    await this.save();
+  }
+
+  async onServiceGallerySelected(evt: Event, key: 'ac'|'heat'|'maintenance', idx: number) {
+    const page = this.draft.servicePages?.[key];
+    if (!page) return;
+    page.gallery ||= []; while (page.gallery.length <= idx) page.gallery.push({});
+    const item = page.gallery[idx];
+
+    const input = evt.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `services/${key}/gallery-${idx}-${Date.now()}.${ext}`;
+
+    if (item.path) await this._removeStorageQuiet(item.path);
+
+    const { error: upErr } = await supabase.storage.from('assets').upload(path, file, {
+      cacheControl: '3600', upsert: true,
+    });
+    if (upErr) { alert('Upload failed: ' + upErr.message); return; }
+
+    const { data } = supabase.storage.from('assets').getPublicUrl(path);
+    item.path = path; item.url = data?.publicUrl;
+    await this.save();
+    input.value = '';
+  }
+
+  async clearServiceGallery(key: 'ac'|'heat'|'maintenance', idx: number) {
+    const page = this.draft.servicePages?.[key];
+    if (!page || !page.gallery || !page.gallery[idx]) return;
+    const item = page.gallery[idx];
+    const ok = confirm('Remove this gallery image? This deletes the file from storage.');
+    if (!ok) return;
+
+    let removed = false;
+    if (item.path) removed = await this._removeStorageQuiet(item.path);
+    else if (item.url) {
+      const keyPath = this._pathFromPublicUrl(item.url);
+      if (keyPath) removed = await this._removeStorageQuiet(keyPath);
+    }
+    if (!removed) alert('Could not delete from storage.');
+    item.path = undefined; item.url = undefined; item.alt = undefined;
+    await this.save();
+  }
+
+  // --- Service pages: features add/remove -------------------------------
+  addServiceFeature(key: 'ac'|'heat'|'maintenance') {
+    const page = this.draft.servicePages?.[key];
+    if (!page) return;
+    page.features ||= [];
+    page.features.push('');
+  }
+
+  removeServiceFeature(key: 'ac'|'heat'|'maintenance', idx: number) {
+    const page = this.draft.servicePages?.[key];
+    if (!page || !page.features) return;
+    page.features.splice(idx, 1);
   }
 
   /**

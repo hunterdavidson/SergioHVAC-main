@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../../core/settings.service';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './about.component.html'
+  imports: [CommonModule, IconComponent],
+  templateUrl: './about.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutComponent {
   constructor(public settings: SettingsService) {}
@@ -28,7 +30,7 @@ export class AboutComponent {
     return '#6C91C2';
   }
 
-  iconClass(icon?: string) {
-    return icon?.trim() || 'fa-solid fa-star';
+  trackByIdx(index: number): number {
+    return index;
   }
 }

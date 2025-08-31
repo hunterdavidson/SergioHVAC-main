@@ -1,0 +1,54 @@
+{
+  "$schema": "https://angular.io/schemas/ngsw-config/1.0/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/index.html",
+          "/favicon.ico",
+          "/icon.svg",
+          "/apple-touch-icon.png",
+          "/manifest.webmanifest",
+          "/assets/**",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**",
+          "/**/*.webp",
+          "/**/*.svg",
+          "/**/*.png",
+          "/**/*.jpg"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "supabase",
+      "urls": [
+        "https://*.supabase.co/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 30,
+        "maxAge": "1d",
+        "strategy": "freshness",
+        "timeout": "5s"
+      }
+    }
+  ],
+  "navigationUrls": [
+    "/**",
+    "!/api/**"
+  ]
+}

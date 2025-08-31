@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { supabase } from '../../core/supabase.client';
 import { AuthService } from '../../core/auth.service';
+import { SeoService } from '../../core/seo.service';
 
 type Lead = {
   id: string;
@@ -27,7 +28,7 @@ type Lead = {
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   loading = true;
   error = '';
   leads: Lead[] = [];
@@ -51,6 +52,7 @@ export class AdminComponent implements OnInit {
   totalPages = 1;
   pages: number[] = [];
 
+  private seo = inject(SeoService);
   constructor(private auth: AuthService, private router: Router) {}
 
   private computePages() {
@@ -60,6 +62,8 @@ export class AdminComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.seo.setTitle('Admin — SV HVAC');
+    this.seo.setRobots('noindex,nofollow');
     const ok = await this.auth.isAdmin();
     if (!ok) { this.router.navigateByUrl('/login'); return; }
 
@@ -92,6 +96,10 @@ export class AdminComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.seo.setRobots('index,follow,max-image-preview:large');
   }
 
   async loadLeads(page: number = 1) {

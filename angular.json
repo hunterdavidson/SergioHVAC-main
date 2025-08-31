@@ -19,20 +19,29 @@
             "outputPath": "dist/sergio-hvac",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [{ "glob": "**/*", "input": "public" }],
             "styles": ["public/css/styles.css", "src/styles.scss"],
             "scripts": [],
-            "outputMode": "static"       
+            "allowedCommonJsDependencies": [
+              "@supabase/node-fetch",
+              "whatwg-url"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
+                { "type": "initial", "maximumWarning": "768kB", "maximumError": "1MB" },
                 { "type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB" }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json",
+              "prerender": {
+                "routesFile": "prerender-routes.txt",
+                "discoverRoutes": false
+              }
             },
             "development": {
               "optimization": false,
@@ -44,6 +53,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": { "buildTarget": "SergioHVAC:build:production" },
             "development": { "buildTarget": "SergioHVAC:build:development" }
@@ -57,7 +69,7 @@
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": [{ "glob": "**/*", "input": "public" }],
-            "styles": ["src/assets/css/styles.css", "src/styles.scss"],
+            "styles": ["public/css/styles.css", "src/styles.scss"],
             "scripts": []
           }
         },

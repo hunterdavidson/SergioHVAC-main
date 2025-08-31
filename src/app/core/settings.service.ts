@@ -4,7 +4,7 @@ import { supabase } from './supabase.client';
 export type TeamMember = {
   name?: string;
   role?: string;
-  icon?: string;            // e.g. "fa-user" (Font Awesome class)
+  icon?: string;            // e.g. 'user' | 'wrench' | 'snowflake' | 'fire' | 'star'
   hidden?: boolean;
   photoPath?: string;       // storage key in bucket
   photoUrl?: string;        // public URL to display
@@ -18,6 +18,8 @@ export type AboutItem = {
   hidden?: boolean;
   icon?: string;
 };
+
+export type GalleryItem = { path?: string; url?: string; alt?: string };
 
 export type SiteSettings = {
   home: {
@@ -33,6 +35,35 @@ export type SiteSettings = {
     ac: { title: string; body: string; cta: string; hidden?: boolean };
     heat: { title: string; body: string; cta: string; hidden?: boolean };
     maintenance: { title: string; body: string; cta: string; hidden?: boolean };
+  };
+  servicePages?: {
+    ac: {
+      heading?: string;
+      subheading?: string;
+      body?: string;
+      heroPath?: string;
+      heroUrl?: string;
+      features: string[];
+      gallery: GalleryItem[];
+    };
+    heat: {
+      heading?: string;
+      subheading?: string;
+      body?: string;
+      heroPath?: string;
+      heroUrl?: string;
+      features: string[];
+      gallery: GalleryItem[];
+    };
+    maintenance: {
+      heading?: string;
+      subheading?: string;
+      body?: string;
+      heroPath?: string;
+      heroUrl?: string;
+      features: string[];
+      gallery: GalleryItem[];
+    };
   };
   about: {
     heading?: string;
@@ -83,6 +114,44 @@ const DEFAULT_SETTINGS: SiteSettings = {
       body: 'Prevent breakdowns and lower bills with a quick tune-up.',
       cta: 'Schedule Maintenance',
       hidden: false,
+    },
+  },
+  servicePages: {
+    ac: {
+      heading: 'Air Conditioning Installation & Repair',
+      subheading: 'High‑efficiency cooling, sized and installed right',
+      body: 'From fast repairs to new high‑efficiency installs, we keep your home cool and your bills low. We size systems properly and stand behind our work.',
+      features: [
+        'Same‑day diagnostics',
+        'Licensed, insured technicians',
+        'Honest pricing, no surprises',
+        'Manufacturer‑backed warranties'
+      ],
+      gallery: [{}, {}, {}],
+    },
+    heat: {
+      heading: 'Heating Services & Furnace Replacement',
+      subheading: 'Safe, reliable heat when you need it most',
+      body: 'We repair and replace furnaces and heat pumps with careful attention to safety and efficiency so you stay comfortable all season.',
+      features: [
+        'Emergency repairs',
+        'Clean workmanship',
+        'Energy‑saving options',
+        'Transparent recommendations'
+      ],
+      gallery: [{}, {}, {}],
+    },
+    maintenance: {
+      heading: 'Seasonal Maintenance & Tune‑Ups',
+      subheading: 'Prevent breakdowns and lower your bills',
+      body: 'A quick seasonal tune‑up can extend system life, improve comfort, and help prevent inconvenient breakdowns during peak weather.',
+      features: [
+        'Multi‑point inspection',
+        'Filter replacement',
+        'Refrigerant and electrical checks',
+        'Friendly tips to keep air clean'
+      ],
+      gallery: [{}, {}, {}],
     },
   },
   about: {
@@ -206,6 +275,26 @@ export class SettingsService {
         heat: { ...base.services.heat, ...(input?.services?.heat ?? {}) },
         maintenance: { ...base.services.maintenance, ...(input?.services?.maintenance ?? {}) },
       },
+      servicePages: {
+        ac: {
+          ...(base.servicePages?.ac ?? {}),
+          ...(input?.servicePages?.ac ?? {}),
+          features: input?.servicePages?.ac?.features?.length ? input.servicePages!.ac!.features : (base.servicePages?.ac?.features ?? []),
+          gallery: input?.servicePages?.ac?.gallery?.length ? input.servicePages!.ac!.gallery : (base.servicePages?.ac?.gallery ?? []),
+        },
+        heat: {
+          ...(base.servicePages?.heat ?? {}),
+          ...(input?.servicePages?.heat ?? {}),
+          features: input?.servicePages?.heat?.features?.length ? input.servicePages!.heat!.features : (base.servicePages?.heat?.features ?? []),
+          gallery: input?.servicePages?.heat?.gallery?.length ? input.servicePages!.heat!.gallery : (base.servicePages?.heat?.gallery ?? []),
+        },
+        maintenance: {
+          ...(base.servicePages?.maintenance ?? {}),
+          ...(input?.servicePages?.maintenance ?? {}),
+          features: input?.servicePages?.maintenance?.features?.length ? input.servicePages!.maintenance!.features : (base.servicePages?.maintenance?.features ?? []),
+          gallery: input?.servicePages?.maintenance?.gallery?.length ? input.servicePages!.maintenance!.gallery : (base.servicePages?.maintenance?.gallery ?? []),
+        },
+      },
       about: {
         ...base.about,
         heading: input?.about?.heading ?? base.about.heading,
@@ -231,6 +320,16 @@ export class SettingsService {
     out.services.ac.hidden ??= false;
     out.services.heat.hidden ??= false;
     out.services.maintenance.hidden ??= false;
+
+    // Ensure servicePages arrays exist with 3 gallery slots
+    out.servicePages ??= structuredClone(base.servicePages!);
+    for (const key of ['ac','heat','maintenance'] as const) {
+      const page: any = (out.servicePages as any)[key] || {};
+      page.features ||= [];
+      page.gallery ||= [];
+      while (page.gallery.length < 3) page.gallery.push({});
+      (out.servicePages as any)[key] = page;
+    }
 
     return out;
   }

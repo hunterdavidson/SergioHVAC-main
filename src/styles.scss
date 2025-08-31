@@ -19,6 +19,22 @@ $text: #212529;
 /* ---- Base document tweaks ---- */
 html { scroll-behavior: smooth; }
 
+/* Accessible focus outline for interactive elements */
+:where(a, button, input, textarea, select, summary, [role="button"])::moz-focus-inner { border: 0; }
+:where(a, button, input, textarea, select, summary, [role="button"]):focus-visible {
+  outline: 2px solid $brand;
+  outline-offset: 2px;
+}
+
+/* Skip link utility if inline styles are overridden */
+.skip-link {
+  position: absolute; left: 8px; top: -40px;
+  background:#111; color:#fff; padding:.5rem .75rem; border-radius:.5rem;
+  z-index: 10000; text-decoration:none;
+  transition: top .2s ease;
+  &:focus { top: 8px; outline: 2px solid $brand; }
+}
+
 /* Offset anchors for fixed navbar (~80px) */
 #home, #services, #about, #team, #contact { scroll-margin-top: 80px; }
 

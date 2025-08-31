@@ -1,10 +1,12 @@
-<section
-  id="home"
-  class="masthead"
-  [ngStyle]="settings.value.home.heroUrl
-    ? {'background-image': 'url(' + settings.value.home.heroUrl + ')', 'background-size': 'cover', 'background-position': 'center'}
-    : {}"
->
+<section id="home" class="masthead">
+  <img *ngIf="heroUrl"
+       class="hero-bg"
+       [ngSrc]="heroUrl"
+       alt="HVAC service hero"
+       priority
+       decoding="async"
+       sizes="100vw"
+       fill>
   <div class="overlay" aria-hidden="true"></div>
   <div class="container h-100">
     <div class="row h-100 align-items-center justify-content-center text-center">
@@ -31,7 +33,9 @@
             class="btn btn-outline-light btn-xl text-uppercase btn-call"
             [href]="'tel:' + (settings.value.navbar?.phone || '')"
           >
-            <i class="fa-solid fa-phone me-2"></i>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;">
+              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V21a1 1 0 01-1 1C10.85 22 2 13.15 2 2a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.2 2.2z"/>
+            </svg>
             {{ settings.value.navbar?.phone }}
           </a>
         </div>

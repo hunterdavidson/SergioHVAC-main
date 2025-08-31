@@ -12,6 +12,9 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 // Use a safe default so you can test without a custom domain
 const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+// Optional: Supabase Edge Function URL to send notifications
+// Example: https://<project-ref>.supabase.co/functions/v1/send-email
+const SEND_EMAIL_FUNCTION_URL = process.env.SEND_EMAIL_FUNCTION_URL || '';
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   console.warn('[leads] Missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
@@ -24,6 +27,27 @@ const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e).trim());
 const clean = (v) => (typeof v === 'string' ? v.trim() : v);
 const isValidPhone = (p) => /^[0-9()+\-.\s]{7,20}$/.test(String(p || ''));
+
+// ---- Very small in-memory rate limit (per server instance)
+const RATE = { windowMs: 10 * 60 * 1000, max: 5 }; // 5 requests / 10 minutes per IP
+const buckets = new Map(); // ip -> [timestamps]
+
+function getIp(req) {
+  const xf = (req.headers['x-forwarded-for'] || '').toString();
+  if (xf) return xf.split(',')[0].trim();
+  return (req.headers['x-real-ip'] || req.connection?.remoteAddress || '').toString();
+}
+
+function isRateLimited(ip) {
+  if (!ip) return false;
+  const now = Date.now();
+  const list = buckets.get(ip) || [];
+  const recent = list.filter((t) => now - t < RATE.windowMs);
+  if (recent.length >= RATE.max) return true;
+  recent.push(now);
+  buckets.set(ip, recent);
+  return false;
+}
 
 function escapeHtml(str = '') {
   return String(str)
@@ -48,6 +72,12 @@ async function handler(req, res) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Simple per-IP rate-limit
+  const ip = getIp(req);
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Too many requests' });
   }
 
   let body = req.body;
@@ -107,21 +137,46 @@ async function handler(req, res) {
       return res.status(500).json({ error: 'Database insert failed' });
     }
 
-    // 2) Email notification (non-blocking)
+    // 2) Email notification (prefer Edge Function, fallback to Resend if not configured)
     try {
-      if (!resend) {
-        console.warn('[leads] RESEND_API_KEY not set; skipping email notification.');
-      } else {
-        const { data: settings, error: settingsErr } = await supabase
-          .from('admin_settings')
-          .select('notify_new_lead, email_to')
-          .limit(1)
-          .maybeSingle();
-
-        if (settingsErr) {
-          console.warn('[leads] Could not load admin_settings:', settingsErr);
-        } else if (settings?.notify_new_lead && settings?.email_to) {
-          const html = `
+      if (SEND_EMAIL_FUNCTION_URL) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort('edge function timeout'), 9000);
+        try {
+          const payload = {
+            lead: {
+              name,
+              email,
+              phone,
+              message,
+              page_path: page_path || null,
+              utm: {
+                source: clean(utm.source) || null,
+                medium: clean(utm.medium) || null,
+                campaign: clean(utm.campaign) || null,
+              },
+            },
+          };
+          const edgeResp = await fetch(SEND_EMAIL_FUNCTION_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+              'apikey': SUPABASE_SERVICE_KEY,
+            },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+          }).catch((e) => ({ ok: false, status: 0, text: async () => String(e?.message || e) }));
+          clearTimeout(timer);
+          if (!edgeResp?.ok) {
+            const t = edgeResp?.text ? await edgeResp.text() : 'no response';
+            console.warn('[leads] send-email edge function failed:', edgeResp?.status, t?.slice?.(0, 300));
+          }
+        } finally {
+          clearTimeout(timer);
+        }
+      } else if (resend) {
+        const html = `
             <div style="font-family:Arial,sans-serif;font-size:14px;color:#111;line-height:1.45">
               <h2 style="margin:0 0 8px">New S.V. HVAC Services Lead</h2>
               <p><b>Name:</b> ${escapeHtml(name)}</p>
@@ -130,14 +185,15 @@ async function handler(req, res) {
               <p><b>Message:</b><br/>${escapeHtml(message)}</p>
             </div>
           `;
-          // before sending the email (right before resend.emails.send)
-          await resend.emails.send({
-            from: EMAIL_FROM,
-            to: settings.email_to,
-            subject: 'New S.V. HVAC Services Lead',
-            html
-          });
-        }
+        // Fallback: send to a single inbox if you set EMAIL_FROM + a recipient
+        await resend.emails.send({
+          from: EMAIL_FROM,
+          to: EMAIL_FROM, // send to yourself; Edge Function handles multi-recipient logic
+          subject: 'New S.V. HVAC Services Lead',
+          html,
+        });
+      } else {
+        console.warn('[leads] SEND_EMAIL_FUNCTION_URL not set and RESEND_API_KEY not set; skipping email notification.');
       }
     } catch (notifyErr) {
       console.error('[leads] Notification send failed:', notifyErr);

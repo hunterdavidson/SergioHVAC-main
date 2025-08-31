@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
 import { SettingsService } from '../../core/settings.service';
 
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './team.component.html'
+  imports: [CommonModule, IconComponent],
+  templateUrl: './team.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TeamComponent {
   constructor(public settings: SettingsService) {}
@@ -15,7 +17,7 @@ export class TeamComponent {
     return (this.settings.value.team?.members || []).filter(m => !m?.hidden);
   }
 
-  iconClass(icon?: string) {
-    return icon?.trim() || 'fa-solid fa-user';
+  trackByIdx(index: number): number {
+    return index;
   }
 }

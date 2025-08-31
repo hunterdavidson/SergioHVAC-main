@@ -10,6 +10,10 @@
     </div>
 
     <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+      <!-- Honeypot field: visually hidden, accessible ignored -->
+      <input type="text" name="hp" [(ngModel)]="hp" tabindex="-1" autocomplete="off"
+             aria-hidden="true"
+             style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;opacity:0;pointer-events:none;" />
       <div class="row">
         <!-- Name -->
         <div class="col-md-6">
@@ -17,6 +21,9 @@
           <input type="text" id="name" name="name" class="form-control mb-4"
                  placeholder="Name *" required autocomplete="name"
                  [(ngModel)]="formData.name" #name="ngModel" />
+          <div class="text-danger small mt-n3 mb-3" *ngIf="(name.invalid && (name.dirty || name.touched)) || fieldErrors.name">
+            {{ fieldErrors.name || (name.errors?.['required'] ? 'Please enter your name.' : '') }}
+          </div>
         </div>
 
         <!-- Email -->
@@ -25,6 +32,9 @@
           <input type="email" id="email" name="email" class="form-control mb-4"
                  placeholder="Email *" required email autocomplete="email"
                  [(ngModel)]="formData.email" #email="ngModel" />
+          <div class="text-danger small mt-n3 mb-3" *ngIf="(email.invalid && (email.dirty || email.touched)) || fieldErrors.email">
+            {{ fieldErrors.email || (email.errors?.['required'] ? 'Please enter your email address.' : (email.errors?.['email'] ? 'Please enter a valid email address.' : '')) }}
+          </div>
         </div>
       </div>
 
@@ -35,6 +45,9 @@
           <input type="tel" id="phone" name="phone" class="form-control mb-4"
                  placeholder="Phone *" required pattern="^[0-9\-\+\s\(\)]{7,15}$" autocomplete="tel"
                  [(ngModel)]="formData.phone" #phone="ngModel" />
+          <div class="text-danger small mt-n3 mb-3" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || fieldErrors.phone">
+            {{ fieldErrors.phone || (phone.errors?.['required'] ? 'Please enter your phone number.' : (phone.errors?.['pattern'] ? 'Please enter a valid phone number.' : '')) }}
+          </div>
         </div>
       </div>
 
@@ -45,6 +58,9 @@
           <textarea id="message" name="message" class="form-control mb-2" rows="5"
                     placeholder="Message (optional)" [(ngModel)]="formData.message"
                     #message="ngModel" maxlength="4000"></textarea>
+          <div class="text-danger small mt-1 mb-2" *ngIf="fieldErrors.message">
+            {{ fieldErrors.message }}
+          </div>
         </div>
       </div>
 

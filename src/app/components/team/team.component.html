@@ -6,16 +6,21 @@
     </div>
 
     <div class="row justify-content-center">
-      <div *ngFor="let m of visibleMembers" class="col-md-4 mb-4 d-flex align-items-stretch">
+      <div *ngFor="let m of visibleMembers; trackBy: trackByIdx" class="col-md-4 mb-4 d-flex align-items-stretch">
         <div class="team-member text-center w-100">
           <div class="mb-3">
             <ng-container *ngIf="m.photoUrl; else iconOnly">
-              <img [src]="m.photoUrl" class="rounded-circle mx-auto d-block" [alt]="m.name ?? 'Team member photo'" style="width:160px; height:160px; object-fit:cover;">
+              <img [src]="m.photoUrl"
+                   class="rounded-circle mx-auto d-block"
+                   [alt]="m.name ?? 'Team member photo'"
+                   width="160" height="160"
+                   loading="lazy" decoding="async"
+                   style="width:160px; height:160px; object-fit:cover;">
             </ng-container>
             <ng-template #iconOnly>
               <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
                    style="width:160px; height:160px; background:#6C91C2; color:#fff;">
-                <i [class]="iconClass(m.icon)" aria-hidden="true" style="font-size:48px;"></i>
+                <app-icon [name]="m.icon || 'user'" [size]="48" color="#fff"></app-icon>
                 <span class="sr-only">{{ m.name ?? 'Team member icon' }}</span>
               </div>
             </ng-template>

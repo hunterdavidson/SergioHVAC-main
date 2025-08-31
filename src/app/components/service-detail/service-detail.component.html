@@ -1,0 +1,73 @@
+<section class="service-hero" [style.--accent]="colorByKey()">
+  <img *ngIf="heroUrl" class="hero-bg" [ngSrc]="heroUrl" [alt]="page.heading || 'Service hero'" priority decoding="async" sizes="100vw" fill>
+  <div class="overlay" aria-hidden="true"></div>
+  <div class="container text-center">
+    <h1 class="text-white text-uppercase mb-3 masthead-heading">{{ page.heading }}</h1>
+    <h3 class="text-white-50 masthead-subheading">{{ page.subheading }}</h3>
+    <div class="mt-3">
+      <a class="btn btn-xl text-uppercase dynamic-button" routerLink="/" fragment="contact">Request a Free Quote</a>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" id="service-content">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-12 col-lg-7">
+        <h2 class="section-heading text-uppercase h4 mb-3">What we do</h2>
+        <p class="lead mb-3">{{ page.body }}</p>
+        <ul class="feature-list mt-3">
+          <li *ngFor="let f of (page.features || []); trackBy: trackByIdx">
+            <span class="check" aria-hidden="true">✓</span>
+            <span>{{ f }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="info-card p-4 rounded shadow-sm">
+          <h3 class="h5 mb-2">Need help today?</h3>
+          <p class="text-muted mb-3">Call now or request a free quote and we’ll get right back to you.</p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-sm dynamic-button text-uppercase" routerLink="/" fragment="contact">Free Quote</a>
+            <a class="btn btn-sm btn-outline-secondary text-uppercase" [href]="'tel:'+ (settings.value.navbar?.phone || '')">Call {{ settings.value.navbar?.phone }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page-section section-light" *ngIf="(page.gallery || []).length">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="section-heading text-uppercase">Gallery</h2>
+      <h3 class="section-subheading text-muted">Recent projects and installs</h3>
+    </div>
+
+    <div class="gallery">
+      <ng-container *ngFor="let g of (page.gallery || []); let i = index; trackBy: trackByIdx">
+        <ng-container [ngSwitch]="!!g?.url">
+          <img *ngSwitchCase="true"
+               [src]="g.url"
+               [alt]="g.alt || (page.heading || 'Service gallery image')"
+               decoding="async"
+               (click)="openImage(g.url, g.alt || page.heading)" />
+          <div *ngSwitchDefault class="placeholder" aria-label="Image placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="#9ca3af" aria-hidden="true">
+              <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14l4-4h12l2 2zM8 11a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+            </svg>
+            <span>Image coming soon</span>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox overlay -->
+<div class="lightbox" *ngIf="activeImage as img" (click)="closeImage()">
+  <img [src]="img.url" [alt]="img.alt" (click)="$event.stopPropagation()">
+  <button class="close" aria-label="Close" (click)="closeImage()">×</button>
+  <div class="caption" *ngIf="img.alt">{{ img.alt }}</div>
+  <div class="hint">Click anywhere to close</div>
+  </div>

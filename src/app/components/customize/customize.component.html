@@ -7,7 +7,8 @@
       <span class="ms-2">Loading settings…</span>
     </div>
     <div *ngIf="!loading && error" class="state-card error">
-      <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="me-2" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v2h2v-2zm0-8h-2v6h2V10z"/></svg>
+      {{ error }}
     </div>
 
     <ng-container *ngIf="!loading && !error">
@@ -139,6 +140,191 @@
         </div>
       </div>
 
+      <!-- SERVICE PAGES -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Service Pages</h4>
+
+          <!-- AC Page -->
+          <div class="border rounded p-3 mb-3">
+            <h6 class="mb-3">AC — /services/ac</h6>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Heading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.ac.heading" name="svcPageAcHeading" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Subheading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.ac.subheading" name="svcPageAcSubheading" />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.ac.body" name="svcPageAcBody"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Hero Image</label>
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'ac')" style="max-width: 340px;" />
+                  <ng-container *ngIf="draft.servicePages!.ac.heroUrl">
+                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.ac.heroUrl" target="_blank" rel="noopener">Open</a>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('ac')">Remove</button>
+                    <img [src]="draft.servicePages!.ac.heroUrl" alt="AC hero preview" class="img-preview" />
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Gallery (3 images)</label>
+                <div class="row g-3">
+                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.ac.gallery; let i = index">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'ac', i)" />
+                      <ng-container *ngIf="g?.url">
+                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('ac', i)">Remove</button>
+                        <img [src]="g.url" alt="AC gallery preview" class="img-preview" />
+                      </ng-container>
+                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcAcAlt'+i" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Features</label>
+                <div class="row g-2">
+                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.ac.features; let i = index">
+                    <input class="form-control" [(ngModel)]="draft.servicePages!.ac.features[i]" [name]="'svcAcFeat'+i" />
+                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('ac', i)">Remove</button>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('ac')">Add Feature</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Heating Page -->
+          <div class="border rounded p-3 mb-3">
+            <h6 class="mb-3">Heating — /services/heating</h6>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Heading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.heat.heading" name="svcPageHeatHeading" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Subheading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.heat.subheading" name="svcPageHeatSubheading" />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.heat.body" name="svcPageHeatBody"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Hero Image</label>
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'heat')" style="max-width: 340px;" />
+                  <ng-container *ngIf="draft.servicePages!.heat.heroUrl">
+                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.heat.heroUrl" target="_blank" rel="noopener">Open</a>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('heat')">Remove</button>
+                    <img [src]="draft.servicePages!.heat.heroUrl" alt="Heat hero preview" class="img-preview" />
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Gallery (3 images)</label>
+                <div class="row g-3">
+                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.heat.gallery; let i = index">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'heat', i)" />
+                      <ng-container *ngIf="g?.url">
+                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('heat', i)">Remove</button>
+                        <img [src]="g.url" alt="Heating gallery preview" class="img-preview" />
+                      </ng-container>
+                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcHeatAlt'+i" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Features</label>
+                <div class="row g-2">
+                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.heat.features; let i = index">
+                    <input class="form-control" [(ngModel)]="draft.servicePages!.heat.features[i]" [name]="'svcHeatFeat'+i" />
+                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('heat', i)">Remove</button>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('heat')">Add Feature</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Maintenance Page -->
+          <div class="border rounded p-3 mb-2">
+            <h6 class="mb-3">Maintenance — /services/maintenance</h6>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Heading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.heading" name="svcPageMaintHeading" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Subheading</label>
+                <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.subheading" name="svcPageMaintSubheading" />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Body</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.maintenance.body" name="svcPageMaintBody"></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Hero Image</label>
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'maintenance')" style="max-width: 340px;" />
+                  <ng-container *ngIf="draft.servicePages!.maintenance.heroUrl">
+                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.maintenance.heroUrl" target="_blank" rel="noopener">Open</a>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('maintenance')">Remove</button>
+                    <img [src]="draft.servicePages!.maintenance.heroUrl" alt="Maintenance hero preview" class="img-preview" />
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Gallery (3 images)</label>
+                <div class="row g-3">
+                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.maintenance.gallery; let i = index">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'maintenance', i)" />
+                      <ng-container *ngIf="g?.url">
+                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('maintenance', i)">Remove</button>
+                        <img [src]="g.url" alt="Maintenance gallery preview" class="img-preview" />
+                      </ng-container>
+                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcMaintAlt'+i" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Features</label>
+                <div class="row g-2">
+                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.maintenance.features; let i = index">
+                    <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.features[i]" [name]="'svcMaintFeat'+i" />
+                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('maintenance', i)">Remove</button>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('maintenance')">Add Feature</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- ABOUT -->
       <div class="card shadow-sm mb-4 section-card">
         <div class="card-body">
@@ -215,8 +401,15 @@
                 <label class="form-label">Role</label>
                 <input class="form-control mb-2" [(ngModel)]="mem.role" [name]="'teamRole'+idx" />
 
-                <label class="form-label">Icon (Font Awesome class)</label>
-                <input class="form-control mb-2" [(ngModel)]="mem.icon" [name]="'teamIcon'+idx" placeholder="fa-user" />
+                <label class="form-label">Icon (fallback avatar)</label>
+                <select class="form-select mb-2" [(ngModel)]="mem.icon" [name]="'teamIcon'+idx">
+                  <option value="">Default (User)</option>
+                  <option value="user">User</option>
+                  <option value="wrench">Tools</option>
+                  <option value="snowflake">Snowflake</option>
+                  <option value="fire">Fire</option>
+                  <option value="star">Star</option>
+                </select>
 
                 <div class="form-check form-switch d-flex align-items-center gap-2 mb-2">
                   <input class="form-check-input" type="checkbox" [id]="'teamHidden'+idx" [(ngModel)]="mem.hidden" [name]="'teamHidden'+idx" />

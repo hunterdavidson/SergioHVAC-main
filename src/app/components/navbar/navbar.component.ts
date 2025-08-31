@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink, NavigationEnd, Event as RouterEvent } from '@angular/router';
 import { SettingsService } from '../../core/settings.service';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   imports: [CommonModule, RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
@@ -18,15 +19,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
   // make settings available to the template
   public settings: SettingsService = inject(SettingsService);
   private router: Router = inject(Router);
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private sub?: Subscription;
 
   ngOnInit(): void {
-    // Ensure settings are loaded at app start
-    this.settings.load();
-    this.isAdminNav = this.router.url.startsWith('/admin');
+    const currentUrl = (this.router.url as any)?.toString?.() ?? String(this.router.url || '');
+    this.isAdminNav = currentUrl.startsWith('/admin');
+    this.cdr.markForCheck();
     this.sub = this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        this.isAdminNav = event.urlAfterRedirects.startsWith('/admin');
+        const nextUrl = (event.urlAfterRedirects as any)?.toString?.() ?? String(event.urlAfterRedirects || '');
+        this.isAdminNav = nextUrl.startsWith('/admin');
+        this.cdr.markForCheck();
       }
     });
   }

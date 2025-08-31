@@ -1,17 +1,16 @@
 <section class="page-section" id="about" style="background-color:#f1f1f1;">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase">About Us</h2>
-      <h3 class="section-subheading">Learn about our journey and vision.</h3>
+      <h2 class="section-heading text-uppercase">{{ heading }}</h2>
+      <h3 class="section-subheading">{{ subheading }}</h3>
     </div>
 
     <ul class="timeline">
-      <li *ngFor="let it of items; let i = index"
+      <li *ngFor="let it of items; let i = index; trackBy: trackByIdx"
           [class.timeline-inverted]="i % 2 === 1">
         <div class="timeline-image d-flex justify-content-center align-items-center"
              [style.background-color]="colorBg(it.color)" style="color:#fff;">
-          <!-- About uses icon only (no photo) -->
-          <i [class]="iconClass(it.icon)" style="font-size:28px;"></i>
+          <app-icon [name]="it.icon || 'star'" [size]="28" color="#fff"></app-icon>
         </div>
 
         <div class="timeline-panel" [style.borderColor]="colorBg(it.color)">
