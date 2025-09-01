@@ -20,6 +20,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/service-detail/service-detail.component').then(m => m.ServiceDetailComponent),
     data: { serviceKey: 'maintenance' }
   },
+  {
+    path: 'estimate',
+    loadComponent: () => import('./estimate/estimate-calculator.component').then(m => m.EstimateCalculatorComponent),
+    canActivate: [authGuard]
+  },
   // If you have separate pages you can add routes for them; if not, the homepage anchors are fine.
 
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },

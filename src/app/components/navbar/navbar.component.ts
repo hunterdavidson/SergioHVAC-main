@@ -24,12 +24,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const currentUrl = (this.router.url as any)?.toString?.() ?? String(this.router.url || '');
-    this.isAdminNav = currentUrl.startsWith('/admin');
+    this.isAdminNav = this._isAdminUrl(currentUrl);
     this.cdr.markForCheck();
     this.sub = this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         const nextUrl = (event.urlAfterRedirects as any)?.toString?.() ?? String(event.urlAfterRedirects || '');
-        this.isAdminNav = nextUrl.startsWith('/admin');
+        this.isAdminNav = this._isAdminUrl(nextUrl);
         this.cdr.markForCheck();
       }
     });
@@ -54,5 +54,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const raw = this.displayPhone;
     const digitsOnly = raw.replace(/[^0-9]/g, '');
     return `tel:${digitsOnly}`;
+  }
+
+  private _isAdminUrl(url: string): boolean {
+    return url.startsWith('/admin') || url.startsWith('/estimate');
   }
 }

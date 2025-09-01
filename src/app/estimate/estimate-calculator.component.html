@@ -1,0 +1,185 @@
+<section class="page-section" id="estimate">
+  <div class="container">
+    <div class="text-center mb-3 mt-3">
+      <h2 class="section-heading text-uppercase">HVAC Estimate Calculator</h2>
+    </div>
+
+    <form [formGroup]="form" class="row g-3 estimate-form" novalidate>
+      <!-- Customer/Site -->
+      <div class="col-12">
+        <h4 class="h6 text-uppercase text-muted">Customer / Site</h4>
+      </div>
+      <div class="section-box">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="zip" class="form-label">ZIP</label>
+            <input id="zip" type="text" class="form-control" formControlName="zip" placeholder="75001" />
+            <div class="text-danger small" *ngIf="form.get('zip')?.invalid && form.get('zip')?.touched">Enter a valid 5-digit ZIP</div>
+            <div class="form-text">
+              <span class="badge bg-light text-dark border">DFW</span>
+              <span class="ms-1">Likely in range</span>
+              <span class="help" title="Based on ZIP prefix. Actual scheduling depends on crew availability (about ~1–1.5hr radius).">ⓘ</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="city">City</label>
+            <input id="city" type="text" class="form-control" formControlName="city" placeholder="Dallas" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="address">Address (optional)</label>
+            <input id="address" type="text" class="form-control" formControlName="address" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="homeSqft">Home Size (sq ft)</label>
+            <input id="homeSqft" type="number" class="form-control" formControlName="homeSqft" min="500" max="8000" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="systems"># of Systems</label>
+            <input id="systems" type="number" class="form-control" formControlName="systems" min="1" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="systemAge">System Age (yrs)</label>
+            <input id="systemAge" type="number" class="form-control" formControlName="systemAge" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Access</label>
+            <select class="form-select" formControlName="access">
+              <option value="easy">Easy</option>
+              <option value="standard">Standard</option>
+              <option value="difficult">Difficult</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6 form-check mt-2">
+            <input id="attic" class="form-check-input" type="checkbox" formControlName="atticOrCrawl" />
+            <label class="form-check-label" for="attic">Attic / Crawlspace</label>
+          </div>
+          <div class="col-12 col-md-6 form-check mt-2">
+            <input id="isCommercial" class="form-check-input" type="checkbox" formControlName="isCommercial" />
+            <label class="form-check-label" for="isCommercial">Commercial</label>
+          </div>
+        </div>
+      </div>
+      <!-- Service / System -->
+      <div class="col-12 mt-3">
+        <h4 class="h6 text-uppercase text-muted">Service & System</h4>
+      </div>
+      <div class="section-box">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Service Type</label>
+            <select class="form-select" formControlName="serviceType">
+              <option value="repair">Repair</option>
+              <option value="replacement">Replacement</option>
+              <option value="new_install">New Install</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">System</label>
+            <select class="form-select" formControlName="systemType">
+              <option value="ac_split">AC Split</option>
+              <option value="heat_pump">Heat Pump</option>
+              <option value="gas_furnace">Gas Furnace</option>
+              <option value="package">Package</option>
+              <option value="mini_split">Ductless</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6" *ngIf="form.value.systemType !== 'gas_furnace'">
+            <label class="form-label">Tonnage</label>
+            <select class="form-select" formControlName="tonnage">
+              <option value="2.0">2.0</option>
+              <option value="3.0">3.0</option>
+              <option value="5.0">5.0</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6" *ngIf="form.value.systemType === 'gas_furnace'">
+            <label class="form-label">Furnace BTU</label>
+            <select class="form-select" formControlName="furnaceBtu">
+              <option value="60000">60,000</option>
+              <option value="100000">100,000</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Season</label>
+            <select class="form-select" formControlName="seasonal">
+              <option value="normal">Normal</option>
+              <option value="summer">Summer (+10%)</option>
+            </select>
+          </div>
+          <div class="col-12 mt-2" *ngIf="config.goodBetterBest && (form.value.serviceType === 'replacement' || form.value.serviceType === 'new_install')">
+            <div class="gbb">
+              <label class="gbb-tile" *ngFor="let opt of gbbOptions()">
+                <input type="radio" class="visually-hidden" formControlName="efficiencyTier" [value]="opt.key" />
+                <div class="gbb-inner">
+                  <div class="h6 mb-1">{{ opt.label }}</div>
+                  <div class="small text-muted">Pick a tier to update equipment cost.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Add-ons -->
+      <div class="col-12 mt-3">
+        <h4 class="h6 text-uppercase text-muted">Scope / Add-ons</h4>
+      </div>
+      <div class="section-box">
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Ductwork</label>
+            <select class="form-select" formControlName="ductScope">
+              <option value="none">None</option>
+              <option value="minor">Minor</option>
+              <option value="moderate">Moderate</option>
+              <option value="major">Major</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label">Thermostat</label>
+            <select class="form-select" formControlName="thermostat">
+              <option value="none">None</option>
+              <option value="basic">Basic</option>
+              <option value="smart">Smart</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <div class="stacked-checks">
+              <div class="form-check"><input class="form-check-input" id="permit" type="checkbox" formControlName="permit" /><label class="form-check-label" for="permit">Permit</label></div>
+              <div class="form-check"><input class="form-check-input" id="crane" type="checkbox" formControlName="crane" /><label class="form-check-label" for="crane">Crane/Hoist</label></div>
+              <div class="form-check"><input class="form-check-input" id="disposal" type="checkbox" formControlName="disposal" /><label class="form-check-label" for="disposal">Haul-away</label></div>
+              <div class="form-check"><input class="form-check-input" id="after" type="checkbox" formControlName="afterHours" /><label class="form-check-label" for="after">After-hours/Emergency</label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Labor inputs removed from UI; calculated internally (3-person crew, per-job) -->
+      <!-- Contact for PDF header (optional) -->
+      <div class="col-12 mt-3">
+        <h4 class="h6 text-uppercase text-muted">Contact (optional)</h4>
+      </div>
+      <div class="section-box"><div class="row g-3">
+      <div class="col-12 col-md-4"><label class="form-label">Name</label><input class="form-control" formControlName="customerName" /></div>
+      <div class="col-12 col-md-4"><label class="form-label">Email</label><input class="form-control" formControlName="customerEmail" /></div>
+      <div class="col-12 col-md-4"><label class="form-label">Phone</label><input class="form-control" formControlName="customerPhone" /></div>
+
+      </div></div>
+      <div class="col-12 mt-4 d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-xl text-uppercase dynamic-button" (click)="calculate()" [disabled]="form.invalid">Calculate</button>
+      </div>
+    </form>
+
+    <!-- Live Estimate Card -->
+    <div id="estimate-result" class="estimate-card mt-4" *ngIf="resultSig() as r">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="h5 mb-3">Your Estimate</h4>
+          <div class="d-flex justify-content-between"><span>Estimated Price</span><b>${{ r.price | number:'1.0-0' }}</b></div>
+          <div class="d-flex justify-content-between"><span>Sales Tax</span><b>${{ r.tax | number:'1.0-0' }}</b></div>
+          <div class="d-flex justify-content-between h5 mt-2 border-top pt-2"><span>Estimated Total</span><span>${{ r.total | number:'1.0-0' }}</span></div>
+          <div class="small text-muted mt-2">This is a ballpark estimate. Final pricing depends on site conditions and selected equipment.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -84,6 +84,49 @@ export type SiteSettings = {
   navbar?: {
     phone?: string; // "(555) 555-5555"
   };
+  estimate?: {
+    targetMargin?: number; // 0.40 = 40%
+    taxRate?: number; // 0.0825
+    laborTaxResidential?: boolean;
+    laborTaxCommercial?: boolean;
+    overheadPct?: number; // 0.12
+    seasonalMultipliers?: { normal: number; summer: number };
+    accessMultipliers?: { easy: number; standard: number; difficult: number };
+    afterHoursMultiplier?: number; // 1.25
+    permitFlat?: number; // 175
+    addOnPrices?: {
+      lineSet?: number;
+      condenserPad?: number;
+      whipDisconnect?: number;
+      electricalUpgrade?: number;
+      smartThermostat?: { label: string; price: number };
+      basicThermostat?: { label: string; price: number };
+      craneFee?: number;
+      disposalFee?: number;
+      refrigerant?: { R410A?: number; R22?: number };
+    };
+    perJob?: {
+      perWorkerPerJobLow: number;
+      perWorkerPerJobHigh: number;
+      defaultCrewSize: number;
+      altCrewSize?: number;
+    };
+    perHour?: { hourlyRatePerTech: number; defaultCrewSize: number };
+    baselineHours?: {
+      acSplitChangeout: { min: number; max: number };
+      furnaceReplace: { min: number; max: number };
+      heatPumpReplace: { min: number; max: number };
+      miniSplitSingle: { min: number; max: number };
+      miniSplitExtraHead: { min: number; max: number };
+      electricalUpgrade: number;
+      lineSetReplace: number;
+    };
+    equipmentBasePrices?: any;
+    ductworkAddersHours?: { none: number; minor: number; moderate: number; major: number };
+    goodBetterBest?: boolean;
+    showFinancing?: boolean;
+    zipPrefixes?: { [prefix: string]: number }; // e.g., { '760':1.00, '761':1.02, '750':1.03 }
+  };
 };
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -172,6 +215,49 @@ const DEFAULT_SETTINGS: SiteSettings = {
   },
   navbar: {
     phone: '(XXX) XXX-XXXX',
+  },
+  estimate: {
+    targetMargin: 0.40,
+    taxRate: 0.0825,
+    laborTaxResidential: false,
+    laborTaxCommercial: true,
+    overheadPct: 0.12,
+    seasonalMultipliers: { normal: 1.0, summer: 1.10 },
+    accessMultipliers: { easy: 0.95, standard: 1.00, difficult: 1.15 },
+    afterHoursMultiplier: 1.25,
+    permitFlat: 175,
+    addOnPrices: {
+      lineSet: 380,
+      condenserPad: 120,
+      whipDisconnect: 95,
+      electricalUpgrade: 350,
+      smartThermostat: { label: 'Smart (Ecobee3 Lite)', price: 250 },
+      basicThermostat: { label: 'Basic (Honeywell T4)', price: 85 },
+      craneFee: 550,
+      disposalFee: 95,
+      refrigerant: { R410A: 65, R22: 120 },
+    },
+    perJob: {
+      perWorkerPerJobLow: 300,
+      perWorkerPerJobHigh: 400,
+      defaultCrewSize: 3,
+      
+    },
+    perHour: { hourlyRatePerTech: 95, defaultCrewSize: 3 },
+    baselineHours: {
+      acSplitChangeout: { min: 4, max: 8 },
+      furnaceReplace: { min: 4, max: 8 },
+      heatPumpReplace: { min: 6, max: 9 },
+      miniSplitSingle: { min: 4, max: 6 },
+      miniSplitExtraHead: { min: 4, max: 6 },
+      electricalUpgrade: 2,
+      lineSetReplace: 2,
+    },
+    equipmentBasePrices: undefined,
+    ductworkAddersHours: { none: 0, minor: 6, moderate: 12, major: 20 },
+    goodBetterBest: true,
+    showFinancing: false,
+    zipPrefixes: { '760': 1.00, '761': 1.02, '750': 1.03 },
   },
 };
 
@@ -309,6 +395,55 @@ export class SettingsService {
       },
       contact: { ...base.contact, ...(input?.contact ?? {}) },
       navbar: { ...base.navbar, ...(input?.navbar ?? {}) },
+      estimate: {
+        ...base.estimate,
+        ...(input?.estimate ?? {}),
+        addOnPrices: {
+          ...(base.estimate?.addOnPrices ?? {}),
+          ...(input?.estimate?.addOnPrices ?? {}),
+          refrigerant: {
+            ...(base.estimate?.addOnPrices?.refrigerant ?? {}),
+            ...(input?.estimate?.addOnPrices?.refrigerant ?? {}),
+          },
+          smartThermostat: {
+            ...(base.estimate?.addOnPrices?.smartThermostat ?? {}),
+            ...(input?.estimate?.addOnPrices?.smartThermostat ?? {}),
+          },
+          basicThermostat: {
+            ...(base.estimate?.addOnPrices?.basicThermostat ?? {}),
+            ...(input?.estimate?.addOnPrices?.basicThermostat ?? {}),
+          },
+        } as any,
+        seasonalMultipliers: {
+          ...(base.estimate?.seasonalMultipliers ?? { normal: 1, summer: 1.1 }),
+          ...(input?.estimate?.seasonalMultipliers ?? {}),
+        },
+        accessMultipliers: {
+          ...(base.estimate?.accessMultipliers ?? { easy: 0.95, standard: 1, difficult: 1.15 }),
+          ...(input?.estimate?.accessMultipliers ?? {}),
+        },
+        perJob: {
+          ...(base.estimate?.perJob ?? { perWorkerPerJobLow:300, perWorkerPerJobHigh:400, defaultCrewSize:3, altCrewSize:4 }),
+          ...(input?.estimate?.perJob ?? {}),
+        },
+        perHour: {
+          ...(base.estimate?.perHour ?? { hourlyRatePerTech: 95, defaultCrewSize: 3 }),
+          ...(input?.estimate?.perHour ?? {}),
+        },
+        baselineHours: {
+          ...(base.estimate?.baselineHours ?? {}),
+          ...(input?.estimate?.baselineHours ?? {}),
+        } as any,
+        equipmentBasePrices: (input?.estimate?.equipmentBasePrices ?? base.estimate?.equipmentBasePrices),
+        ductworkAddersHours: {
+          ...(base.estimate?.ductworkAddersHours ?? { none:0, minor:6, moderate:12, major:20 }),
+          ...(input?.estimate?.ductworkAddersHours ?? {}),
+        },
+        zipPrefixes: {
+          ...(base.estimate?.zipPrefixes ?? {}),
+          ...(input?.estimate?.zipPrefixes ?? {}),
+        },
+      },
     };
 
     // Ensure structures exist
@@ -320,6 +455,7 @@ export class SettingsService {
     out.services.ac.hidden ??= false;
     out.services.heat.hidden ??= false;
     out.services.maintenance.hidden ??= false;
+    out.estimate ??= structuredClone(base.estimate!);
 
     // Ensure servicePages arrays exist with 3 gallery slots
     out.servicePages ??= structuredClone(base.servicePages!);

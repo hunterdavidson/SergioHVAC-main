@@ -264,8 +264,8 @@
           </div>
 
           <!-- Maintenance Page -->
-          <div class="border rounded p-3 mb-2">
-            <h6 class="mb-3">Maintenance — /services/maintenance</h6>
+  <div class="border rounded p-3 mb-2">
+    <h6 class="mb-3">Maintenance — /services/maintenance</h6>
             <div class="row g-3">
               <div class="col-12 col-md-6">
                 <label class="form-label">Heading</label>
@@ -458,6 +458,88 @@
         </div>
       </div>
 
+      <!-- Estimate Settings -------------------------------------------------- -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Estimate Settings</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-3">
+              <label class="form-label">Target Gross Margin</label>
+              <input type="number" step="0.01" min="0" max="0.95" class="form-control" [(ngModel)]="draft.estimate!.targetMargin" name="estTargetMargin" />
+              <div class="form-text">Default 0.40 (40%).</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Tax Rate</label>
+              <input type="number" step="0.0001" class="form-control" [(ngModel)]="draft.estimate!.taxRate" name="estTaxRate" />
+              <div class="form-text">Texas default: 0.0825</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Overhead %</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.overheadPct" name="estOverhead" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Permit Fee (flat)</label>
+              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.permitFlat" name="estPermit" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">After-hours Multiplier</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.afterHoursMultiplier" name="estAfterHours" />
+            </div>
+
+            <div class="col-12"><strong>Seasonal Multipliers</strong></div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Normal</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.seasonalMultipliers!.normal" name="estSeasonNormal" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Summer</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.seasonalMultipliers!.summer" name="estSeasonSummer" />
+            </div>
+
+            <div class="col-12"><strong>Access Multipliers</strong></div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Easy</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.accessMultipliers!.easy" name="estAccessEasy" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Standard</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.accessMultipliers!.standard" name="estAccessStandard" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Difficult</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.accessMultipliers!.difficult" name="estAccessDifficult" />
+            </div>
+
+            <div class="col-12"><strong>Per-Job Labor</strong> <span class="text-muted small">(calculator uses 3‑person default)</span></div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Per Worker Low</label>
+              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJobLow" name="estPerJobLow" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Per Worker High</label>
+              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJobHigh" name="estPerJobHigh" />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Default Crew Size</label>
+              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.defaultCrewSize" name="estCrewDefault" />
+            </div>
+            
+
+            <div class="col-12"><strong>Region ZIP Prefix Multipliers</strong> <span class="form-text">e.g., 760, 761, 750</span></div>
+            <div class="col-12">
+              <div class="row g-2 align-items-end">
+                <div class="col-6 col-md-3" *ngFor="let pair of (draft.estimate!.zipPrefixes | keyvalue)">
+                  <div class="input-group">
+                    <span class="input-group-text">{{ pair.key }}</span>
+                    <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.zipPrefixes![pair.key]" [name]="'estZip'+pair.key" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SAVE BAR (full-width, content-aligned) -->
       <div class="save-bar">
         <div class="container d-flex align-items-center justify-content-end gap-2" aria-live="polite">
@@ -476,4 +558,6 @@
 
     </ng-container>
   </div>
+
+  
 </section>

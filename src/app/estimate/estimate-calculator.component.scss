@@ -1,0 +1,89 @@
+.estimate-form .form-text .help { cursor: help; }
+
+.gbb .gbb-card { cursor: pointer; border: 1px solid #e5e7eb; border-radius: .5rem; }
+.gbb .gbb-card:hover { border-color: #6C91C2; box-shadow: 0 0 0 .2rem rgba(108,145,194,.15); }
+
+/* New tile radios (no big outer box, just inner selection) */
+.gbb { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.gbb .gbb-tile { display: block; cursor: pointer; }
+.gbb .gbb-tile .gbb-inner {
+  border: 2px solid #e5e7eb; border-radius: .75rem; padding: .75rem .9rem; background: #fff;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.gbb .gbb-tile input:checked + .gbb-inner {
+  border-color: #6C91C2; box-shadow: 0 0 0 .2rem rgba(108,145,194,.2); background: rgba(108,145,194,.06);
+}
+@media (max-width: 767.98px) {
+  .gbb { grid-template-columns: 1fr; }
+}
+
+.estimate-card .card-body {
+  background: #fff;
+}
+
+/* Section wrappers for readability */
+.estimate-form .section-box {
+  background: linear-gradient(180deg, #f7f9fc, #f5f7fb);
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #6C91C2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 4px;
+}
+
+/* Themed controls (blue brand) */
+.estimate-form .form-select {
+  border-color: #d1d5db;
+}
+.estimate-form .form-select:focus {
+  border-color: #6C91C2;
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45);
+}
+.estimate-form .form-control {
+  border-color: #d1d5db;
+}
+.estimate-form .form-control:focus {
+  border-color: #6C91C2;
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.45);
+}
+.estimate-form .form-check-input {
+  accent-color: #6C91C2;
+}
+.estimate-form .form-check-input:checked {
+  background-color: #6C91C2 !important;
+  border-color: #6C91C2 !important;
+}
+.estimate-form .form-check-input[type="radio"]:checked {
+  background-color: #6C91C2 !important;
+  border-color: #6C91C2 !important;
+}
+.estimate-form .form-check-label { margin-left: .35rem; }
+.estimate-form .stacked-checks .form-check { margin: .25rem 0; }
+.estimate-form .stacked-checks .form-check-input:focus { box-shadow: 0 0 0 .25rem rgba(108,145,194,.35); }
+.estimate-form .form-check-input:focus {
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.35);
+}
+.estimate-form .btn.btn-outline-secondary,
+.estimate-form .input-group .btn.btn-outline-secondary {
+  border-color: #6C91C2;
+  color: #6C91C2;
+}
+.estimate-form .btn.btn-outline-secondary:hover,
+.estimate-form .input-group .btn.btn-outline-secondary:hover {
+  background: #6C91C2; color: #fff;
+}
+
+/* Good/Better/Best radio cards */
+.gbb .gbb-card {
+  border: 2px solid #e5e7eb;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.gbb .gbb-card:hover { border-color: #6C91C2; box-shadow: 0 2px 12px rgba(108,145,194,.25); }
+.gbb .gbb-card .form-check-input { margin-right: .5rem; }
+.gbb .gbb-card input:checked ~ .card-body { outline: 2px solid #6C91C2; outline-offset: 2px; background: rgba(108,145,194,.06); border-radius: 8px; }
+
+@media print {
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  nav, #mainNav, .navbar, footer, .estimate-form, .btn { display: none !important; }
+  .estimate-card { margin-top: 0 !important; }
+}
