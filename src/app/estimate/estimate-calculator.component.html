@@ -164,7 +164,8 @@
 
       </div></div>
       <div class="col-12 mt-4 d-flex gap-2 flex-wrap">
-        <button type="button" class="btn btn-xl text-uppercase dynamic-button" (click)="calculate()" [disabled]="form.invalid">Calculate</button>
+        <button type="button" class="btn btn-xl text-uppercase dynamic-button" (click)="calculate()">Calculate</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="resetEstimate()">Reset</button>
       </div>
     </form>
 

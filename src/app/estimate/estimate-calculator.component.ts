@@ -130,6 +130,48 @@ export class EstimateCalculatorComponent {
     }, 0);
   }
 
+  resetEstimate() {
+    // Clear the current result and reset the form to sane defaults
+    this.resultSig.set(null);
+    this.form.reset({
+      zip: '',
+      city: '',
+      address: '',
+      homeSqft: 2000,
+      systems: 1,
+      systemAge: 10,
+      access: 'standard',
+      atticOrCrawl: false,
+      isCommercial: false,
+      serviceType: 'replacement',
+      systemType: 'ac_split',
+      tonnage: '3.0',
+      furnaceBtu: '60000',
+      efficiencyTier: 'SEER2_16',
+      ductScope: 'none',
+      electricalUpgrade: false,
+      lineSet: false,
+      condenserPad: false,
+      whipDisconnect: false,
+      thermostat: 'none',
+      refrigerantType: 'none',
+      refrigerantLbs: 0,
+      permit: true,
+      crane: false,
+      disposal: true,
+      afterHours: false,
+      crewSize: Number(this.config.perJob.defaultCrewSize),
+      perWorkerPerJob: Math.round((this.config.perJob.perWorkerPerJobLow + this.config.perJob.perWorkerPerJobHigh)/2),
+      seasonal: 'normal',
+      customerName: '',
+      customerEmail: '',
+      customerPhone: '',
+    });
+    // Ensure validation state is clean
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+  }
+
   private mergeConfigWithSettings() {
     const cfg: any = structuredClone(PRICING_CONFIG);
     const est = this.settingsSvc.value?.estimate;
