@@ -1,0 +1,8 @@
+.plans-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1rem; }
+.plan-card { position:relative; display:flex; flex-direction:column; background:#fff; border-radius:.75rem; box-shadow:0 6px 18px rgba(0,0,0,.12); padding:1.25rem; }
+.plan-card .badge { position:absolute; top:.75rem; right:.75rem; background:#6C91C2; color:#fff; padding:.25rem .5rem; border-radius:.35rem; font-size:.75rem; }
+.plan-card .price { font-size:2rem; font-weight:800; margin:.25rem 0; }
+.plan-card .interval { font-size:.9rem; color:#6b7280; font-weight:500; }
+.plan-card .features { margin: .75rem 0; padding-left:1rem; flex:1 1 auto; }
+.plan-card .cta { margin-top: auto; }
+.plan-card .features li { margin:.25rem 0; color:#374151; }

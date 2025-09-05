@@ -1,0 +1,12 @@
+.hero { width:100%; max-height: 420px; object-fit: cover; border-radius: .5rem; box-shadow: 0 6px 18px rgba(0,0,0,.12); margin: 0 auto 1rem; display:block; }
+.content { max-width: 800px; margin: 0 auto; }
+.content :where(h2,h3) { margin-top: 1.25rem; }
+.content img { max-width: 100%; height: auto; border-radius: .5rem; }
+.content pre, .content code { background:#f9fafb; padding:.2rem .4rem; border-radius:.25rem; }
+/* Theme link styling inside post */
+.content a { color:#6C91C2; text-decoration: underline; }
+.content a:hover { color:#5273A8; }
+
+/* Related cards theme-aligned links */
+.related-posts .card-body a { color:#6C91C2; text-decoration:none; font-weight:600; }
+.related-posts .card-body a:hover { text-decoration:underline; color:#5273A8; }

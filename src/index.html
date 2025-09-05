@@ -59,28 +59,11 @@
 
     <!-- Inline SVGs are used for icons; no heavy icon font needed. -->
 
-    <!-- Page + loader styles -->
+    <!-- Page styles -->
     <style>
       :root { --brand:#6C91C2; }
       html, body { background:#fff; min-height:100%; }
       body { margin:0; }
-
-      /* Simple pre-boot loader */
-      #app-loader {
-        position: fixed; inset: 0;
-        display: flex; align-items: center; justify-content: center;
-        background: #fff; z-index: 9999;
-        transition: opacity .25s ease, visibility .25s ease;
-      }
-      #app-loader.hidden { opacity: 0; visibility: hidden; }
-
-      .loader {
-        width: 48px; height: 48px;
-        border: 4px solid #e5e7eb; border-top-color: var(--brand);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
 
       /* Skip to content link (a11y) */
       .skip-link {
@@ -93,6 +76,20 @@
       }
       .skip-link:focus { transform: translateY(0); outline: 2px solid #6C91C2; }
     </style>
+    <script>
+      (function(){
+        try {
+          var get = function(n){
+            var m = document.cookie.match(new RegExp('(?:^|; )' + n.replace(/([.$?*|{}()\[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+            return m ? decodeURIComponent(m[1]) : '';
+          };
+          // Expose early from cookies only; do not fetch geo endpoint
+          window.__geoCity = get('x-geo-city');
+          window.__geoLat = get('x-geo-lat');
+          window.__geoLon = get('x-geo-lon');
+        } catch {}
+      })();
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -149,12 +146,6 @@
         "priceRange": "$$"
       }
     </script>
-    <!-- Pre-boot loading overlay -->
-    <div id="app-loader" role="status" aria-live="polite" aria-label="Loading">
-      <img src="/icon.svg" alt="SV HVAC" height="40" style="margin-right:12px;opacity:.9">
-      <div class="loader" aria-hidden="true"></div>
-    </div>
-
     <app-root id="main" role="main"></app-root>
   </body>
 </html>

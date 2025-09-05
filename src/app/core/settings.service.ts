@@ -29,6 +29,39 @@ export type SiteSettings = {
     heroPath?: string;
     heroUrl?: string;
   };
+  education?: {
+    heading?: string;
+    subheading?: string;
+    videos: Array<{ url: string; title?: string; description?: string }>;
+  };
+  blog?: {
+    posts: Array<{
+      slug: string;
+      title: string;
+      date?: string;
+      summary?: string;
+      contentHtml?: string;
+      heroPath?: string;
+      heroUrl?: string;
+      author?: string;
+      readMins?: number;
+      tags?: string[];
+      published?: boolean;
+      inlineImages?: string[];
+    }>;
+  };
+  plans?: {
+    heading?: string;
+    subheading?: string;
+    tiers: Array<{
+      name: string;
+      price: number;
+      interval?: string; // e.g., 'per visit', 'per year'
+      features: string[];
+      cta?: string;
+      mostPopular?: boolean;
+    }>;
+  };
   services: {
     sectionHeading?: string;
     sectionSubheading?: string;
@@ -45,6 +78,8 @@ export type SiteSettings = {
       heroUrl?: string;
       features: string[];
       gallery: GalleryItem[];
+      faqs?: Array<{ q: string; a: string }>;
+      sections?: Array<{ heading: string; body: string }>;
     };
     heat: {
       heading?: string;
@@ -54,6 +89,8 @@ export type SiteSettings = {
       heroUrl?: string;
       features: string[];
       gallery: GalleryItem[];
+      faqs?: Array<{ q: string; a: string }>;
+      sections?: Array<{ heading: string; body: string }>;
     };
     maintenance: {
       heading?: string;
@@ -63,6 +100,8 @@ export type SiteSettings = {
       heroUrl?: string;
       features: string[];
       gallery: GalleryItem[];
+      faqs?: Array<{ q: string; a: string }>;
+      sections?: Array<{ heading: string; body: string }>;
     };
   };
   about: {
@@ -106,8 +145,9 @@ export type SiteSettings = {
       refrigerant?: { R410A?: number; R22?: number };
     };
     perJob?: {
-      perWorkerPerJobLow: number;
-      perWorkerPerJobHigh: number;
+      perWorkerPerJob?: number;
+      perWorkerPerJobLow?: number; // legacy; used if single value missing
+      perWorkerPerJobHigh?: number; // legacy; used if single value missing
       defaultCrewSize: number;
       altCrewSize?: number;
     };
@@ -126,6 +166,13 @@ export type SiteSettings = {
     goodBetterBest?: boolean;
     showFinancing?: boolean;
     zipPrefixes?: { [prefix: string]: number }; // e.g., { '760':1.00, '761':1.02, '750':1.03 }
+  };
+  reviews?: {
+    rating?: number;
+    count?: number;
+    googlePlaceId?: string;
+    googleReviewUrl?: string;
+    testimonials?: Array<{ author?: string; text?: string; rating?: number }>;
   };
 };
 
@@ -163,38 +210,90 @@ const DEFAULT_SETTINGS: SiteSettings = {
     ac: {
       heading: 'Air Conditioning Installation & Repair',
       subheading: 'High‑efficiency cooling, sized and installed right',
-      body: 'From fast repairs to new high‑efficiency installs, we keep your home cool and your bills low. We size systems properly and stand behind our work.',
+      body: 'From fast repairs to new high‑efficiency installs, we keep your home cool and your bills low. We size systems properly and stand behind our work. Our licensed technicians diagnose issues quickly and recommend the best options for your home and budget.',
+      heroUrl: 'https://images.unsplash.com/photo-1581093588401-16fcb3c9f4a0?q=80&w=1600&auto=format&fit=crop',
       features: [
         'Same‑day diagnostics',
         'Licensed, insured technicians',
         'Honest pricing, no surprises',
         'Manufacturer‑backed warranties'
       ],
-      gallery: [{}, {}, {}],
+      gallery: [
+        { url: 'https://images.unsplash.com/photo-1581093588360-15d8b89e9c6c?q=80&w=1200&auto=format&fit=crop', alt: 'Technician working on AC condenser' },
+        { url: 'https://images.unsplash.com/photo-1597764699514-9f3ef0c79855?q=80&w=1200&auto=format&fit=crop', alt: 'New AC unit install' },
+        { url: 'https://images.unsplash.com/photo-1581091014210-5cbf39e7f06c?q=80&w=1200&auto=format&fit=crop', alt: 'Indoor air handler' }
+      ],
+      faqs: [
+        { q: 'How long does an AC install take?', a: 'Most full system installs are completed in one day. Complex jobs or special order equipment may require additional time, but we will always communicate a clear timeline.' },
+        { q: 'Should I repair or replace my AC?', a: 'If your system is over 10–12 years old, requires frequent repairs, or uses R‑22 refrigerant, replacement is often the most cost‑effective long‑term option. We will provide a transparent side‑by‑side comparison.' },
+        { q: 'Do you offer financing?', a: 'Yes—flexible financing options are available for qualifying customers. Ask our team during your free estimate.' },
+        { q: 'What brands do you install?', a: 'We service and install all major brands. We’ll recommend quality equipment that fits your home, efficiency goals, and budget.' },
+        { q: 'Do you provide warranties?', a: 'Yes. New systems include manufacturer warranties and our workmanship guarantee. We explain coverage details before installation.' }
+      ],
+      sections: [
+        { heading: 'Signs You May Need AC Repair', body: 'Warm air, weak airflow, unusual noises, frequent cycling, water near the indoor unit, or unexpected energy bill spikes are common indicators. Early diagnosis prevents larger issues.' },
+        { heading: 'Our AC Installation Process', body: 'We begin with a proper load calculation and duct inspection, recommend right‑sized equipment, protect your home during install, and test every system function before we leave. We walk you through operation and maintenance.' },
+        { heading: 'Why Choose Us for Cooling', body: 'Transparent quotes, friendly techs, fast service windows, and quality parts. We treat your home with respect and stand behind every job in the Dallas–Fort Worth area.' }
+      ],
     },
     heat: {
       heading: 'Heating Services & Furnace Replacement',
       subheading: 'Safe, reliable heat when you need it most',
-      body: 'We repair and replace furnaces and heat pumps with careful attention to safety and efficiency so you stay comfortable all season.',
+      body: 'We repair and replace furnaces and heat pumps with careful attention to safety and efficiency so you stay comfortable all season. From emergency repairs to high‑efficiency replacements, our team delivers long‑lasting comfort.',
+      heroUrl: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1600&auto=format&fit=crop',
       features: [
         'Emergency repairs',
         'Clean workmanship',
         'Energy‑saving options',
         'Transparent recommendations'
       ],
-      gallery: [{}, {}, {}],
+      gallery: [
+        { url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop', alt: 'Furnace maintenance' },
+        { url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop', alt: 'Cozy home heating' },
+        { url: 'https://images.unsplash.com/photo-1517244683847-7456b63c5dde?q=80&w=1200&auto=format&fit=crop', alt: 'Heat pump outdoor unit' }
+      ],
+      faqs: [
+        { q: 'Can you replace my furnace in one day?', a: 'Yes. Most replacements are finished the same day, including haul‑away of the old unit and a thorough startup and safety check.' },
+        { q: 'Do you repair heat pumps?', a: 'Absolutely. We service and install heat pumps and dual‑fuel systems from all major manufacturers.' },
+        { q: 'What are common furnace repair signs?', a: 'Cold spots, short cycling, loud banging or squealing, and higher utility bills. If you notice gas smells or repeated safety shutoffs, turn the system off and call us immediately.' },
+        { q: 'Do you offer maintenance plans?', a: 'Yes. Seasonal tune‑ups keep your system efficient and help avoid surprise breakdowns during peak weather.' },
+        { q: 'Do you offer financing for replacements?', a: 'Yes—flexible financing options are available for qualifying customers.' },
+        { q: 'What maintenance do furnaces need?', a: 'An annual tune‑up that checks burners, heat exchanger, safeties, and airflow helps ensure safe, efficient operation.' }
+      ],
+      sections: [
+        { heading: 'Heating Repair Done Right', body: 'We diagnose the root cause—not just the symptom—so the fix lasts. Our trucks are stocked for common parts to get heat restored quickly.' },
+        { heading: 'Furnace Replacement Benefits', body: 'Modern systems deliver quieter operation, better comfort, and lower monthly bills. We offer options and clear pricing, no pressure.' },
+        { heading: 'Safety First', body: 'Every visit includes a safety inspection to ensure proper venting, combustion air, and carbon monoxide protection.' }
+      ],
     },
     maintenance: {
       heading: 'Seasonal Maintenance & Tune‑Ups',
       subheading: 'Prevent breakdowns and lower your bills',
-      body: 'A quick seasonal tune‑up can extend system life, improve comfort, and help prevent inconvenient breakdowns during peak weather.',
+      body: 'A quick seasonal tune‑up can extend system life, improve comfort, improve air quality, and help prevent inconvenient breakdowns during peak weather. We check refrigerant levels, electrical components, airflow, and thermostat function.',
+      heroUrl: 'https://images.unsplash.com/photo-1511381939415-c1c66e0d8794?q=80&w=1600&auto=format&fit=crop',
       features: [
         'Multi‑point inspection',
         'Filter replacement',
         'Refrigerant and electrical checks',
         'Friendly tips to keep air clean'
       ],
-      gallery: [{}, {}, {}],
+      gallery: [
+        { url: 'https://images.unsplash.com/photo-1511381939415-c1c66e0d8794?q=80&w=1200&auto=format&fit=crop', alt: 'Technician checking filters' },
+        { url: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop', alt: 'Clean air vent' },
+        { url: 'https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=1200&auto=format&fit=crop', alt: 'Maintenance checklist' }
+      ],
+      faqs: [
+        { q: 'How often should I schedule maintenance?', a: 'We recommend a tune‑up twice a year—AC in spring and heating in fall. This catches small issues before they become costly.' },
+        { q: 'Does maintenance keep my warranty valid?', a: 'Yes. Most manufacturers require documented routine maintenance for warranty coverage.' },
+        { q: 'What does a tune‑up include?', a: 'We inspect coils, blower, electrical components, drain lines, refrigerant charge, safety switches, and more. We’ll share a simple report with any findings.' },
+        { q: 'How long does a tune‑up take?', a: 'Typically 45–90 minutes per system depending on access and condition.' },
+        { q: 'Will you remind me when it’s time?', a: 'Yes. We can set email/text reminders or enroll you in a plan with scheduled visits.' }
+      ],
+      sections: [
+        { heading: 'What We Check', body: 'Our multi‑point inspection covers airflow, electrical, refrigerant, safety controls, and thermostat operation. We clean and calibrate to restore efficiency.' },
+        { heading: 'Benefits of Regular Maintenance', body: 'Fewer breakdowns, better comfort, longer equipment life, lower energy bills, and cleaner indoor air.' },
+        { heading: 'Filter & IAQ Tips', body: 'We’ll recommend the right filter for your system and habits. Ask about air cleaners and simple upgrades that make a difference.' }
+      ],
     },
   },
   about: {
@@ -214,7 +313,89 @@ const DEFAULT_SETTINGS: SiteSettings = {
     phoneLead: 'Prefer to talk?',
   },
   navbar: {
-    phone: '(XXX) XXX-XXXX',
+    phone: '(817) 724-5507',
+  },
+  reviews: {
+    rating: 5.0,
+    count: 0,
+    googlePlaceId: '',
+    googleReviewUrl: '',
+    testimonials: []
+  },
+  education: {
+    heading: 'HVAC Education & Tips',
+    subheading: 'Simple how‑tos to help your system run better',
+    videos: [
+      { url: 'https://www.youtube.com/watch?v=0GZ8tXJ7z0I', title: 'How to Change Your AC Filter', description: 'A quick walkthrough on replacing filters and why it matters.' },
+      { url: 'https://www.youtube.com/watch?v=Qz2oY4V1JcA', title: 'Thermostat Basics', description: 'Helpful settings to improve comfort and efficiency.' },
+      { url: 'https://www.youtube.com/watch?v=pLah3qB9iJw', title: 'Clearing a Condensate Drain Line', description: 'Stop the pan from overflowing with a simple clean-out.' },
+      { url: 'https://www.youtube.com/watch?v=Fh7XnHzg8iA', title: 'Heat Pump 101', description: 'How heat pumps heat and cool your home efficiently.' },
+      { url: 'https://www.youtube.com/watch?v=RrVXx7dQFbw', title: 'Improving Indoor Air Quality', description: 'Filters, MERV, and simple ways to reduce dust.' },
+      { url: 'https://www.youtube.com/watch?v=8Q_7Hh2mA_k', title: 'Thermostat Scheduling Tips', description: 'Set and forget comfort with energy savings.' }
+    ]
+  },
+  blog: {
+    posts: [
+      {
+        slug: 'ac-installation-cost-dfw',
+        title: 'AC Installation Costs in Dallas–Fort Worth: What to Expect',
+        date: new Date().toISOString().slice(0,10),
+        summary: 'A transparent look at equipment options, labor, and what impacts project pricing in the DFW area.',
+        heroUrl: 'https://images.unsplash.com/photo-1581093588360-15d8b89e9c6c?q=80&w=1600&auto=format&fit=crop',
+        contentHtml: '<h2>Typical Price Ranges in DFW</h2><p>Most full AC changeouts in the Dallas–Fort Worth area land between <strong>$7,500–$14,000</strong> for standard split systems. Projects involving new ductwork, high‑efficiency heat pumps, or electrical upgrades can run higher. Multi‑stage or variable‑speed equipment improves comfort and efficiency but increases upfront cost.</p><h3>Key Cost Factors</h3><ul><li><strong>System size & SEER2</strong>: Larger homes need higher tonnage; higher SEER2 reduces energy use but costs more upfront.</li><li><strong>Ductwork condition</strong>: Leaky or undersized ducts limit performance; sealing or replacement adds labor and materials.</li><li><strong>Electrical & code items</strong>: New disconnects, pads, breakers, or line sets may be required to meet code and manufacturer specs.</li><li><strong>Access</strong>: Attic heights, roof access, and long line sets add time and equipment (e.g., a crane).</li></ul><h3>What’s Included with a Quality Install</h3><ul><li>Right‑sized equipment with load calculation</li><li>New pad, disconnect, and properly charged refrigerant lines</li><li>Startup and performance verification (static pressure, subcool/superheat)</li><li>Clean workmanship, permits, haul‑away, and a walkthrough</li></ul><h3>Financing & Rebates</h3><p>We offer flexible financing for qualified customers and help you find any available utility rebates. <strong>Goal</strong>: the best long‑term comfort per dollar.</p><p><em>Call us for a free, no‑pressure estimate. We’ll price good/better/best options and explain trade‑offs clearly.</em></p>',
+        author: 'SV HVAC',
+        readMins: 6,
+        tags: ['ac','pricing','dfw'],
+        published: true
+      },
+      {
+        slug: 'ac-maintenance-checklist',
+        title: 'Spring AC Maintenance Checklist for DFW Homes',
+        date: new Date().toISOString().slice(0,10),
+        summary: 'Simple steps to get your system ready for Texas heat.',
+        heroUrl: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?q=80&w=1600&auto=format&fit=crop',
+        contentHtml: '<p>A spring tune‑up prevents surprise breakdowns during the first 90° week. Use this checklist to keep comfort steady and energy use down.</p><h3>Homeowner To‑Dos</h3><ul><li><strong>Filters</strong>: Replace every 1–3 months. If you can’t see light through it, swap it.</li><li><strong>Outdoor clearance</strong>: Keep 18–24\" of space around the condenser. Trim shrubs and remove leaves.</li><li><strong>Vents & returns</strong>: Open and unblocked. Closed vents raise static pressure and can shorten equipment life.</li><li><strong>Thermostat</strong>: Replace batteries (if applicable) and set an efficient schedule.</li></ul><h3>What We Check</h3><ul><li>Refrigerant charge (subcool/superheat)</li><li>Electrical components and amp draws</li><li>Capacitors, contactors, safety controls</li><li>Drain lines and pan (clear to prevent water damage)</li><li>Static pressure & airflow</li></ul><h3>When to Call</h3><p>Warm air, weak airflow, short cycling, ice on the lines, or a tripped float switch are early warnings. We’ll diagnose root causes and give simple, transparent options.</p>',
+        author: 'SV HVAC', readMins: 5,
+        tags: ['maintenance','checklist','ac'], published: true
+      },
+      {
+        slug: 'seer2-explained',
+        title: 'SEER2 Explained: What Efficiency Ratings Mean',
+        date: new Date().toISOString().slice(0,10),
+        summary: 'Understand the updated efficiency standard and how it affects your next system.',
+        contentHtml: '<p>SEER2 is the updated standard replacing SEER to better reflect real‑world performance. Higher numbers generally mean lower energy bills, but balance cost, comfort, and payback.</p>',
+        author: 'SV HVAC', readMins: 3,
+        tags: ['seer2','efficiency','ac'], published: false
+      },
+      {
+        slug: 'heat-pump-vs-gas-furnace-dfw',
+        title: 'Heat Pump vs Gas Furnace in DFW — Which Is Right for You?',
+        date: new Date().toISOString().slice(0,10),
+        summary: 'Compare comfort, cost, and performance for North Texas climate.',
+        heroUrl: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1600&auto=format&fit=crop',
+        contentHtml: '<h2>Quick Take</h2><p><strong>Heat pumps</strong> are efficient and great for DFW’s mild winters; <strong>gas furnaces</strong> deliver strong heat during cold snaps. Both can be reliable choices depending on your home and goals.</p><h3>When a Heat Pump Shines</h3><ul><li>Moderate winters reduce auxiliary heat use</li><li>One system provides both heating and cooling</li><li>Lower carbon footprint and often lower monthly bills</li></ul><h3>When a Furnace Makes Sense</h3><ul><li>Very cold homes or drafty envelopes</li><li>Existing gas infrastructure</li><li>Preference for hotter supply air</li></ul><h3>Total Cost of Ownership</h3><p>While the upfront cost can be similar, operating costs depend on energy prices and insulation. We’ll compare options for your home using local rates and your usage patterns.</p><h3>The Hybrid Option</h3><p>A dual‑fuel (hybrid) system uses a heat pump for mild days and a furnace for the coldest weather, optimizing comfort and cost.</p><p><em>Ask us for a free, no‑pressure consultation. We’ll run the numbers for your home.</em></p>',
+        author: 'SV HVAC', readMins: 7,
+        tags: ['heating','heat-pump','furnace'], published: true
+      },
+      {
+        slug: 'indoor-air-quality-basics',
+        title: 'Indoor Air Quality Basics: Filters, MERV, and Upgrades',
+        date: new Date().toISOString().slice(0,10),
+        summary: 'Cleaner air starts with the right filter and habits.',
+        contentHtml: '<p>We demystify MERV ratings, discuss when to upgrade, and share simple tips to reduce dust and allergens.</p>',
+        author: 'SV HVAC', readMins: 4,
+        tags: ['iaq','filters','merv'], published: false
+      }
+    ]
+  },
+  plans: {
+    heading: 'Maintenance Plans',
+    subheading: 'Prevent breakdowns and keep comfort steady all year',
+    tiers: [
+      { name: 'Basic', price: 129, interval: 'per visit', features: ['21‑point inspection', 'Filter check & replace (customer‑provided)', 'Safety checks'], cta: 'Book Basic', mostPopular: false },
+      { name: 'Preferred', price: 199, interval: 'per visit', features: ['Everything in Basic', 'Priority scheduling', '10% off repairs'], cta: 'Book Preferred', mostPopular: true },
+      { name: 'Premium', price: 349, interval: 'per year', features: ['2 visits / year', 'Priority scheduling', '15% off repairs', 'No after‑hours fee'], cta: 'Join Premium', mostPopular: false },
+    ],
   },
   estimate: {
     targetMargin: 0.40,
@@ -238,8 +419,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
       refrigerant: { R410A: 65, R22: 120 },
     },
     perJob: {
-      perWorkerPerJobLow: 300,
-      perWorkerPerJobHigh: 400,
+      perWorkerPerJob: 350,
       defaultCrewSize: 3,
       
     },
@@ -277,36 +457,73 @@ export class SettingsService {
   /** Current settings snapshot used by app components */
   private _current: SiteSettings = structuredClone(DEFAULT_SETTINGS);
 
-  /** Load settings from DB (site_settings.data JSONB). If missing, seed defaults. */
+  /** Load settings with cache-first semantics for instant paint.
+   *  - If cached settings exist, use them immediately and resolve.
+   *  - Refresh from DB in the background and persist when available.
+   *  - On first visit (no cache), fetch from DB (or fall back to defaults) then resolve.
+   */
   async load(): Promise<void> {
-    const { data, error } = await supabase
-      .from('site_settings')
-      .select('data')
-      .limit(1)
-      .maybeSingle();
-
-    if (error) {
-      console.warn('[settings] load failed, falling back to defaults:', error.message);
-      const local = this._loadLocal();
-      this._current = local ?? structuredClone(DEFAULT_SETTINGS);
+    // 1) Try local cache first for instant paint
+    const cached = this._loadLocal();
+    if (cached && !this._loaded) {
+      this._current = this._mergeWithDefaults(cached);
       this._markLoaded();
+      // Fire-and-forget background refresh; do not block bootstrap
+      this._refreshFromRemote();
       return;
     }
 
-    if (data?.data) {
-      this._current = this._mergeWithDefaults(data.data as SiteSettings);
+    // 2) No cache yet — fetch from DB, then resolve
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('data')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data?.data) {
+        this._current = this._mergeWithDefaults(data.data as SiteSettings);
+        this._saveLocal(this._current);
+        this._markLoaded();
+        return;
+      }
+
+      // No row yet — seed with defaults
+      const seeded = this._mergeWithDefaults(DEFAULT_SETTINGS);
+      const { error: upsertErr } = await supabase.from('site_settings').insert({ data: seeded });
+      if (upsertErr) console.warn('[settings] seed insert failed:', upsertErr.message);
+      this._current = seeded;
+      this._saveLocal(seeded);
+      this._markLoaded();
+    } catch (e: any) {
+      console.warn('[settings] load failed, using defaults:', e?.message || e);
+      this._current = this._mergeWithDefaults(cached ?? DEFAULT_SETTINGS);
       this._saveLocal(this._current);
       this._markLoaded();
-      return;
     }
+  }
 
-    // No row yet — seed one with defaults
-    const seeded = this._mergeWithDefaults(DEFAULT_SETTINGS);
-    const { error: upsertErr } = await supabase.from('site_settings').insert({ data: seeded });
-    if (upsertErr) console.warn('[settings] seed insert failed:', upsertErr.message);
-    this._current = seeded;
-    this._saveLocal(seeded);
-    this._markLoaded();
+  /** Background refresh from Supabase; updates cache when successful. */
+  private async _refreshFromRemote(): Promise<void> {
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('data')
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      if (data?.data) {
+        this._current = this._mergeWithDefaults(data.data as SiteSettings);
+        this._saveLocal(this._current);
+        // Note: components relying on this service read synchronously each CD run.
+        // We intentionally do not toggle loaded again to avoid churn.
+      }
+    } catch (e: any) {
+      // Soft-fail: keep using cached/defaults
+      console.warn('[settings] background refresh failed:', e?.message || e);
+    }
   }
 
   /** Save to DB and mirror to localStorage */
@@ -348,6 +565,16 @@ export class SettingsService {
   private _mergeWithDefaults(input: Partial<SiteSettings> | undefined): SiteSettings {
     const base = structuredClone(DEFAULT_SETTINGS);
 
+    // Helper: merge FAQs by unique question text, preserving input order then base
+    const mergeFaqs = (baseFaqs?: Array<{ q: string; a: string }>, inputFaqs?: Array<{ q: string; a: string }>) => {
+      const inList = Array.isArray(inputFaqs) ? inputFaqs.filter(x => x && x.q) : [];
+      const baseList = Array.isArray(baseFaqs) ? baseFaqs.filter(x => x && x.q) : [];
+      if (!inList.length) return baseList;
+      const seen = new Set(inList.map(x => (x.q || '').toLowerCase().trim()));
+      const extras = baseList.filter(x => !seen.has((x.q || '').toLowerCase().trim()));
+      return [...inList, ...extras];
+    };
+
     const out: SiteSettings = {
       ...base,
       ...input,
@@ -367,18 +594,21 @@ export class SettingsService {
           ...(input?.servicePages?.ac ?? {}),
           features: input?.servicePages?.ac?.features?.length ? input.servicePages!.ac!.features : (base.servicePages?.ac?.features ?? []),
           gallery: input?.servicePages?.ac?.gallery?.length ? input.servicePages!.ac!.gallery : (base.servicePages?.ac?.gallery ?? []),
+          faqs: mergeFaqs(base.servicePages?.ac?.faqs, input?.servicePages?.ac?.faqs),
         },
         heat: {
           ...(base.servicePages?.heat ?? {}),
           ...(input?.servicePages?.heat ?? {}),
           features: input?.servicePages?.heat?.features?.length ? input.servicePages!.heat!.features : (base.servicePages?.heat?.features ?? []),
           gallery: input?.servicePages?.heat?.gallery?.length ? input.servicePages!.heat!.gallery : (base.servicePages?.heat?.gallery ?? []),
+          faqs: mergeFaqs(base.servicePages?.heat?.faqs, input?.servicePages?.heat?.faqs),
         },
         maintenance: {
           ...(base.servicePages?.maintenance ?? {}),
           ...(input?.servicePages?.maintenance ?? {}),
           features: input?.servicePages?.maintenance?.features?.length ? input.servicePages!.maintenance!.features : (base.servicePages?.maintenance?.features ?? []),
           gallery: input?.servicePages?.maintenance?.gallery?.length ? input.servicePages!.maintenance!.gallery : (base.servicePages?.maintenance?.gallery ?? []),
+          faqs: mergeFaqs(base.servicePages?.maintenance?.faqs, input?.servicePages?.maintenance?.faqs),
         },
       },
       about: {
@@ -423,7 +653,7 @@ export class SettingsService {
           ...(input?.estimate?.accessMultipliers ?? {}),
         },
         perJob: {
-          ...(base.estimate?.perJob ?? { perWorkerPerJobLow:300, perWorkerPerJobHigh:400, defaultCrewSize:3, altCrewSize:4 }),
+          ...(base.estimate?.perJob ?? { perWorkerPerJob:350, defaultCrewSize:3, altCrewSize:4 }),
           ...(input?.estimate?.perJob ?? {}),
         },
         perHour: {
@@ -449,7 +679,7 @@ export class SettingsService {
     // Ensure structures exist
     out.about.items ??= [];
     out.team.members ??= [];
-    out.navbar ??= { phone: '(XXX) XXX-XXXX' };
+    out.navbar ??= { phone: '(817) 724-5507' };
     out.services.sectionHeading ??= base.services.sectionHeading;
     out.services.sectionSubheading ??= base.services.sectionSubheading;
     out.services.ac.hidden ??= false;
@@ -463,9 +693,15 @@ export class SettingsService {
       const page: any = (out.servicePages as any)[key] || {};
       page.features ||= [];
       page.gallery ||= [];
+      page.faqs ||= [];
+      page.sections ||= [];
       while (page.gallery.length < 3) page.gallery.push({});
       (out.servicePages as any)[key] = page;
     }
+
+    out.reviews ??= structuredClone(base.reviews!);
+    out.education ??= structuredClone(base.education!);
+    out.blog ??= structuredClone(base.blog!);
 
     return out;
   }

@@ -1,0 +1,27 @@
+.mobile-cta {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  display: none;
+  gap: .5rem;
+  padding: .5rem;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -6px 18px rgba(0,0,0,.08);
+}
+.mobile-cta .btn {
+  flex: 1 1 auto;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: .6rem;
+  padding: .6rem .75rem;
+  font-weight: 700;
+}
+.mobile-cta .btn.call { background:#fff; color:#111; border:2px solid #6C91C2; }
+.mobile-cta .btn.quote { background:#6C91C2; color:#fff; border:2px solid #6C91C2; }
+.mobile-cta .btn.quote:hover { background:#5273A8; border-color:#5273A8; }
+
+@media (max-width: 768px) {
+  .mobile-cta { display:flex; }
+  body { padding-bottom: 64px; }
+}
+

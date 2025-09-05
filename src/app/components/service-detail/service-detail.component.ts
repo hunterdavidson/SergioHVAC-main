@@ -3,13 +3,14 @@ import { Component, ChangeDetectionStrategy, inject, OnInit, OnDestroy } from '@
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SettingsService } from '../../core/settings.service';
 import { SeoService } from '../../core/seo.service';
+import { ContactComponent } from '../contact/contact.component';
 
 type ServiceKey = 'ac' | 'heat' | 'maintenance';
 
 @Component({
   selector: 'app-service-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgOptimizedImage],
+  imports: [CommonModule, RouterLink, NgOptimizedImage, ContactComponent],
   templateUrl: './service-detail.component.html',
   styleUrls: ['./service-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,14 +40,21 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
   trackByIdx(i: number) { return i; }
 
   ngOnInit(): void {
+    // SSR injects approximate city via headers; no permission prompt needed.
     const heading = this.page?.heading || 'Service';
-    this.seo.setTitle(`${heading} — SV HVAC`);
+    this.seo.setTitle(`${heading} in Dallas–Fort Worth, TX — SV HVAC`);
     const path = this.key === 'ac' ? '/services/ac'
       : this.key === 'heat' ? '/services/heating'
       : '/services/maintenance';
     this.seo.setCanonical(path);
     // Meta description prefers subheading, then trimmed body
-    const desc = (this.page?.subheading || (this.page?.body || '')).toString().trim().slice(0, 160);
+    let desc = (this.page?.subheading || (this.page?.body || '')).toString().trim();
+    const phone = this.settings.value.navbar?.phone || '';
+    if (phone) {
+      const add = ` Call ${phone} for same-day service in DFW.`;
+      desc = (desc + ' ' + add).trim();
+    }
+    desc = desc.slice(0, 160);
     if (desc) this.seo.setDescription(desc);
 
     // JSON-LD for Service
@@ -63,7 +71,7 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
     const shareImage = images[0] || (site + '/assets/img/og-card.webp');
     const shareAlt = this.page?.heading || serviceType;
     this.seo.setOg({
-      title: `${heading} — SV HVAC`,
+      title: `${heading} in Dallas–Fort Worth, TX — SV HVAC`,
       description: desc,
       url: site + path,
       image: shareImage,
@@ -74,7 +82,7 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
     });
     this.seo.setTwitter({
       card: 'summary_large_image',
-      title: `${heading} — SV HVAC`,
+      title: `${heading} in Dallas–Fort Worth, TX — SV HVAC`,
       description: desc,
       image: shareImage,
       imageAlt: shareAlt,
@@ -87,7 +95,7 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: site + '/' },
         { '@type': 'ListItem', position: 2, name: 'Services', item: site + '/#services' },
-        { '@type': 'ListItem', position: 3, name: heading, item: site + path },
+        { '@type': 'ListItem', position: 3, name: `${heading} in Dallas–Fort Worth`, item: site + path },
       ]
     });
 
@@ -107,11 +115,25 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
       },
       areaServed: {
         '@type': 'City',
-        name: 'Grapevine',
+        name: 'Dallas–Fort Worth',
         addressRegion: 'TX',
         addressCountry: 'US'
       }
     });
+
+    // FAQ Schema (if present)
+    const faqs = (this.page?.faqs || []).filter((q: any) => q?.q && q?.a).slice(0, 15);
+    if (faqs.length) {
+      this.seo.upsertJsonLd('ld-faq', {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((f: any) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        }))
+      });
+    }
   }
 
   // Simple lightbox state
@@ -124,5 +146,6 @@ export class ServiceDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.seo.removeElement('ld-service');
     this.seo.removeElement('ld-breadcrumbs');
+    this.seo.removeElement('ld-faq');
   }
 }

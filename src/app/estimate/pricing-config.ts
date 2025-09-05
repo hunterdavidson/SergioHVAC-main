@@ -15,8 +15,7 @@ export const PRICING_CONFIG = {
 
   laborMode: 'perJob' as const,
   perJob: {
-    perWorkerPerJobLow: 300,
-    perWorkerPerJobHigh: 400,
+    perWorkerPerJob: 350,
     defaultCrewSize: 3,
     altCrewSize: 4,
   },
@@ -24,6 +23,8 @@ export const PRICING_CONFIG = {
     hourlyRatePerTech: 95,
     defaultCrewSize: 3,
   },
+  // Additional labor factor for attic or crawlspace access
+  atticOrCrawlLaborMultiplier: 1.05,
 
   baselineHours: {
     acSplitChangeout: { min: 4, max: 8 },

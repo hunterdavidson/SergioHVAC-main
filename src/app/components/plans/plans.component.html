@@ -1,0 +1,25 @@
+<section class="page-section section-light">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h1 class="section-heading text-uppercase">{{ settings.value.plans?.heading || 'Maintenance Plans' }}</h1>
+      <h3 class="section-subheading text-muted">{{ settings.value.plans?.subheading || 'Prevent breakdowns and keep comfort steady all year' }}</h3>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card" *ngFor="let t of (settings.value.plans?.tiers || [])">
+        <div class="badge" *ngIf="t.mostPopular">Most Popular</div>
+        <h2 class="h4 text-uppercase">{{ t.name }}</h2>
+        <div class="price">${{ t.price }} <span class="interval">{{ t.interval || 'per visit' }}</span></div>
+        <ul class="features">
+          <li *ngFor="let f of (t.features || [])">{{ f }}</li>
+        </ul>
+        <div class="mt-2 text-center cta">
+          <a class="btn btn-xl text-uppercase dynamic-button" [routerLink]="[]" [queryParams]="{ plan: t.name }" fragment="contact">{{ t.cta || 'Get Started' }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact form on this page so plan CTAs scroll here instead of redirecting -->
+<app-contact></app-contact>

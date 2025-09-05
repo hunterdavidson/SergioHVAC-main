@@ -5,11 +5,12 @@ import { ServicesComponent } from '../services/services.component';
 import { AboutComponent } from '../about/about.component';
 import { TeamComponent } from '../team/team.component';
 import { ContactComponent } from '../contact/contact.component';
+import { ReviewWidgetComponent } from '../review-widget/review-widget.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, HomeComponent, ServicesComponent, AboutComponent, TeamComponent, ContactComponent],
+  imports: [CommonModule, HomeComponent, ServicesComponent, ReviewWidgetComponent, AboutComponent, TeamComponent, ContactComponent],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

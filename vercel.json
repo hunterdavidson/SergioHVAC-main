@@ -4,11 +4,30 @@
   "buildCommand": "cross-env NODE_ENV=production node generate-env.mjs && node update-sitemap.mjs && ng build --configuration=production",
   "outputDirectory": "dist/sergio-hvac/browser",
   "rewrites": [
+    { "source": "/services/ac/(.*)", "destination": "/services/ac" },
+    { "source": "/services/heating/(.*)", "destination": "/services/heating" },
+    { "source": "/services/maintenance/(.*)", "destination": "/services/maintenance" },
     { "source": "/login", "destination": "/" },
     { "source": "/admin", "destination": "/" },
     { "source": "/admin/customize", "destination": "/" }
   ],
   "headers": [
+    {
+      "source": "/login",
+      "headers": [ { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ]
+    },
+    {
+      "source": "/admin",
+      "headers": [ { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ]
+    },
+    {
+      "source": "/admin/(.*)",
+      "headers": [ { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ]
+    },
+    {
+      "source": "/estimate",
+      "headers": [ { "key": "X-Robots-Tag", "value": "noindex, nofollow" } ]
+    },
     {
       "source": "/assets/(.*)",
       "headers": [
@@ -23,7 +42,7 @@
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; base-uri 'self'; frame-ancestors 'self'; form-action 'self'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; base-uri 'self'; frame-ancestors 'self'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self'; upgrade-insecure-requests"
         }
       ]
     }

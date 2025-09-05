@@ -59,4 +59,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private _isAdminUrl(url: string): boolean {
     return url.startsWith('/admin') || url.startsWith('/estimate');
   }
+
+  // Scroll to on-page contact form; do not redirect to home
+  goToContact(evt: Event) {
+    try {
+      const el = document.getElementById('contact');
+      if (el) {
+        evt.preventDefault();
+        if (this.isMenuOpen) this.isMenuOpen = false;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    } catch {}
+    // No contact section on this page; keep user on current route
+    // Let the native anchor update the fragment without redirecting
+    if (this.isMenuOpen) this.isMenuOpen = false;
+  }
 }

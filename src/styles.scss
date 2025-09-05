@@ -18,6 +18,10 @@ $text: #212529;
 
 /* ---- Base document tweaks ---- */
 html { scroll-behavior: smooth; }
+/* Fixed navbar height (adjust if your nav height changes) */
+:root { --nav-h: 80px; }
+/* Push content below fixed navbar */
+body { padding-top: var(--nav-h); }
 
 /* Fix mobile container padding: ensure base .container has gutters */
 .container {
@@ -42,7 +46,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* Offset anchors for fixed navbar (~80px) */
-#home, #services, #about, #team, #contact { scroll-margin-top: 80px; }
+#home, #services, #about, #team, #contact { scroll-margin-top: var(--nav-h); }
 
 /* ---- Buttons (keeps your existing look) ---- */
 .btn-primary {
@@ -217,4 +221,38 @@ html { scroll-behavior: smooth; }
 /* Footers (as you had) */
 footer { background-color: #4A678C; color: #fff;
   a { color: $brand-red; &:hover { color: #fff; } }
+}
+
+/* Space for mobile sticky CTA */
+@media (max-width: 768px) {
+  body { padding-bottom: 64px; }
+}
+
+/* Consistent section rhythm handled via .page-section and body padding-top */
+
+/* Unify vertical rhythm for sections */
+.page-section { padding-top: 4rem; padding-bottom: 4rem; }
+
+/* Hide and disable interaction for broken/missing images to avoid hover spinner */
+img:not([src]),
+img[src=""],
+img[src="null"],
+img[src="undefined"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ensure blog list hero thumbs show pointer cursor */
+.post-card .thumb { cursor: pointer; }
+
+/* Make phone links slightly larger for readability across the site */
+a[href^="tel:"] { font-size: 1.05rem; }
+
+/* Content link theme (applies to HTML injected via [innerHTML]) */
+:where(.content) a {
+  color: $brand;           /* theme blue */
+  text-decoration: underline;
+}
+:where(.content) a:hover {
+  color: $brand-dark;      /* darker on hover */
 }

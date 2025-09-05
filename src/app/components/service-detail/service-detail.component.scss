@@ -44,3 +44,13 @@
 .lightbox .close { margin-top: .75rem; background: transparent; color:#fff; border:none; font-size:2rem; line-height:1; cursor:pointer; }
 .lightbox .caption { color:#e5e7eb; margin-top:.25rem; }
 .lightbox .hint { color:#9ca3af; font-size:.85rem; margin-top:.25rem; }
+
+/* Accessible details/summary FAQ accordion */
+.faq-list { max-width: 840px; margin: 0 auto; }
+.faq-item { background:#fff; border:1px solid #e5e7eb; border-radius:.6rem; padding:.5rem .75rem; margin-bottom:.75rem; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.faq-summary { list-style:none; display:flex; align-items:center; justify-content:space-between; gap:.75rem; cursor:pointer; }
+.faq-summary::-webkit-details-marker { display:none; }
+.faq-summary .q { font-weight:600; color:#111; }
+.faq-item .chev { transition: transform .18s ease; color:#6b7280; }
+.faq-item[open] .chev { transform: rotate(180deg); }
+.faq-answer { padding:.5rem .25rem .25rem .25rem; }

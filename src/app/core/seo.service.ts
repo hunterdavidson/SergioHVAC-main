@@ -87,8 +87,9 @@ export class SeoService {
         link.setAttribute('rel', 'canonical');
         head.appendChild(link);
       }
-      const base = location.origin;
-      link.href = path ? (base + path) : location.href;
+      // Always canonicalize to primary domain to avoid www/non-www or preview host duplication
+      const base = 'https://svhvac.com';
+      link.href = path ? (base + path) : (base + (location.pathname || '/'));
     } catch {}
   }
 

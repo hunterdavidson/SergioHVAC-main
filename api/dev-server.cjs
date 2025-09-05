@@ -7,15 +7,16 @@ const express = require('express');
 try { require('dotenv').config(); } catch {}
 
 const handler = require('./leads.js');
+const reviewsHandler = require('./google-reviews.js');
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 
 // Mirror the production route
 app.all('/api/leads', (req, res) => handler(req, res));
+app.all('/api/google-reviews', (req, res) => reviewsHandler(req, res));
 
 const PORT = process.env.DEV_API_PORT || 8787;
 app.listen(PORT, () => {
   console.log(`[dev-api] Listening on http://127.0.0.1:${PORT}`);
 });
-

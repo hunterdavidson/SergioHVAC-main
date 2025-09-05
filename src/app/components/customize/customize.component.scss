@@ -6,6 +6,42 @@
   .img-preview {
     max-height: 80px; border-radius: 8px; border: 1px solid #e5e7eb;
   }
+
+  /* Higher-contrast section cards */
+  .section-card {
+    position: relative;
+    border: 1px solid #cbd5e1; /* slate-300 */
+    background: #f8fafc;       /* slate-50 */
+    box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    overflow: hidden; /* clip accent bar at corners */
+  }
+  .section-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0; /* left edge */
+    width: 4px;
+    background: #6C91C2; /* brand accent */
+  }
+  .section-card > .card-body { padding: 1.25rem; }
+  .section-card h4 {
+    color: #111827; /* gray-900 */
+    font-weight: 700;
+    margin: 0 0 .75rem 0;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .section-card h6 { color: #1f2937; font-weight: 700; }
+  .section-card hr { border-color: #d1d5db; opacity: 1; }
+
+  /* Sub-panels within sections (e.g., service tiles, gallery items) */
+  .section-card .border.rounded {
+    background: #f3f4f6;       /* gray-100 */
+    border-color: #cbd5e1 !important; /* slate-300 */
+  }
+
+  /* Labels and help text for readability */
+  .section-card .form-label { color: #374151; font-weight: 600; }
+  .section-card .form-text { color: #4b5563; }
 }
 
 .save-bar {

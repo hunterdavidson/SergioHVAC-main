@@ -1,0 +1,23 @@
+<section class="page-section section-light">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h1 class="section-heading text-uppercase">HVAC Blog</h1>
+      <h3 class="section-subheading text-muted">Guides, tips, and updates for DFW homeowners</h3>
+    </div>
+
+    <div class="post-grid">
+      <article class="post-card" *ngFor="let p of posts">
+        <a class="thumb" [routerLink]="['/blog', p.slug]" [attr.aria-label]="p.title">
+          <img *ngIf="p.heroUrl" [src]="p.heroUrl" [alt]="p.title" loading="lazy" (error)="markImgError(p.slug)" [class.d-none]="imageError[p.slug]" />
+          <div *ngIf="!p.heroUrl || imageError[p.slug]" class="placeholder" aria-hidden="true">&nbsp;</div>
+        </a>
+        <div class="body">
+          <h2 class="h5 mb-1"><a [routerLink]="['/blog', p.slug]">{{ p.title }}</a></h2>
+          <p class="text-muted small mb-2">{{ p.date || '' }}<span *ngIf="p.author"> · {{ p.author }}</span><span *ngIf="p.readMins"> · {{ p.readMins }} min read</span></p>
+          <p class="mb-2 text-muted">{{ p.summary }}</p>
+          <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/blog', p.slug]">Read More</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

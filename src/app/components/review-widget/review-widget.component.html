@@ -1,0 +1,38 @@
+<section class="page-section section-dark reviews-section" aria-label="Customer reviews">
+  <div class="container">
+    <div class="text-center mb-3">
+      <div class="rating" *ngIf="rating as r">
+        <div class="stars" aria-hidden="true">
+          <span class="star" *ngFor="let s of starsArray(r)" [class.on]="s === 1">★</span>
+        </div>
+        <span class="rating-badge" [attr.aria-label]="'Rated ' + formattedRating(r) + ' out of 5'">{{ formattedRating(r) }}</span>
+      </div>
+      <p class="mb-0 text-white-50" *ngIf="count as c">Based on {{ c }} Google reviews</p>
+    </div>
+
+    <div class="review-scroller" *ngIf="reviews.length > 0; else noReviews">
+      <article class="review-card" *ngFor="let rv of reviews; let i = index">
+        <div class="review-stars" [attr.aria-label]="'Rated ' + rv.rating + ' out of 5'">
+          <span class="rstar" *ngFor="let s of starsArray(rv.rating)" [class.on]="s === 1">★</span>
+        </div>
+        <p class="review-text">{{ rv.text }}</p>
+        <div class="review-meta">
+          <img *ngIf="rv.profilePhotoUrl" [src]="rv.profilePhotoUrl" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer" />
+          <div class="who">
+            <span class="author">{{ rv.author }}</span>
+            <span class="time" *ngIf="rv.relativeTimeDescription">{{ rv.relativeTimeDescription }}</span>
+          </div>
+          <span class="source" *ngIf="rv.source === 'google'">Google</span>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #noReviews>
+      <div class="text-center text-white-50">Reviews will appear here when available.</div>
+    </ng-template>
+
+    <div class="text-center mt-4">
+      <a *ngIf="reviewUrl as url" class="btn btn-xl text-uppercase btn-contrast" [href]="url" target="_blank" rel="noopener nofollow">Leave a Google review</a>
+    </div>
+  </div>
+</section>

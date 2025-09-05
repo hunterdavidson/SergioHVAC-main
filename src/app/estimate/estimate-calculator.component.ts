@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, computed, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { EstimateService, EstimateInputs, EstimateResult } from './estimate.service';
 import { PRICING_CONFIG } from './pricing-config';
 import { SettingsService } from '../core/settings.service';
+import { SeoService } from '../core/seo.service';
 
 @Component({
   selector: 'app-estimate-calculator',
@@ -13,10 +14,11 @@ import { SettingsService } from '../core/settings.service';
   styleUrls: ['./estimate-calculator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EstimateCalculatorComponent {
+export class EstimateCalculatorComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private svc = inject(EstimateService);
   private settingsSvc = inject(SettingsService);
+  private seo = inject(SeoService);
 
   config = this.mergeConfigWithSettings();
 
@@ -57,7 +59,7 @@ export class EstimateCalculatorComponent {
     // Labor
     // simplified labor UI: per-job only
     crewSize: [Number(this.config.perJob.defaultCrewSize), [Validators.min(1), Validators.max(8)]],
-    perWorkerPerJob: [Math.round((this.config.perJob.perWorkerPerJobLow + this.config.perJob.perWorkerPerJobHigh)/2)],
+    perWorkerPerJob: [this.defaultPerWorkerPerJob()],
     seasonal: ['normal'],
 
     // Contact (optional for PDF header)
@@ -119,7 +121,7 @@ export class EstimateCalculatorComponent {
     // Ensure per-job by default in simplified mode
     (v as any).laborMode = 'perJob';
     // Force default crew size and mid per-worker-per-job (hide labor choices)
-    const mid = Math.round((this.config.perJob.perWorkerPerJobLow + this.config.perJob.perWorkerPerJobHigh) / 2);
+    const mid = this.defaultPerWorkerPerJob();
     (v as any).crewSize = this.config.perJob.defaultCrewSize;
     (v as any).perWorkerPerJob = mid;
     this.resultSig.set(this.svc.estimateCost(v, this.config));
@@ -161,7 +163,7 @@ export class EstimateCalculatorComponent {
       disposal: true,
       afterHours: false,
       crewSize: Number(this.config.perJob.defaultCrewSize),
-      perWorkerPerJob: Math.round((this.config.perJob.perWorkerPerJobLow + this.config.perJob.perWorkerPerJobHigh)/2),
+      perWorkerPerJob: this.defaultPerWorkerPerJob(),
       seasonal: 'normal',
       customerName: '',
       customerEmail: '',
@@ -170,6 +172,16 @@ export class EstimateCalculatorComponent {
     // Ensure validation state is clean
     this.form.markAsPristine();
     this.form.markAsUntouched();
+  }
+
+  ngOnInit(): void {
+    // Estimator is a private tool; keep out of the index
+    this.seo.setRobots('noindex,nofollow');
+  }
+
+  ngOnDestroy(): void {
+    // Restore default indexing on navigation away
+    this.seo.setRobots('index,follow,max-image-preview:large');
   }
 
   private mergeConfigWithSettings() {
@@ -195,5 +207,14 @@ export class EstimateCalculatorComponent {
     if (est.ductworkAddersHours) cfg.ductworkAddersHours = { ...cfg.ductworkAddersHours, ...est.ductworkAddersHours } as any;
     if (typeof est.goodBetterBest === 'boolean') (cfg as any).goodBetterBest = est.goodBetterBest;
     return cfg;
+  }
+
+  private defaultPerWorkerPerJob(): number {
+    const pj: any = this.config.perJob as any;
+    if (typeof pj.perWorkerPerJob === 'number') return Math.round(pj.perWorkerPerJob);
+    if (typeof pj.perWorkerPerJobLow === 'number' && typeof pj.perWorkerPerJobHigh === 'number') {
+      return Math.round((pj.perWorkerPerJobLow + pj.perWorkerPerJobHigh) / 2);
+    }
+    return 350;
   }
 }

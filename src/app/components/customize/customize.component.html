@@ -201,6 +201,24 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-12">
+                <label class="form-label">FAQs</label>
+                <div class="row g-2">
+                  <div class="col-12" *ngFor="let f of (draft.servicePages!.ac.faqs || []); let i = index">
+                    <div class="border rounded p-2 d-flex flex-column gap-2">
+                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcAcFaqQ'+i" />
+                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcAcFaqA'+i"></textarea>
+                      <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('ac', i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('ac')">Add FAQ</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -260,12 +278,30 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-12">
+                <label class="form-label">FAQs</label>
+                <div class="row g-2">
+                  <div class="col-12" *ngFor="let f of (draft.servicePages!.heat.faqs || []); let i = index">
+                    <div class="border rounded p-2 d-flex flex-column gap-2">
+                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcHeatFaqQ'+i" />
+                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcHeatFaqA'+i"></textarea>
+                      <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('heat', i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('heat')">Add FAQ</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Maintenance Page -->
   <div class="border rounded p-3 mb-2">
-    <h6 class="mb-3">Maintenance — /services/maintenance</h6>
+            <h6 class="mb-3">Maintenance — /services/maintenance</h6>
             <div class="row g-3">
               <div class="col-12 col-md-6">
                 <label class="form-label">Heading</label>
@@ -319,12 +355,31 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-12">
+                <label class="form-label">FAQs</label>
+                <div class="row g-2">
+                  <div class="col-12" *ngFor="let f of (draft.servicePages!.maintenance.faqs || []); let i = index">
+                    <div class="border rounded p-2 d-flex flex-column gap-2">
+                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcMaintFaqQ'+i" />
+                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcMaintFaqA'+i"></textarea>
+                      <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('maintenance', i)">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('maintenance')">Add FAQ</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-        </div>
       </div>
+    </div>
 
+      
       <!-- ABOUT -->
       <div class="card shadow-sm mb-4 section-card">
         <div class="card-body">
@@ -458,6 +513,216 @@
         </div>
       </div>
 
+      <!-- REVIEWS -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Reviews</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-4">
+              <label class="form-label">Average Rating</label>
+              <input type="number" step="0.1" min="0" max="5" class="form-control" [(ngModel)]="draft.reviews!.rating" name="reviewsRating" />
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Review Count</label>
+              <input type="number" min="0" class="form-control" [(ngModel)]="draft.reviews!.count" name="reviewsCount" />
+            </div>
+            <div class="col-12 col-md-8">
+              <label class="form-label">Google Review Link (Leave a Review)</label>
+              <input type="url" class="form-control" [(ngModel)]="draft.reviews!.googleReviewUrl" name="reviewsUrl" placeholder="https://search.google.com/local/writereview?placeid=..." />
+              <div class="form-text">Paste your “Write a review” link. The home page widget will use this.</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Google Place ID (optional)</label>
+              <input type="text" class="form-control" [(ngModel)]="draft.reviews!.googlePlaceId" name="reviewsPlaceId" placeholder="ChIJxxxxxxxxxxxxxxxxxx" />
+              <div class="form-text">If set, we’ll fetch recent Google reviews on your site. If empty, we try to read the placeid from the review link.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION / VIDEOS -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Education & Videos</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label">Heading</label>
+              <input class="form-control" [(ngModel)]="draft.education!.heading" name="eduHeading" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Subheading</label>
+              <input class="form-control" [(ngModel)]="draft.education!.subheading" name="eduSubheading" />
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>Videos</strong>
+              <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addEducationVideo()">Add Video</button>
+            </div>
+            <div class="border rounded p-2 mb-2" *ngFor="let v of (draft.education!.videos || []); let i = index">
+              <div class="row g-2">
+                <div class="col-12">
+                  <label class="form-label">YouTube URL</label>
+                  <input class="form-control" [(ngModel)]="v.url" [name]="'eduUrl'+i" placeholder="https://www.youtube.com/watch?v=..." />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Title</label>
+                  <input class="form-control" [(ngModel)]="v.title" [name]="'eduTitle'+i" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Description</label>
+                  <input class="form-control" [(ngModel)]="v.description" [name]="'eduDesc'+i" />
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeEducationVideo(i)">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOG -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Blog Posts</h4>
+          <div class="d-flex justify-content-end mb-2">
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addBlogPost()">Add Post</button>
+          </div>
+          <div class="border rounded p-3 mb-3" *ngFor="let p of (draft.blog!.posts || []); let i = index">
+            <div class="row g-2">
+              <div class="col-12 col-md-6">
+                <label class="form-label">Title</label>
+                <input class="form-control" [(ngModel)]="p.title" [name]="'postTitle'+i" />
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Slug</label>
+                <input class="form-control" [(ngModel)]="p.slug" [name]="'postSlug'+i" />
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Date</label>
+                <input class="form-control" [(ngModel)]="p.date" [name]="'postDate'+i" placeholder="YYYY-MM-DD" />
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Author</label>
+                <input class="form-control" [(ngModel)]="p.author" [name]="'postAuthor'+i" />
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label">Read Time (mins)</label>
+                <input type="number" class="form-control" [(ngModel)]="p.readMins" [name]="'postRead'+i" />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Summary</label>
+                <input class="form-control" [(ngModel)]="p.summary" [name]="'postSummary'+i" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Hero Image</label>
+                <input type="file" class="form-control" (change)="onBlogHeroSelected($event, i)" accept="image/*" />
+                <div class="form-text">Upload a wide image (1200×630 recommended) for social sharing.</div>
+              </div>
+              <div class="col-12 col-md-6 d-flex align-items-end" *ngIf="p.heroUrl">
+                <img [src]="p.heroUrl" alt="Blog hero preview" style="max-height:80px;border-radius:8px;border:1px solid #e5e7eb;margin-right:8px;" />
+                <button class="btn btn-outline-danger btn-sm" type="button" (click)="clearBlogHero(i)">Remove</button>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Inline Images</label>
+                <input type="file" class="form-control" (change)="onBlogInlineSelected($event, i)" accept="image/*" />
+                <div class="form-text">Upload images to embed in your article. Click “Insert” to append an &lt;img&gt; tag to Content (HTML).</div>
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                  <div class="border rounded p-2" *ngFor="let img of (p.inlineImages || []); let k = index" style="width:180px;">
+                    <img [src]="img" alt="Inline image" style="width:100%;height:100px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" />
+                    <div class="d-flex justify-content-between mt-2">
+                      <button class="btn btn-outline-secondary btn-sm" type="button" (click)="insertInlineImg(i, img)">Insert</button>
+                      <button class="btn btn-outline-danger btn-sm" type="button" (click)="(p.inlineImages || []).splice(k,1)">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Content (HTML)</label>
+                <textarea class="form-control" rows="6" [(ngModel)]="p.contentHtml" [name]="'postContent'+i" placeholder="<p>Write your post here...</p>"></textarea>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label">Tags (comma-separated)</label>
+                <input class="form-control" [ngModel]="(p.tags || []).join(', ')" (ngModelChange)="onBlogTagsChange(i, $event)" [name]="'postTags'+i" />
+              </div>
+              <div class="col-12 col-md-6 d-flex align-items-end justify-content-between">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" [ngModel]="p.published !== false" (ngModelChange)="p.published = $event" [name]="'postPub'+i" />
+                  <label class="form-check-label ms-2">Published</label>
+                </div>
+                <div>
+                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="draft.blog!.posts.splice(i,1)">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLANS / MAINTENANCE TIERS -->
+      <div class="card shadow-sm mb-4 section-card">
+        <div class="card-body">
+          <h4 class="mb-3">Maintenance Plans</h4>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label">Heading</label>
+              <input class="form-control" [(ngModel)]="draft.plans!.heading" name="plansHeading" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Subheading</label>
+              <input class="form-control" [(ngModel)]="draft.plans!.subheading" name="plansSubheading" />
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+            <strong>Tiers</strong>
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addPlanTier()">Add Tier</button>
+          </div>
+          <div class="border rounded p-3 mb-2" *ngFor="let t of (draft.plans!.tiers || []); let i = index">
+            <div class="row g-2">
+              <div class="col-6 col-md-3">
+                <label class="form-label">Name</label>
+                <input class="form-control" [(ngModel)]="t.name" [name]="'planName'+i" />
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label">Price</label>
+                <input type="number" class="form-control" [(ngModel)]="t.price" [name]="'planPrice'+i" />
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label">Interval</label>
+                <input class="form-control" [(ngModel)]="t.interval" [name]="'planInterval'+i" placeholder="per visit / per year" />
+              </div>
+              <div class="col-6 col-md-3">
+                <label class="form-label">CTA Text</label>
+                <input class="form-control" [(ngModel)]="t.cta" [name]="'planCta'+i" />
+              </div>
+              <div class="col-12 col-md-4 d-flex align-items-end">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" [ngModel]="t.mostPopular === true" (ngModelChange)="t.mostPopular = $event" [name]="'planPopular'+i" />
+                  <label class="form-check-label ms-2">Most Popular</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Features</label>
+                <div class="row g-2">
+                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of (t.features || []); let j = index">
+                    <input class="form-control" [(ngModel)]="t.features[j]" [name]="'planFeat'+i+'_'+j" />
+                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="t.features.splice(j,1)">Remove</button>
+                  </div>
+                  <div class="col-12">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addPlanFeature(i)">Add Feature</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 text-end">
+                <button class="btn btn-outline-danger btn-sm" type="button" (click)="draft.plans!.tiers.splice(i,1)">Delete Tier</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Estimate Settings -------------------------------------------------- -->
       <div class="card shadow-sm mb-4 section-card">
         <div class="card-body">
@@ -512,12 +777,9 @@
 
             <div class="col-12"><strong>Per-Job Labor</strong> <span class="text-muted small">(calculator uses 3‑person default)</span></div>
             <div class="col-12 col-md-3">
-              <label class="form-label">Per Worker Low</label>
-              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJobLow" name="estPerJobLow" />
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="form-label">Per Worker High</label>
-              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJobHigh" name="estPerJobHigh" />
+              <label class="form-label">Per Worker (per job)</label>
+              <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJob" name="estPerJobSingle" />
+              <div class="form-text">One number instead of low/high.</div>
             </div>
             <div class="col-12 col-md-3">
               <label class="form-label">Default Crew Size</label>

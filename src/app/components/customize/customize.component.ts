@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { SettingsService, SiteSettings, TeamMember } from '../../core/settings.service';
 import { supabase } from '../../core/supabase.client';
+import { SeoService } from '../../core/seo.service';
 
 @Component({
   selector: 'app-customize',
@@ -12,8 +13,9 @@ import { supabase } from '../../core/supabase.client';
   templateUrl: './customize.component.html',
   styleUrls: ['./customize.component.scss'],
 })
-export class CustomizeComponent implements OnInit {
+export class CustomizeComponent implements OnInit, OnDestroy {
   private settingsSvc = inject(SettingsService);
+  private seo = inject(SeoService);
 
   loading = true;
   error = '';
@@ -26,6 +28,8 @@ export class CustomizeComponent implements OnInit {
 
   // --- Lifecycle -----------------------------------------------------------
   async ngOnInit() {
+    // Keep this admin customization screen out of the index
+    this.seo.setRobots('noindex,nofollow');
     try {
       await this.settingsSvc.load();
       this.draft = structuredClone(this.settingsSvc.value);
@@ -35,6 +39,11 @@ export class CustomizeComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  ngOnDestroy(): void {
+    // Restore default robots for public pages
+    this.seo.setRobots('index,follow,max-image-preview:large');
   }
 
   // --- Normalization -------------------------------------------------------
@@ -52,6 +61,10 @@ export class CustomizeComponent implements OnInit {
     this.draft.navbar ||= { phone: '(XXX) XXX-XXXX' };
     this.draft.home ||= { headline: '', subhead: '', ctaText: '' };
 
+    this.draft.reviews ||= { rating: 5.0, count: 0, googlePlaceId: '', googleReviewUrl: '', testimonials: [] } as any;
+    this.draft.education ||= { heading: 'HVAC Education & Tips', subheading: 'How‑tos and maintenance tips', videos: [] } as any;
+    this.draft.blog ||= { posts: [] } as any;
+
     // Ensure service pages exist with arrays
     this.draft.servicePages ||= {
       ac: { features: [], gallery: [] },
@@ -62,9 +75,13 @@ export class CustomizeComponent implements OnInit {
       const p: any = (this.draft.servicePages as any)[k] || {};
       p.features ||= [];
       p.gallery ||= [];
+      p.faqs ||= [];
+      p.sections ||= [];
       while (p.gallery.length < 3) p.gallery.push({});
       (this.draft.servicePages as any)[k] = p;
     }
+
+    // No cities list
   }
 
   // --- Save ---------------------------------------------------------------
@@ -89,6 +106,22 @@ export class CustomizeComponent implements OnInit {
       this.saving = false;
     }
   }
+
+  // --- FAQs helpers -------------------------------------------------------
+  addServiceFaq(key: 'ac'|'heat'|'maintenance') {
+    const page: any = (this.draft.servicePages as any)[key] || {};
+    page.faqs ||= [];
+    page.faqs.push({ q: '', a: '' });
+    (this.draft.servicePages as any)[key] = page;
+  }
+
+  removeServiceFaq(key: 'ac'|'heat'|'maintenance', idx: number) {
+    const page: any = (this.draft.servicePages as any)[key] || {};
+    if (!page.faqs) return;
+    page.faqs.splice(idx, 1);
+  }
+
+  // Removed city helpers
 
   // --- Hero image upload/remove ------------------------------------------
   async onHeroSelected(evt: Event) {
@@ -307,6 +340,107 @@ export class CustomizeComponent implements OnInit {
     const page = this.draft.servicePages?.[key];
     if (!page || !page.features) return;
     page.features.splice(idx, 1);
+  }
+
+  // --- Education helpers --------------------------------------------------
+  addEducationVideo() {
+    const edu: any = this.draft.education ?? (this.draft.education = { heading: '', subheading: '', videos: [] } as any);
+    edu.videos = edu.videos || [];
+    edu.videos.push({ url: '', title: '', description: '' });
+  }
+  removeEducationVideo(idx: number) {
+    if (!this.draft.education?.videos) return;
+    this.draft.education.videos.splice(idx, 1);
+  }
+
+  // --- Blog helpers -------------------------------------------------------
+  addBlogPost() {
+    const blog: any = this.draft.blog ?? (this.draft.blog = { posts: [] } as any);
+    blog.posts = blog.posts || [];
+    const today = new Date().toISOString().slice(0,10);
+    blog.posts.push({ slug: 'new-post', title: 'New Post', date: today, summary: '', contentHtml: '', tags: [], published: false } as any);
+  }
+  onBlogTagsChange(idx: number, value: string) {
+    const p = this.draft.blog?.posts?.[idx];
+    if (!p) return;
+    const arr = String(value || '')
+      .split(',')
+      .map((x: string) => x.trim())
+      .filter((x: string) => !!x);
+    (p as any).tags = arr;
+  }
+
+  // --- Plan helpers -------------------------------------------------------
+  addPlanTier() {
+    const plans: any = this.draft.plans ?? (this.draft.plans = { heading: '', subheading: '', tiers: [] } as any);
+    plans.tiers = plans.tiers || [];
+    plans.tiers.push({ name: 'New Tier', price: 0, interval: 'per visit', features: [], cta: 'Get Started' } as any);
+  }
+  addPlanFeature(idx: number) {
+    const tier = this.draft.plans?.tiers?.[idx];
+    if (!tier) return;
+    tier.features ||= [];
+    tier.features.push('');
+  }
+
+  // --- Blog hero upload/remove -------------------------------------------
+  async onBlogHeroSelected(evt: Event, idx: number) {
+    const post = this.draft.blog?.posts?.[idx];
+    if (!post) return;
+    const input = evt.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = `blog/${post.slug || 'post'}-${Date.now()}.${ext}`;
+    if (post.heroPath) await this._removeStorageQuiet(post.heroPath);
+    const { error } = await supabase.storage.from('assets').upload(path, file, { cacheControl: '3600', upsert: true });
+    if (error) { alert('Upload failed: ' + error.message); return; }
+    const { data } = supabase.storage.from('assets').getPublicUrl(path);
+    post.heroPath = path; post.heroUrl = data?.publicUrl;
+    await this.save();
+    input.value = '';
+  }
+
+  async clearBlogHero(idx: number) {
+    const post = this.draft.blog?.posts?.[idx];
+    if (!post) return;
+    const ok = confirm('Remove this blog hero image? This will delete the file from storage.');
+    if (!ok) return;
+    let removed = false;
+    if (post.heroPath) removed = await this._removeStorageQuiet(post.heroPath);
+    else if (post.heroUrl) {
+      const keyPath = this._pathFromPublicUrl(post.heroUrl);
+      if (keyPath) removed = await this._removeStorageQuiet(keyPath);
+    }
+    if (!removed) alert('Could not delete from storage.');
+    post.heroPath = undefined; post.heroUrl = undefined;
+    await this.save();
+  }
+
+  // --- Blog inline media upload ------------------------------------------
+  async onBlogInlineSelected(evt: Event, idx: number) {
+    const post: any = this.draft.blog?.posts?.[idx];
+    if (!post) return;
+    const input = evt.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop() || 'jpg';
+    const safeSlug = (post.slug || 'post').replace(/[^a-z0-9-]/gi, '-');
+    const path = `blog/${safeSlug}/inline-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from('assets').upload(path, file, { cacheControl: '3600', upsert: true });
+    if (error) { alert('Upload failed: ' + error.message); return; }
+    const { data } = supabase.storage.from('assets').getPublicUrl(path);
+    post.inlineImages = post.inlineImages || [];
+    post.inlineImages.push(data?.publicUrl);
+    await this.save();
+    input.value = '';
+  }
+
+  insertInlineImg(idx: number, url: string) {
+    const post: any = this.draft.blog?.posts?.[idx];
+    if (!post) return;
+    const snippet = `\n<p><img src="${url}" alt="" /></p>\n`;
+    post.contentHtml = (post.contentHtml || '') + snippet;
   }
 
   /**

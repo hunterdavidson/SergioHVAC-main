@@ -3,24 +3,27 @@
 module.exports = handler;
 module.exports.config = { runtime: 'nodejs20.x' };
 
-const { Resend } = require('resend');
+// No direct email fallback here; notifications handled by Edge Function
 
 // ---- Env
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-// Use a safe default so you can test without a custom domain
+// Use a safe default so you can test without a custom domain (unused)
 const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 // Optional: Supabase Edge Function URL to send notifications
 // Example: https://<project-ref>.supabase.co/functions/v1/send-email
 const SEND_EMAIL_FUNCTION_URL = process.env.SEND_EMAIL_FUNCTION_URL || '';
 
-const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+const resend = null;
 
 // ---- Helpers
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(e).trim());
 const clean = (v) => (typeof v === 'string' ? v.trim() : v);
 const isValidPhone = (p) => /^[0-9()+\-.\s]{7,20}$/.test(String(p || ''));
+const toTitleCase = (s) => String(s || '')
+  .toLowerCase()
+  .replace(/\b([a-z])/g, (_, c) => c.toUpperCase())
+  .replace(/\b(Ac)\b/g, 'AC');
 
 // ---- Very small in-memory rate limit (per server instance)
 const RATE = { windowMs: 10 * 60 * 1000, max: 5 }; // 5 requests / 10 minutes per IP
@@ -96,6 +99,10 @@ async function handler(req, res) {
   const phone = clean(body.phone);
   const message = clean(body.message);
   const page_path = clean(body.page_path);
+  const plan = clean(body.plan || body.plan_tier);
+  const zip_code = clean(body.zip || body.zip_code);
+  const service_type = toTitleCase(clean(body.serviceType || body.service_type));
+  const contact_time = clean(body.contactTime || body.contact_time);
   const utm = body.utm || {};
   const hp = clean(body.hp);
 
@@ -130,26 +137,31 @@ async function handler(req, res) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort('edge function timeout'), 9000);
         try {
-          const payload = {
-            lead: {
-              name,
-              email,
-              phone,
-              message,
-              page_path: page_path || null,
-              utm: {
-                source: clean(utm.source) || null,
-                medium: clean(utm.medium) || null,
-                campaign: clean(utm.campaign) || null,
-              },
-            },
-          };
+      const payload = {
+        lead: {
+          name,
+          email,
+          phone,
+          message,
+          page_path: page_path || null,
+          plan: plan || null,
+          zip_code: zip_code || null,
+          service_type: service_type || null,
+          contact_time: contact_time || null,
+          utm: {
+            source: clean(utm.source) || null,
+            medium: clean(utm.medium) || null,
+            campaign: clean(utm.campaign) || null,
+          },
+        },
+      };
+          const authKey = SUPABASE_ANON_KEY || '';
           const edgeResp = await fetch(SEND_EMAIL_FUNCTION_URL, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${SUPABASE_ANON_KEY || ''}`,
-              'apikey': SUPABASE_ANON_KEY || '',
+              'Authorization': `Bearer ${authKey}`,
+              'apikey': authKey,
             },
             body: JSON.stringify(payload),
             signal: controller.signal,
@@ -163,25 +175,11 @@ async function handler(req, res) {
         } finally {
           clearTimeout(timer);
         }
-      } else if (resend) {
-        const html = `
-            <div style="font-family:Arial,sans-serif;font-size:14px;color:#111;line-height:1.45">
-              <h2 style="margin:0 0 8px">New S.V. HVAC Services Lead</h2>
-              <p><b>Name:</b> ${escapeHtml(name)}</p>
-              <p><b>Email:</b> ${escapeHtml(email)}</p>
-              <p><b>Phone:</b> ${escapeHtml(phone)}</p>
-              <p><b>Message:</b><br/>${escapeHtml(message)}</p>
-            </div>
-          `;
-        // Fallback: send to a single inbox if you set EMAIL_FROM + a recipient
-        await resend.emails.send({
-          from: EMAIL_FROM,
-          to: EMAIL_FROM, // send to yourself; Edge Function handles multi-recipient logic
-          subject: 'New S.V. HVAC Services Lead',
-          html,
-        });
-      } else {
-        console.warn('[leads] SEND_EMAIL_FUNCTION_URL not set and RESEND_API_KEY not set; skipping email notification.');
+      }
+
+      // No direct fallback here; rely on Edge Function only
+      if (!SEND_EMAIL_FUNCTION_URL) {
+        console.warn('[leads] SEND_EMAIL_FUNCTION_URL not set; skipping notification.');
       }
     } catch (notifyErr) {
       console.error('[leads] Notification send failed:', notifyErr);

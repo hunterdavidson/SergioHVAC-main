@@ -1,0 +1,10 @@
+.post-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; }
+.post-card { background:#fff; border-radius:.75rem; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.12); display:flex; flex-direction:column; }
+.post-card .thumb { display:block; background:#f3f4f6; aspect-ratio: 16/9; position:relative; cursor: pointer; }
+.post-card .thumb img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.post-card .thumb .placeholder { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#e5e7eb; color:#6b7280; text-shadow:none; font-weight:600; letter-spacing:.5px; cursor: pointer; }
+.post-card .body { padding:1rem; display:flex; flex-direction:column; flex: 1 1 auto; }
+.post-card .body .btn { margin-top:auto; align-self:flex-start; }
+/* Theme link styling */
+.post-card .body a { color:#6C91C2; text-decoration:none; }
+.post-card .body a:hover { text-decoration:underline; color:#5273A8; }

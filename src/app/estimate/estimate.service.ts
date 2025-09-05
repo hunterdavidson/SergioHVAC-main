@@ -85,8 +85,18 @@ export class EstimateService {
     // 2) Labor
     let laborBase = 0;
     if (!input.laborMode || input.laborMode === 'perJob') {
-      const perWorkerPerJob = input.perWorkerPerJob ?? Math.round((cfg.perJob.perWorkerPerJobLow + cfg.perJob.perWorkerPerJobHigh) / 2);
+      const pj: any = (cfg as any).perJob || {};
+      const perWorkerPerJob = input.perWorkerPerJob
+        ?? (typeof pj.perWorkerPerJob === 'number' ? pj.perWorkerPerJob
+          : Math.round((((pj.perWorkerPerJobLow ?? 325) + (pj.perWorkerPerJobHigh ?? 375)) / 2)));
       laborBase = perWorkerPerJob * input.crewSize;
+      // Add ductwork effort as equivalent labor in per-job mode
+      const ductHours = cfg.ductworkAddersHours[input.ductScope] || 0;
+      if (ductHours > 0) {
+        const ductAdder = ductHours * cfg.perHour.hourlyRatePerTech * input.crewSize;
+        breakdown.push({ label: 'Ductwork labor adder', amount: dollars(ductAdder), note: `${ductHours}h @ ${cfg.perHour.hourlyRatePerTech}/tech` });
+        laborBase += ductAdder;
+      }
     } else {
       const hours = Math.max(0, input.techHours || 0);
       laborBase = (cfg.perHour.hourlyRatePerTech * input.crewSize) * hours;
@@ -102,8 +112,9 @@ export class EstimateService {
     const accessMult = cfg.accessMultipliers[input.access] ?? 1.0;
     const seasonalMult = cfg.seasonalMultipliers[input.seasonal] ?? 1.0;
     const afterHoursMult = input.afterHours ? cfg.afterHoursMultiplier : 1.0;
-    const labor = dollars(laborBase * accessMult * seasonalMult * afterHoursMult);
-    if (labor > 0) breakdown.push({ label: 'Labor', amount: labor, note: this.describeLaborMults(accessMult, seasonalMult, afterHoursMult) });
+    const atticMult = (input.atticOrCrawl ? (cfg as any).atticOrCrawlLaborMultiplier ?? 1.05 : 1.0);
+    const labor = dollars(laborBase * accessMult * seasonalMult * afterHoursMult * atticMult);
+    if (labor > 0) breakdown.push({ label: 'Labor', amount: labor, note: this.describeLaborMults(accessMult, seasonalMult, afterHoursMult, atticMult) });
 
     // 3) Overhead: on materials + labor
     const overhead = dollars(cfg.overheadPct * (materials + labor));
@@ -176,10 +187,12 @@ export class EstimateService {
     const items: Record<string, number> = {};
     const add = (label: string, amount: number) => { if (amount > 0) items[label] = amount; };
 
-    if (input.electricalUpgrade) add('Electrical upgrade', cfg.addOnPrices.electricalUpgrade);
-    if (input.lineSet) add('Line set', cfg.addOnPrices.lineSet);
-    if (input.condenserPad) add('Condenser pad', cfg.addOnPrices.condenserPad);
-    if (input.whipDisconnect) add('Whip/Disconnect', cfg.addOnPrices.whipDisconnect);
+    const perSystem = (input.serviceType === 'replacement' || input.serviceType === 'new_install') ? Math.max(1, input.systems || 1) : 1;
+    const onePerJob = 1;
+    if (input.electricalUpgrade) add('Electrical upgrade', cfg.addOnPrices.electricalUpgrade * perSystem);
+    if (input.lineSet) add('Line set', cfg.addOnPrices.lineSet * perSystem);
+    if (input.condenserPad) add('Condenser pad', cfg.addOnPrices.condenserPad * perSystem);
+    if (input.whipDisconnect) add('Whip/Disconnect', cfg.addOnPrices.whipDisconnect * perSystem);
     if (input.thermostat === 'basic') add(cfg.addOnPrices.basicThermostat.label, cfg.addOnPrices.basicThermostat.price);
     if (input.thermostat === 'smart') add(cfg.addOnPrices.smartThermostat.label, cfg.addOnPrices.smartThermostat.price);
 
@@ -196,15 +209,20 @@ export class EstimateService {
     let fees = 0;
     if (input.permit) { fees += cfg.addOnPrices.permitFlat; breakdown.push({ label: 'Permit fee', amount: cfg.addOnPrices.permitFlat }); }
     if (input.crane) { fees += cfg.addOnPrices.craneFee; breakdown.push({ label: 'Crane/Hoist', amount: cfg.addOnPrices.craneFee }); }
-    if (input.disposal) { fees += cfg.addOnPrices.disposalFee; breakdown.push({ label: 'Haul-away/Disposal', amount: cfg.addOnPrices.disposalFee }); }
+    if (input.disposal) {
+      const count = (input.serviceType === 'replacement' || input.serviceType === 'new_install') ? Math.max(1, input.systems || 1) : 1;
+      const amt = cfg.addOnPrices.disposalFee * count;
+      fees += amt; breakdown.push({ label: 'Haul-away/Disposal', amount: amt, note: `${count} system(s)` });
+    }
     return fees;
   }
 
-  private describeLaborMults(a: number, s: number, h: number): string | undefined {
+  private describeLaborMults(a: number, s: number, h: number, attic?: number): string | undefined {
     const parts: string[] = [];
     if (a !== 1) parts.push(`access ×${a.toFixed(2)}`);
     if (s !== 1) parts.push(`season ×${s.toFixed(2)}`);
     if (h !== 1) parts.push(`after-hours ×${h.toFixed(2)}`);
+    if (attic && attic !== 1) parts.push(`attic/crawl ×${attic.toFixed(2)}`);
     return parts.length ? parts.join(', ') : undefined;
   }
 }

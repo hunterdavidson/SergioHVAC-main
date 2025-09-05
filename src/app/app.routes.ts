@@ -25,6 +25,11 @@ export const routes: Routes = [
     loadComponent: () => import('./estimate/estimate-calculator.component').then(m => m.EstimateCalculatorComponent),
     canActivate: [authGuard]
   },
+  { path: 'education', loadComponent: () => import('./components/education/education.component').then(m => m.EducationComponent) },
+  { path: 'education/:slug', loadComponent: () => import('./components/education/education.component').then(m => m.EducationComponent) },
+  { path: 'blog', loadComponent: () => import('./components/blog/blog-list.component').then(m => m.BlogListComponent) },
+  { path: 'blog/:slug', loadComponent: () => import('./components/blog/blog-post.component').then(m => m.BlogPostComponent) },
+  { path: 'maintenance-plan', loadComponent: () => import('./components/plans/plans.component').then(m => m.PlansComponent) },
   // If you have separate pages you can add routes for them; if not, the homepage anchors are fine.
 
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
