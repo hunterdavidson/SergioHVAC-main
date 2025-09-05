@@ -1,0 +1,36 @@
+<section class="page-section">
+  <div class="container">
+    <article *ngIf="post as p; else missing">
+      <header class="mb-3 text-center">
+        <h1 class="section-heading text-uppercase">{{ p.title }}</h1>
+        <p class="text-muted small">{{ p.date }}<span *ngIf="p.author"> · {{ p.author }}</span><span *ngIf="p.readMins"> · {{ p.readMins }} min read</span></p>
+      </header>
+      <img *ngIf="p.heroUrl; else defaultHero" [src]="p.heroUrl" [alt]="p.title" class="hero" loading="lazy" />
+      <ng-template #defaultHero>
+        <img src="/assets/img/og-card.webp" alt="HVAC service" class="hero" loading="lazy" />
+      </ng-template>
+      <div class="content" [innerHTML]="p.contentHtml"></div>
+      <section class="mt-4 related-posts" *ngIf="related.length">
+        <h2 class="h5 text-uppercase text-center mb-3">Related Posts</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-4" *ngFor="let r of related">
+            <div class="card h-100 shadow-sm">
+              <img *ngIf="r.heroUrl" [src]="r.heroUrl" [alt]="r.title" class="card-img-top" loading="lazy" />
+              <div class="card-body">
+                <h3 class="h6 mb-1"><a [routerLink]="['/blog', r.slug]">{{ r.title }}</a></h3>
+                <p class="text-muted small mb-0">{{ r.date }}<span *ngIf="r.readMins"> · {{ r.readMins }} min</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+    <ng-template #missing>
+      <div class="text-center">
+        <h1 class="h4">Post not found</h1>
+        <p class="text-muted">The article you are looking for may have been removed.</p>
+      </div>
+    </ng-template>
+  </div>
+  
+</section>
