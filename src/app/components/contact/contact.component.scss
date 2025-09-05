@@ -1,6 +1,8 @@
 /* Section-specific text & spacing for contact */
 #contact {
   color: $text;
+  position: relative; /* create a stable stacking context */
+  z-index: 0;
 
   .section-heading { color: #fff; }
   .section-subheading { color: rgba(#fff, .85); }
@@ -45,5 +47,35 @@ a.btn {
     }
 
 /* Placeholder styling for selects to match input placeholder grey */
-#contact select.is-placeholder { color: #6c757d; }
-#contact select:not(.is-placeholder) { color: #212529; }
+/* Displayed value color on the closed <select> */
+#contact select.is-placeholder { color: #6c757d !important; }
+#contact select:not(.is-placeholder) { color: #212529 !important; }
+
+/* Dropdown option colors: placeholder always grey, others always black */
+#contact select option.placeholder-option { color: #6c757d !important; }
+#contact select option:not(.placeholder-option) { color: #212529 !important; }
+
+/* Extra specificity to override inherited color from <select> in some UAs */
+#contact select.is-placeholder option:not(.placeholder-option) { color: #212529 !important; }
+#contact select:not(.is-placeholder) option.placeholder-option { color: #6c757d !important; }
+
+/* Inline field error overlays: sit under inputs without shifting layout */
+#contact .field-wrap {
+  position: relative;
+  padding-bottom: 0; /* don't reserve extra space */
+  overflow: visible; /* ensure absolute error isn't clipped */
+  z-index: 1; /* raise above adjacent flow content */
+}
+#contact .field-error {
+  position: absolute;
+  left: 0;
+  right: 0; /* allow wrapping within input width */
+  top: calc(100% + 2px); /* tuck just below input */
+  color: #dc3545; /* Bootstrap danger */
+  font-size: .875rem; /* small */
+  line-height: 1.2;
+  pointer-events: none;
+  z-index: 10000; /* ensure over next rows/inputs */
+  opacity: 1; visibility: visible; display: block; /* force visible */
+  white-space: normal; word-break: break-word; /* prevent overflow */
+}

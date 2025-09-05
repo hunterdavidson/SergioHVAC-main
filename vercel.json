@@ -1,7 +1,7 @@
 {
   "framework": "angular",
-  "devCommand": "cross-env NODE_ENV=development node generate-env.mjs && node api/dev-server.cjs & ng serve --port 4200",
-  "buildCommand": "cross-env NODE_ENV=production node generate-env.mjs && node update-sitemap.mjs && ng build --configuration=production",
+  "devCommand": "npm run vercel:dev",
+  "buildCommand": "npm run vercel:build",
   "outputDirectory": "dist/sergio-hvac/browser",
   "rewrites": [
     { "source": "/services/ac/(.*)", "destination": "/services/ac" },

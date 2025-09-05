@@ -173,6 +173,29 @@ body { padding-top: var(--nav-h); }
     &:focus { outline: none; box-shadow: none; }
   }
   .navbar-toggler:focus { outline: none; box-shadow: none; }
+
+  /* Subtle differentiation for Education, Plans, Blog */
+  .nav-link.nav-link-alt {
+    color: $brand !important; /* ensure brand blue */
+    position: relative;
+  }
+  .nav-link.nav-link-alt::after {
+    content: "";
+    position: absolute;
+    left: .5rem;
+    right: .5rem;
+    bottom: .2rem;
+    height: 2px;
+    background: rgba(108,145,194,.4);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .2s ease;
+  }
+  .nav-link.nav-link-alt:hover::after,
+  .nav-link.nav-link-alt:focus::after,
+  .nav-link.nav-link-alt.active::after {
+    transform: scaleX(1);
+  }
 }
 
 /* Toggler rotation helper (kept) */
@@ -197,6 +220,30 @@ body { padding-top: var(--nav-h); }
   background: #fff;
   text-decoration: none;
   &:hover { background: $brand; color: #fff !important; border-color: $brand-dark; }
+}
+
+/* Phone number: outlined pill button, aligned with nav */
+.navbar .nav-call-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 700;
+  font-size: 1rem; /* match nav link text */
+  line-height: 1.5; /* match nav link line-height */
+  color: #111 !important;
+  background: #fff !important;
+  border: 2px solid $brand !important;
+  border-radius: .5rem;
+  padding: .45rem .75rem; /* visually align with nav-link height */
+  text-decoration: none;
+  vertical-align: middle;
+}
+.navbar .nav-call-btn:hover,
+.navbar .nav-call-btn:focus {
+  background: $brand !important;
+  color: #fff !important;
+  border-color: $brand-dark !important;
+  box-shadow: 0 0 0 .25rem rgba(108,145,194,.35) !important;
 }
 
 /* ---- Services-specific tiny helpers (global so you can remove per-file copies) ---- */
