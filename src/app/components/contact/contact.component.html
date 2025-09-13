@@ -20,7 +20,7 @@
           <label for="name" class="visually-hidden">Name</label>
             <input type="text" id="name" name="name" class="form-control mt-4"
                    placeholder="Name *" required autocomplete="name"
-                   [(ngModel)]="formData.name" #name="ngModel" />
+                   [(ngModel)]="formData.name" #name="ngModel" #nameEl />
           <div class="text-danger small" *ngIf="(name.invalid && (name.dirty || name.touched)) || fieldErrors.name">
               {{ fieldErrors.name || (name.errors?.['required'] ? 'Please enter your name.' : '') }}
             </div>

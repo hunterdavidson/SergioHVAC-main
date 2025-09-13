@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SettingsService } from '../../core/settings.service';
@@ -11,9 +11,12 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './contact.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, AfterViewInit {
   private settingsService = inject(SettingsService);
   private route = inject(ActivatedRoute);
+  @ViewChild('nameEl') private nameEl?: ElementRef<HTMLInputElement>;
+  private pendingFocus = false;
+  private lastPlanValue = '';
   get settings() {
     return this.settingsService.value;
   }
@@ -53,8 +56,27 @@ export class ContactComponent implements OnInit {
           const tiers = (this.settings.plans?.tiers || []).map(t => t?.name || '').filter(Boolean);
           const found = tiers.find(n => n.toLowerCase() === plan.toLowerCase());
           this.formData.plan = found || plan;
+          // Focus name field when plan is preselected from Plans page
+          if (this.lastPlanValue !== (found || plan)) {
+            this.lastPlanValue = (found || plan);
+            this.focusNameSoon();
+          }
         }
       });
+    } catch {}
+  }
+
+  ngAfterViewInit(): void {
+    if (this.pendingFocus) this.focusNameSoon();
+  }
+
+  private focusNameSoon() {
+    const el = this.nameEl?.nativeElement;
+    if (!el) { this.pendingFocus = true; return; }
+    this.pendingFocus = false;
+    try {
+      // Delay to allow fragment scrolling to complete
+      setTimeout(() => { try { el.focus(); } catch {} }, 0);
     } catch {}
   }
 
