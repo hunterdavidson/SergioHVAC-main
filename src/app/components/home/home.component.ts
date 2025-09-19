@@ -13,10 +13,11 @@ import { SettingsService } from '../../core/settings.service';
 export class HomeComponent implements OnInit {
   constructor(public settings: SettingsService) {}
 
-  get heroUrl(): string | null {
-    // SettingsService already hydrates a public URL for the hero image when a path exists
-    // so we can just use it directly without calling storage here.
-    return this.settings.value.home?.heroUrl || null;
+  private readonly staticHeroUrl = '/assets/img/hero-image.webp';
+
+  get heroUrl(): string {
+    // Hero now uses a fixed local asset so it stays consistent across deployments.
+    return this.staticHeroUrl;
   }
 
   get headline(): string | null {
@@ -32,7 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // If a hero image is configured, hint the browser to preload it for LCP
+    // Preload the hero image so it is ready for the first paint.
     const url = this.heroUrl;
     if (url && typeof document !== 'undefined') {
       try {

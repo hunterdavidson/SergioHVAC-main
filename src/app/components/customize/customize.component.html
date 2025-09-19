@@ -14,9 +14,25 @@
     <ng-container *ngIf="!loading && !error">
 
       <!-- NAVBAR -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Navbar</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('navbar')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('navbar')"
+          [attr.aria-expanded]="isSectionOpen('navbar')"
+          id="toggle-navbar"
+          [attr.aria-controls]="'section-navbar'">
+          <span class="section-card__title">Navbar</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('navbar')"
+          class="card-body section-card__content"
+          id="section-navbar"
+          role="region"
+          [attr.aria-labelledby]="'toggle-navbar'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -32,9 +48,25 @@
       </div>
 
       <!-- HOME -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Home</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('home')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('home')"
+          [attr.aria-expanded]="isSectionOpen('home')"
+          id="toggle-home"
+          [attr.aria-controls]="'section-home'">
+          <span class="section-card__title">Home</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('home')"
+          class="card-body section-card__content"
+          id="section-home"
+          role="region"
+          [attr.aria-labelledby]="'toggle-home'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -52,24 +84,33 @@
 
             <div class="col-12">
               <label class="form-label">Hero Background Image</label>
-              <div class="d-flex align-items-center gap-3 flex-wrap">
-                <input type="file" accept="image/*" class="form-control" (change)="onHeroSelected($event)" style="max-width: 340px;" />
-                <ng-container *ngIf="draft.home.heroUrl">
-                  <a class="btn btn-outline-secondary btn-sm" [href]="draft.home.heroUrl" target="_blank" rel="noopener">Open Image</a>
-                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearHero()">Remove Image</button>
-                  <img [src]="draft.home.heroUrl" alt="Hero preview" style="max-height:80px;border-radius:8px;border:1px solid #e5e7eb;" />
-                </ng-container>
-              </div>
-              <div class="form-text">Recommended wide image. Stored in Supabase Storage (bucket: <code>assets</code>).</div>
+              <p class="form-text mb-2">The homepage hero now always uses the local asset at <code>public/assets/img/hero-image.webp</code>. Replace that file in the repo to update the visual.</p>
+              <img src="/assets/img/hero-image.webp" alt="Static hero preview" class="img-preview" />
             </div>
           </div>
         </div>
       </div>
 
       <!-- SERVICES (restored) -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Services</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('services')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('services')"
+          [attr.aria-expanded]="isSectionOpen('services')"
+          id="toggle-services"
+          [attr.aria-controls]="'section-services'">
+          <span class="section-card__title">Services</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('services')"
+          class="card-body section-card__content"
+          id="section-services"
+          role="region"
+          [attr.aria-labelledby]="'toggle-services'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -141,9 +182,25 @@
       </div>
 
       <!-- SERVICE PAGES -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Service Pages</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('servicePages')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('servicePages')"
+          [attr.aria-expanded]="isSectionOpen('servicePages')"
+          id="toggle-service-pages"
+          [attr.aria-controls]="'section-service-pages'">
+          <span class="section-card__title">Service Pages</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('servicePages')"
+          class="card-body section-card__content"
+          id="section-service-pages"
+          role="region"
+          [attr.aria-labelledby]="'toggle-service-pages'">
 
           <!-- AC Page -->
           <div class="border rounded p-3 mb-3">
@@ -381,9 +438,25 @@
 
       
       <!-- ABOUT -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">About</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('about')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('about')"
+          [attr.aria-expanded]="isSectionOpen('about')"
+          id="toggle-about"
+          [attr.aria-controls]="'section-about'">
+          <span class="section-card__title">About</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('about')"
+          class="card-body section-card__content"
+          id="section-about"
+          role="region"
+          [attr.aria-labelledby]="'toggle-about'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -428,9 +501,25 @@
       </div>
 
       <!-- TEAM -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Team</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('team')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('team')"
+          [attr.aria-expanded]="isSectionOpen('team')"
+          id="toggle-team"
+          [attr.aria-controls]="'section-team'">
+          <span class="section-card__title">Team</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('team')"
+          class="card-body section-card__content"
+          id="section-team"
+          role="region"
+          [attr.aria-labelledby]="'toggle-team'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -488,9 +577,25 @@
       </div>
 
       <!-- CONTACT -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Contact</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('contact')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('contact')"
+          [attr.aria-expanded]="isSectionOpen('contact')"
+          id="toggle-contact"
+          [attr.aria-controls]="'section-contact'">
+          <span class="section-card__title">Contact</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('contact')"
+          class="card-body section-card__content"
+          id="section-contact"
+          role="region"
+          [attr.aria-labelledby]="'toggle-contact'">
 
           <div class="row g-3">
             <div class="col-12 col-md-6">
@@ -514,9 +619,25 @@
       </div>
 
       <!-- REVIEWS -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Reviews</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('reviews')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('reviews')"
+          [attr.aria-expanded]="isSectionOpen('reviews')"
+          id="toggle-reviews"
+          [attr.aria-controls]="'section-reviews'">
+          <span class="section-card__title">Reviews</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('reviews')"
+          class="card-body section-card__content"
+          id="section-reviews"
+          role="region"
+          [attr.aria-labelledby]="'toggle-reviews'">
           <div class="row g-3">
             <div class="col-12 col-md-4">
               <label class="form-label">Average Rating</label>
@@ -541,9 +662,25 @@
       </div>
 
       <!-- EDUCATION / VIDEOS -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Education & Videos</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('education')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('education')"
+          [attr.aria-expanded]="isSectionOpen('education')"
+          id="toggle-education"
+          [attr.aria-controls]="'section-education'">
+          <span class="section-card__title">Education & Videos</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('education')"
+          class="card-body section-card__content"
+          id="section-education"
+          role="region"
+          [attr.aria-labelledby]="'toggle-education'">
           <div class="row g-3">
             <div class="col-12 col-md-6">
               <label class="form-label">Heading</label>
@@ -583,9 +720,25 @@
       </div>
 
       <!-- BLOG -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Blog Posts</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('blog')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('blog')"
+          [attr.aria-expanded]="isSectionOpen('blog')"
+          id="toggle-blog"
+          [attr.aria-controls]="'section-blog'">
+          <span class="section-card__title">Blog Posts</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('blog')"
+          class="card-body section-card__content"
+          id="section-blog"
+          role="region"
+          [attr.aria-labelledby]="'toggle-blog'">
           <div class="d-flex justify-content-end mb-2">
             <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addBlogPost()">Add Post</button>
           </div>
@@ -662,9 +815,25 @@
       </div>
 
       <!-- PLANS / MAINTENANCE TIERS -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Maintenance Plans</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('plans')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('plans')"
+          [attr.aria-expanded]="isSectionOpen('plans')"
+          id="toggle-plans"
+          [attr.aria-controls]="'section-plans'">
+          <span class="section-card__title">Maintenance Plans</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('plans')"
+          class="card-body section-card__content"
+          id="section-plans"
+          role="region"
+          [attr.aria-labelledby]="'toggle-plans'">
           <div class="row g-3">
             <div class="col-12 col-md-6">
               <label class="form-label">Heading</label>
@@ -724,9 +893,25 @@
       </div>
 
       <!-- Estimate Settings -------------------------------------------------- -->
-      <div class="card shadow-sm mb-4 section-card">
-        <div class="card-body">
-          <h4 class="mb-3">Estimate Settings</h4>
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('estimate')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('estimate')"
+          [attr.aria-expanded]="isSectionOpen('estimate')"
+          id="toggle-estimate"
+          [attr.aria-controls]="'section-estimate'">
+          <span class="section-card__title">Estimate Settings</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('estimate')"
+          class="card-body section-card__content"
+          id="section-estimate"
+          role="region"
+          [attr.aria-labelledby]="'toggle-estimate'">
           <div class="row g-3">
             <div class="col-12 col-md-3">
               <label class="form-label">Target Gross Margin</label>

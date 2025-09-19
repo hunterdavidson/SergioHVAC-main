@@ -6,6 +6,23 @@ import { SettingsService, SiteSettings, TeamMember } from '../../core/settings.s
 import { supabase } from '../../core/supabase.client';
 import { SeoService } from '../../core/seo.service';
 
+const SECTION_KEYS = [
+  'navbar',
+  'home',
+  'services',
+  'servicePages',
+  'about',
+  'team',
+  'contact',
+  'reviews',
+  'education',
+  'blog',
+  'plans',
+  'estimate',
+] as const;
+
+type SectionKey = (typeof SECTION_KEYS)[number];
+
 @Component({
   selector: 'app-customize',
   standalone: true,
@@ -25,6 +42,23 @@ export class CustomizeComponent implements OnInit, OnDestroy {
 
   // The editable copy
   draft!: SiteSettings;
+
+  // Track open/closed state for each admin section dropdown
+  private sectionState: Record<SectionKey, boolean> = SECTION_KEYS.reduce(
+    (acc, key) => {
+      acc[key] = false;
+      return acc;
+    },
+    {} as Record<SectionKey, boolean>
+  );
+
+  isSectionOpen(key: SectionKey): boolean {
+    return !!this.sectionState[key];
+  }
+
+  toggleSection(key: SectionKey) {
+    this.sectionState[key] = !this.sectionState[key];
+  }
 
   // --- Lifecycle -----------------------------------------------------------
   async ngOnInit() {
