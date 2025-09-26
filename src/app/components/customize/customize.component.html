@@ -733,6 +733,162 @@
         </div>
       </div>
 
+      <!-- FOOTER -->
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('footer')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('footer')"
+          [attr.aria-expanded]="isSectionOpen('footer')"
+          id="toggle-footer"
+          [attr.aria-controls]="'section-footer'">
+          <span class="section-card__title">Footer</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('footer')"
+          class="card-body section-card__content"
+          id="section-footer"
+          role="region"
+          [attr.aria-labelledby]="'toggle-footer'">
+
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label">Company Name</label>
+              <input class="form-control" [(ngModel)]="draft.footer!.companyName" name="footerCompanyName" placeholder="SV HVAC Services" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Tagline</label>
+              <input class="form-control" [(ngModel)]="draft.footer!.tagline" name="footerTagline" placeholder="Reliable heating and cooling..." />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Address</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="draft.footer!.address" name="footerAddress" placeholder="123 Main St, Fort Worth, TX"></textarea>
+              <div class="form-text">Displayed beneath the tagline in the footer.</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Phone</label>
+              <input class="form-control" [(ngModel)]="draft.footer!.phone" name="footerPhone" placeholder="(817) 555-1234" />
+              <div class="form-text">Formatted number shown with a click-to-call link.</div>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" [(ngModel)]="draft.footer!.email" name="footerEmail" placeholder="info@example.com" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Legal Notice</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="draft.footer!.legalNotice" name="footerLegalNotice" placeholder="Licensed and insured. TACLB..."></textarea>
+              <div class="form-text">Optional small print shown at the bottom of the brand column.</div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between">
+                <label class="form-label mb-0">Quick Links</label>
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addFooterLink()">Add Link</button>
+              </div>
+              <ng-container *ngIf="draft.footer!.links?.length; else noFooterLinks">
+                <div class="row g-3 mt-1">
+                  <div class="col-12 col-lg-6" *ngFor="let link of draft.footer!.links; let i = index">
+                    <div class="border rounded p-3 h-100">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="mb-0">Link {{ i + 1 }}</h6>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeFooterLink(i)">Remove</button>
+                      </div>
+                      <label class="form-label">Label</label>
+                      <input class="form-control mb-2" [(ngModel)]="link.label" [name]="'footerLinkLabel'+i" placeholder="Contact" />
+                      <label class="form-label">URL</label>
+                      <input class="form-control" [(ngModel)]="link.url" [name]="'footerLinkUrl'+i" placeholder="/contact or https://..." />
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noFooterLinks>
+                <p class="text-muted small mt-2 mb-0">No quick links yet. Use "Add Link" to create one.</p>
+              </ng-template>
+            </div>
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between">
+                <label class="form-label mb-0">Social Links</label>
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addFooterSocial()">Add Social Link</button>
+              </div>
+              <ng-container *ngIf="draft.footer!.social?.length; else noFooterSocial">
+                <div class="row g-3 mt-1">
+                  <div class="col-12 col-lg-6" *ngFor="let social of draft.footer!.social; let i = index">
+                    <div class="border rounded p-3 h-100">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="mb-0">Social {{ i + 1 }}</h6>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeFooterSocial(i)">Remove</button>
+                      </div>
+                      <label class="form-label">Label</label>
+                      <input class="form-control mb-2" [(ngModel)]="social.label" [name]="'footerSocialLabel'+i" placeholder="Facebook" />
+                      <label class="form-label">URL</label>
+                      <input class="form-control mb-2" [(ngModel)]="social.url" [name]="'footerSocialUrl'+i" placeholder="https://facebook.com/..." />
+                      <label class="form-label">Icon Override (optional)</label>
+                      <input class="form-control" [(ngModel)]="social.icon" [name]="'footerSocialIcon'+i" placeholder="facebook" />
+                      <div class="form-text">Used as the data-icon attribute. Defaults to the label's first letter.</div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noFooterSocial>
+                <p class="text-muted small mt-2 mb-0">No social links yet. Use "Add Social Link" to create one.</p>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEGAL -->
+      <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('legal')">
+        <button
+          type="button"
+          class="section-card__toggle"
+          (click)="toggleSection('legal')"
+          [attr.aria-expanded]="isSectionOpen('legal')"
+          id="toggle-legal"
+          [attr.aria-controls]="'section-legal'">
+          <span class="section-card__title">Legal Pages</span>
+          <span class="section-card__chevron" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+          </span>
+        </button>
+        <div
+          *ngIf="isSectionOpen('legal')"
+          class="card-body section-card__content"
+          id="section-legal"
+          role="region"
+          [attr.aria-labelledby]="'toggle-legal'">
+
+          <div class="row g-3">
+            <div class="col-12 col-lg-6">
+              <div class="border rounded p-3 h-100">
+                <h6 class="mb-3">Privacy Policy</h6>
+                <label class="form-label">Title</label>
+                <input class="form-control mb-2" [(ngModel)]="draft.legal!.privacy.title" name="legalPrivacyTitle" placeholder="Privacy Policy" />
+                <label class="form-label">Updated On</label>
+                <input class="form-control mb-2" [(ngModel)]="draft.legal!.privacy.updatedOn" name="legalPrivacyUpdated" placeholder="2025-01-01" />
+                <label class="form-label">Content (HTML allowed)</label>
+                <textarea class="form-control" rows="10" [(ngModel)]="draft.legal!.privacy.contentHtml" name="legalPrivacyContent"></textarea>
+                <div class="form-text">Supports HTML markup; this renders on the /privacy-policy page.</div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="border rounded p-3 h-100">
+                <h6 class="mb-3">Terms & Conditions</h6>
+                <label class="form-label">Title</label>
+                <input class="form-control mb-2" [(ngModel)]="draft.legal!.terms.title" name="legalTermsTitle" placeholder="Terms & Conditions" />
+                <label class="form-label">Updated On</label>
+                <input class="form-control mb-2" [(ngModel)]="draft.legal!.terms.updatedOn" name="legalTermsUpdated" placeholder="2025-01-01" />
+                <label class="form-label">Content (HTML allowed)</label>
+                <textarea class="form-control" rows="10" [(ngModel)]="draft.legal!.terms.contentHtml" name="legalTermsContent"></textarea>
+                <div class="form-text">Supports HTML markup; this renders on the /terms-of-service page.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- REVIEWS -->
       <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('reviews')">
         <button

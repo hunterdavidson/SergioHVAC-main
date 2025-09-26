@@ -348,7 +348,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
       { label: 'Instagram', url: 'https://www.instagram.com/svhvac', icon: 'instagram' },
       { label: 'LinkedIn', url: 'https://www.linkedin.com/company/svhvac', icon: 'linkedin' }
     ],
-    legalNotice: 'Licensed & insured | TACLB000000 | Serving the Dallas-Fort Worth Metroplex',
+    legalNotice: 'Serving the Dallas-Fort Worth Metroplex',
   },
   legal: {
     privacy: {
