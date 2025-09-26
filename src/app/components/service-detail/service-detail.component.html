@@ -89,9 +89,6 @@
   </div>
 </section>
 
-<!-- Contact form at bottom of page (below gallery) -->
-<app-contact></app-contact>
-
 <!-- Lightbox overlay -->
 <div class="lightbox" *ngIf="activeImage as img" (click)="closeImage()">
   <img [src]="img.url" [alt]="img.alt" (click)="$event.stopPropagation()">

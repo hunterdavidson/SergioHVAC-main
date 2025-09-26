@@ -785,7 +785,7 @@
             <div class="col-12">
               <div class="d-flex align-items-center justify-content-between">
                 <label class="form-label mb-0">Quick Links</label>
-                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addFooterLink()">Add Link</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFooterLink()">Add Link</button>
               </div>
               <ng-container *ngIf="draft.footer!.links?.length; else noFooterLinks">
                 <div class="row g-3 mt-1">
@@ -810,7 +810,7 @@
             <div class="col-12">
               <div class="d-flex align-items-center justify-content-between">
                 <label class="form-label mb-0">Social Links</label>
-                <button type="button" class="btn btn-sm btn-outline-primary" (click)="addFooterSocial()">Add Social Link</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="addFooterSocial()">Add Social Link</button>
               </div>
               <ng-container *ngIf="draft.footer!.social?.length; else noFooterSocial">
                 <div class="row g-3 mt-1">

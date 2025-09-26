@@ -20,16 +20,21 @@ $text: #212529;
 
 /* ---- Base document tweaks ---- */
 html, body { scroll-behavior: smooth; }
+html { scrollbar-gutter: stable; }
 /* Fixed navbar height (adjust if your nav height changes) */
 :root { --nav-h: 80px; }
 /* Push content below fixed navbar */
-body { padding-top: var(--nav-h); }
+body {
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+}
 
 /* Fix mobile container padding: ensure base .container has gutters */
 .container {
   padding-right: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
   padding-left: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
 }
+
 
 /* Accessible focus outline for interactive elements */
 :where(a, button, input, textarea, select, summary, [role="button"])::moz-focus-inner { border: 0; }
@@ -76,6 +81,7 @@ body { padding-top: var(--nav-h); }
   }
   &:active { transform: translateY(1px); }
 }
+
 /* ---- Buttons (keeps your existing look) ---- */
 .btn-primary {
   background-color: $brand !important;
@@ -90,7 +96,7 @@ body { padding-top: var(--nav-h); }
   box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
 }
 
-/* Reusable ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œdynamicÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â button class you used across sections */
+/* Reusable dynamic button class used across sections */
 .dynamic-button,
 .btn.dynamic-button {
   background: $brand !important;
@@ -107,11 +113,13 @@ body { padding-top: var(--nav-h); }
     box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
   }
   &:disabled {
-    background: color.adjust($brand, $lightness: 25%) !important;
-    border-color: color.adjust($brand, $lightness: 25%) !important;
-    color: #fff !important;
+    $disabled-bg: #d1d5db;
+    background: $disabled-bg !important;
+    border-color: $disabled-bg !important;
+    color: #4b5563 !important;
     cursor: not-allowed !important;
     box-shadow: none !important;
+    opacity: 1 !important;
   }
   &:active { transform: translateY(1px); }
 }
@@ -233,7 +241,7 @@ body { padding-top: var(--nav-h); }
 /* Collapse animation helper (kept) */
 .navbar-collapse {
   max-height: 0; overflow: hidden; transition: max-height .3s ease-in-out;
-  @media (min-width: 992px) { max-height: none; overflow: visible; }
+  @media (min-width: 1400px) { max-height: none; overflow: visible; }
 }
 .navbar-collapse.show { max-height: 500px; }
 
@@ -588,3 +596,6 @@ section#contact a[href^="tel:"]:focus-visible {
   color: $brand-dark;
   text-decoration: underline;
 }
+
+
+

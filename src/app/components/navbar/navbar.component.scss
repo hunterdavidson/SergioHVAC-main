@@ -8,3 +8,27 @@
 /* Toggler rotation class already globally styled; kept here only if you prefer scope */
 .navbar-toggler-icon-svg { transition: transform .3s ease-in-out; }
 .navbar-toggler-icon-svg.rotated { transform: rotate(90deg); }
+
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .navbar-nav .nav-item,
+  .navbar-nav .nav-link {
+    width: 100%;
+  }
+
+  .navbar-nav .nav-contact-btn {
+    width: calc(100% - 1rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .navbar-nav .nav-call-btn {
+    width: calc(100% - 1rem);
+  }
+}
+
+

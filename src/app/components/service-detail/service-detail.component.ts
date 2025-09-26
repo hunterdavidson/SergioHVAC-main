@@ -3,7 +3,6 @@ import { Component, ChangeDetectionStrategy, inject, OnInit, OnDestroy } from '@
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SettingsService } from '../../core/settings.service';
 import { SeoService } from '../../core/seo.service';
-import { ContactComponent } from '../contact/contact.component';
 import { Subscription } from 'rxjs';
 
 type ServiceKey = 'ac' | 'heat' | 'maintenance';
@@ -11,7 +10,7 @@ type ServiceKey = 'ac' | 'heat' | 'maintenance';
 @Component({
   selector: 'app-service-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgOptimizedImage, ContactComponent],
+  imports: [CommonModule, RouterLink, NgOptimizedImage],
   templateUrl: './service-detail.component.html',
   styleUrls: ['./service-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
