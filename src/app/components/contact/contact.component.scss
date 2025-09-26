@@ -3,20 +3,22 @@
   color: $text;
   position: relative; /* create a stable stacking context */
   z-index: 0;
+  background-color: #fff;
 
-  .section-heading { color: #fff; }
-  .section-subheading { color: rgba(#fff, .85); }
+  .section-heading { color: #0f172a; }
+  .section-subheading { color: #475569; }
 
-  /* Make tel links white in this dark section */
+  /* Brand-colored tel link styling */
   a[href^="tel:"] {
-    color: #fff; font-weight: 600; text-decoration: none;
-    transition: color .2s ease, text-decoration-color .2s ease;
-    &:hover { color: $brand; text-decoration: underline; }
+    color: $brand; font-weight: 600; text-decoration: none;
+    &:hover,
+    &:focus-visible { color: $brand-dark; text-decoration: underline; }
+    &:visited { color: $brand; }
   }
 }
 
 /* Selection highlight only inside contact */
-#contact ::selection { background: rgba(108,145,194,.35); color: #111; }
+#contact ::selection { background: rgba(148, 163, 184, 0.25); color: #0f172a; }
 
 /* Compact section padding if you use .compact-section on the wrapper */
 #contact.compact-section { padding-top: 2rem; padding-bottom: 2rem; }
@@ -36,6 +38,17 @@
 
 /* (Optional) extra space between inputs in this section only */
 #contact .form-group + .form-group { margin-top: 1rem; }
+
+#contact .form-grid {
+  margin-top: .5rem;
+}
+#contact .form-grid > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+#contact .form-grid .text-danger {
+  margin-top: .5rem;
+}
 
 a.btn {
       max-width: 700px;
@@ -79,3 +92,25 @@ a.btn {
   opacity: 1; visibility: visible; display: block; /* force visible */
   white-space: normal; word-break: break-word; /* prevent overflow */
 }
+
+.contact-lead { color: #334155; }
+.contact-phone { color: $brand; }
+.contact-phone:hover,
+.contact-phone:focus { color: $brand-dark; }
+.contact-success { color: #166956; }
+.contact-footnote { color: #64748b; }
+
+.contact-prefill {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+  padding: .75rem 1rem;
+  border-radius: .75rem;
+  background: rgba(22, 105, 86, 0.12);
+  color: #134e3f;
+  font-weight: 600;
+}
+.contact-prefill svg { flex-shrink: 0; }
+.contact-prefill span { flex: 1; }

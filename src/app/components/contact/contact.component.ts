@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SettingsService } from '../../core/settings.service';
@@ -14,9 +14,14 @@ import { ActivatedRoute } from '@angular/router';
 export class ContactComponent implements OnInit, AfterViewInit {
   private settingsService = inject(SettingsService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
   @ViewChild('nameEl') private nameEl?: ElementRef<HTMLInputElement>;
+
   private pendingFocus = false;
-  private lastPlanValue = '';
+  prefilledPlan: string | null = null;
+
   get settings() {
     return this.settingsService.value;
   }
@@ -40,29 +45,29 @@ export class ContactComponent implements OnInit, AfterViewInit {
     plan: '',
     zip: '',
     serviceType: '',
-    contactTime: '' as '' | 'Anytime' | 'Morning' | 'Afternoon' | 'Evening',
   };
 
   // simple honeypot field (bots tend to fill it)
   hp: string = '';
 
-  // Initialize from query params (e.g., ?plan=Preferred)
   ngOnInit(): void {
     try {
-      this.route.queryParamMap.subscribe((map) => {
-        const plan = (map.get('plan') || '').trim();
-        if (plan) {
-          // If plan exists in settings, normalize to that label
-          const tiers = (this.settings.plans?.tiers || []).map(t => t?.name || '').filter(Boolean);
-          const found = tiers.find(n => n.toLowerCase() === plan.toLowerCase());
-          this.formData.plan = found || plan;
-          // Focus name field when plan is preselected from Plans page
-          if (this.lastPlanValue !== (found || plan)) {
-            this.lastPlanValue = (found || plan);
-            this.focusNameSoon();
-          }
+      const sub = this.route.queryParamMap.subscribe((map) => {
+        const incoming = (map.get('plan') || '').trim();
+        const normalized = incoming ? this.normalizePlanName(incoming) : '';
+
+        if (normalized !== this.formData.plan) {
+          this.formData.plan = normalized;
         }
+
+        this.prefilledPlan = normalized || null;
+        if (normalized) {
+          this.focusNameSoon();
+        }
+
+        this.cdr.markForCheck();
       });
+      this.destroyRef.onDestroy(() => sub.unsubscribe());
     } catch {}
   }
 
@@ -70,13 +75,27 @@ export class ContactComponent implements OnInit, AfterViewInit {
     if (this.pendingFocus) this.focusNameSoon();
   }
 
+  private normalizePlanName(raw: string): string {
+    const plan = raw.trim();
+    if (!plan) return '';
+    const tiers = (this.settings.plans?.tiers || []).map(t => t?.name || '').filter(Boolean);
+    const match = tiers.find(name => name.toLowerCase() === plan.toLowerCase());
+    return match || plan;
+  }
+
   private focusNameSoon() {
     const el = this.nameEl?.nativeElement;
-    if (!el) { this.pendingFocus = true; return; }
+    if (!el) {
+      this.pendingFocus = true;
+      return;
+    }
     this.pendingFocus = false;
     try {
-      // Delay to allow fragment scrolling to complete
-      setTimeout(() => { try { el.focus(); } catch {} }, 0);
+      setTimeout(() => {
+        try {
+          el.focus();
+        } catch {}
+      }, 0);
     } catch {}
   }
 
@@ -96,6 +115,11 @@ export class ContactComponent implements OnInit, AfterViewInit {
       }
     }
     this.formData.phone = formatted;
+  }
+
+  onPlanChange(_: string) {
+    this.prefilledPlan = null;
+    this.cdr.markForCheck();
   }
 
   private getUtmParams() {
@@ -166,7 +190,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.isSubmitted = false;
 
     try {
-      const { name, email, phone, message, plan, zip, serviceType, contactTime } = this.formData;
+      const { name, email, phone, message, plan, zip, serviceType } = this.formData;
       const utms = this.getUtmParams();
       const body = {
         name: name?.trim() || '',
@@ -177,7 +201,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
         plan: (plan || '').trim() || undefined,
         zip_code: (zip || '').trim() || undefined,
         service_type: (serviceType || '').trim() || undefined,
-        contact_time: (contactTime || '').trim() || undefined,
         utm: {
           source: utms.utm_source || undefined,
           medium: utms.utm_medium || undefined,
@@ -231,10 +254,10 @@ export class ContactComponent implements OnInit, AfterViewInit {
         plan: '',
         zip: this.formData.zip || '',
         serviceType: '',
-        contactTime: '' as '' | 'Anytime' | 'Morning' | 'Afternoon' | 'Evening',
       };
       this.formData = next;
       form.resetForm(this.formData);
+      this.pendingFocus = false;
       this.hp = '';
 
     } catch (e: any) {

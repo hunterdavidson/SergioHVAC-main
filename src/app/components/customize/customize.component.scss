@@ -83,6 +83,59 @@
   /* Labels and help text for readability */
   .section-card .form-label { color: #374151; font-weight: 600; }
   .section-card .form-text { color: #4b5563; }
+  .subsection-card {
+    border: 1px solid #d0d7e6;
+    border-radius: .9rem;
+    background: #fff;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  }
+  .subsection-card__toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .75rem 1rem;
+    background: linear-gradient(0deg, rgba(240, 244, 248, 0.9), rgba(240, 244, 248, 0.9));
+    border: none;
+    color: #1f2937;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .subsection-card__toggle:hover,
+  .subsection-card__toggle:focus-visible {
+    background: rgba(108, 145, 194, 0.12);
+    outline: none;
+  }
+  .subsection-card__toggle:focus-visible {
+    box-shadow: 0 0 0 3px rgba(108, 145, 194, 0.3);
+  }
+  .subsection-card__title { flex: 1 1 auto; }
+  .subsection-card__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #516380;
+  }
+  .subsection-card__chevron svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+    transition: transform .2s ease;
+  }
+  .subsection-card--open .subsection-card__chevron svg {
+    transform: rotate(180deg);
+  }
+  .subsection-card__content {
+    padding: 1rem 1.15rem 1.25rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
+  }
+
 }
 
 .save-bar {

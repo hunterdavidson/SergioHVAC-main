@@ -1,0 +1,7 @@
+<section class="legal-page" aria-labelledby="terms-title">
+  <div class="container">
+    <h1 id="terms-title">{{ terms?.title || "Terms & Conditions" }}</h1>
+    <p class="legal-updated" *ngIf="terms?.updatedOn">Last updated {{ terms?.updatedOn }}</p>
+    <div class="legal-content" [innerHTML]="content"></div>
+  </div>
+</section>

@@ -1,0 +1,7 @@
+<section class="legal-page" aria-labelledby="privacy-title">
+  <div class="container">
+    <h1 id="privacy-title">{{ policy?.title || "Privacy Policy" }}</h1>
+    <p class="legal-updated" *ngIf="policy?.updatedOn">Last updated {{ policy?.updatedOn }}</p>
+    <div class="legal-content" [innerHTML]="content"></div>
+  </div>
+</section>

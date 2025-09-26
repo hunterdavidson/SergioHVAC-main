@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: #e6e6e6;">
   <div class="container">
     <!-- Brand -->
-    <a class="navbar-brand text-dark" href="/#home" (click)="navigateToFragment($event, 'home')">
+    <a class="navbar-brand text-dark" routerLink="/" (click)="closeNavbar()">
       <img src="/logo-simple.webp" alt="SV HVAC logo" style="height: 30px; margin-right: 10px;" />
       SV HVAC Services
     </a>
@@ -25,19 +25,19 @@
         <!-- Public nav -->
         <ng-container *ngIf="!isAdminNav; else adminLinks">
           <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#home" (click)="navigateToFragment($event, 'home')">Home</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" (click)="closeNavbar()">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#services" (click)="navigateToFragment($event, 'services')">Services</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/services" (click)="closeNavbar()">Services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#about" (click)="navigateToFragment($event, 'about')">About</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/about" (click)="closeNavbar()">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#team" (click)="navigateToFragment($event, 'team')">Team</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/team" (click)="closeNavbar()">Team</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#contact" (click)="navigateToFragment($event, 'contact')">Contact</a>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm nav-contact-btn text-uppercase" routerLink="/contact" (click)="closeNavbar()">Contact</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-brand fw-bold nav-link-alt" routerLink="/maintenance-plan" (click)="closeNavbar()">Plans</a>
@@ -53,7 +53,7 @@
         <!-- Admin nav -->
         <ng-template #adminLinks>
           <li class="nav-item">
-            <a class="nav-link text-dark fw-bold" href="/#home" (click)="navigateToFragment($event, 'home')">Home</a>
+            <a class="nav-link text-dark fw-bold" routerLink="/" (click)="closeNavbar()">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark fw-bold" routerLink="/admin" (click)="closeNavbar()">Leads</a>

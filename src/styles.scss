@@ -9,6 +9,8 @@ $brand: #6C91C2;        // primary silver-blue
 $brand-dark: #5273A8;   // hover/darker
 $brand-red: #E64545;    // navbar hover red
 $brand-dark-red: #ca3b3b; 
+$brand-green: #1f8a70;
+$brand-green-dark: #166956;
 $text: #212529;
 
 
@@ -17,7 +19,7 @@ $text: #212529;
 }
 
 /* ---- Base document tweaks ---- */
-html { scroll-behavior: smooth; }
+html, body { scroll-behavior: smooth; }
 /* Fixed navbar height (adjust if your nav height changes) */
 :root { --nav-h: 80px; }
 /* Push content below fixed navbar */
@@ -48,6 +50,32 @@ body { padding-top: var(--nav-h); }
 /* Offset anchors for fixed navbar (~80px) */
 #home, #services, #about, #team, #contact { scroll-margin-top: var(--nav-h); }
 
+
+
+.btn-brand-success,
+.btn.btn-brand-success {
+  background: $brand-green !important;
+  border: 2px solid $brand-green !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s, transform .1s;
+  &:hover,
+  &:focus {
+    background: $brand-green-dark !important;
+    border-color: $brand-green-dark !important;
+    color: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 .25rem rgba(31,138,112,.35) !important;
+  }
+  &:disabled {
+    background: color.adjust($brand-green, $lightness: 25%) !important;
+    border-color: color.adjust($brand-green, $lightness: 25%) !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+  }
+  &:active { transform: translateY(1px); }
+}
 /* ---- Buttons (keeps your existing look) ---- */
 .btn-primary {
   background-color: $brand !important;
@@ -62,7 +90,7 @@ body { padding-top: var(--nav-h); }
   box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
 }
 
-/* Reusable “dynamic” button class you used across sections */
+/* Reusable ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œdynamicÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â button class you used across sections */
 .dynamic-button,
 .btn.dynamic-button {
   background: $brand !important;
@@ -209,7 +237,7 @@ body { padding-top: var(--nav-h); }
 }
 .navbar-collapse.show { max-height: 500px; }
 
-/* ---- “Call” pill in navbar (outlined & spaced) ---- */
+/* ---- ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œCallÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â pill in navbar (outlined & spaced) ---- */
 .navbar .call-pill {
   margin-left: .5rem;
   border: 2px solid $brand;
@@ -246,13 +274,41 @@ body { padding-top: var(--nav-h); }
   box-shadow: 0 0 0 .25rem rgba(108,145,194,.35) !important;
 }
 
+.navbar .nav-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #fff !important;
+  background: $brand !important;
+  border: 2px solid $brand !important;
+  border-radius: .5rem;
+  padding: .5rem 1.1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.navbar .nav-contact-btn:hover,
+.navbar .nav-contact-btn:focus {
+  background: $brand-dark !important;
+  border-color: $brand-dark !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 .25rem rgba(82,115,168,.35) !important;
+}
+.navbar .nav-contact-btn:active {
+  transform: translateY(1px);
+}
+
 /* ---- Services-specific tiny helpers (global so you can remove per-file copies) ---- */
 #services a[href^="tel:"],
 #services .tel-link {
   color: $brand-dark !important;
   font-weight: 700;
   text-decoration: none;
-  &:hover { color: $brand !important; text-decoration: underline; }
+  &:hover { color: $brand !important; }
 }
 
 #services ::selection { background: rgba(108,145,194,.25); color: #111; }
@@ -269,6 +325,53 @@ body { padding-top: var(--nav-h); }
 footer { background-color: #4A678C; color: #fff;
   a { color: $brand-red; &:hover { color: #fff; } }
 }
+
+/* Reusable service CTA buttons */
+.btn-service {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.45rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .2s ease, color .2s ease;
+}
+
+.btn-service:hover,
+.btn-service:focus {
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.18);
+}
+
+.btn-service--outline {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.btn-service--ac { background-color: #6c91c2; border-color: #6c91c2; color: #fff; }
+.btn-service--ac:hover,
+.btn-service--ac:focus { background-color: #5273a8; border-color: #5273a8; color: #fff; }
+.btn-service--outline-ac { color: #6c91c2; border-color: #6c91c2; }
+.btn-service--outline-ac:hover,
+.btn-service--outline-ac:focus { background-color: rgba(108, 145, 194, 0.12); color: #425c85; }
+
+.btn-service--heat { background-color: #ec5b56; border-color: #ec5b56; color: #fff; }
+.btn-service--heat:hover,
+.btn-service--heat:focus { background-color: #cf4a46; border-color: #cf4a46; color: #fff; }
+.btn-service--outline-heat { color: #ec5b56; border-color: #ec5b56; }
+.btn-service--outline-heat:hover,
+.btn-service--outline-heat:focus { background-color: rgba(236, 91, 86, 0.12); color: #b73d39; }
+
+.btn-service--maint { background-color: #1f8a70; border-color: #1f8a70; color: #fff; }
+.btn-service--maint:hover,
+.btn-service--maint:focus { background-color: #166956; border-color: #166956; color: #fff; }
+.btn-service--outline-maint { color: #1f8a70; border-color: #1f8a70; }
+.btn-service--outline-maint:hover,
+.btn-service--outline-maint:focus { background-color: rgba(31, 138, 112, 0.12); color: #135243; }
 
 /* Space for mobile sticky CTA */
 @media (max-width: 768px) {
@@ -298,8 +401,190 @@ a[href^="tel:"] { font-size: 1.05rem; }
 /* Content link theme (applies to HTML injected via [innerHTML]) */
 :where(.content) a {
   color: $brand;           /* theme blue */
-  text-decoration: underline;
 }
 :where(.content) a:hover {
   color: $brand-dark;      /* darker on hover */
+}
+
+
+.plan-overview {
+  background: #f5f8fc;
+  padding: 3rem 0;
+}
+
+.plan-overview__header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.5rem;
+}
+
+.plan-overview__header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.plan-overview__header p {
+  color: #4b5563;
+  margin-bottom: 0;
+}
+
+.plan-overview__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.plan-card {
+  position: relative;
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 16px 32px rgba(15, 35, 95, 0.12);
+  border-top: 4px solid #6C91C2;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.plan-card--popular {
+  border-top-color: #ec5b56;
+  box-shadow: 0 18px 36px rgba(236, 91, 86, 0.25);
+}
+
+.plan-card__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ec5b56;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.plan-card__title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.plan-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.plan-card__amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.plan-card__interval {
+  color: #6b7280;
+}
+
+.plan-card__features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #374151;
+}
+
+.plan-card__features li::before {
+  content: '\2713';
+  margin-right: 0.5rem;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.plan-card__footer {
+  margin-top: auto;
+}
+
+.plan-overview__empty {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  color: #4b5563;
+}
+
+.plan-card--cool { border-top-color: #6C91C2; }
+.plan-card--heat { border-top-color: #ec5b56; }
+.plan-card--maint { border-top-color: #6C91C2; }
+
+@media (max-width: 640px) {
+  .plan-overview {
+    padding: 2.5rem 0;
+  }
+  .plan-overview__header h2 {
+    font-size: 1.8rem;
+  }
+}
+.plan-card__cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  padding: 0.6rem 1.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.plan-card__cta-button:hover,
+.plan-card__cta-button:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  text-decoration: none;
+  color: #fff;
+}
+.plan-card__cta-button--cool { background: #6C91C2; border-color: #6C91C2; color: #fff; }
+.plan-card__cta-button--cool:hover,
+.plan-card__cta-button--cool:focus { background: #5273A8; border-color: #5273A8; }
+.plan-card__cta-button--heat { background: #ec5b56; border-color: #ec5b56; color: #fff; }
+.plan-card__cta-button--heat:hover,
+.plan-card__cta-button--heat:focus { background: #cf4a46; border-color: #cf4a46; }
+.plan-card__cta-button--maint { background: #6C91C2; border-color: #6C91C2; color: #fff; }
+.plan-card__cta-button--maint:hover,
+.plan-card__cta-button--maint:focus { background: #5273A8; border-color: #5273A8; }
+/* Contact section overrides (supersede legacy Agency CSS) */
+section#contact {
+  background: #fff;
+}
+section#contact .section-heading {
+  color: #0f172a;
+}
+section#contact .section-subheading {
+  color: #475569;
+}
+section#contact .contact-lead {
+  color: #334155;
+}
+section#contact .contact-footnote {
+  color: #64748b;
+}
+section#contact .contact-success {
+  color: #166956;
+}
+section#contact a[href^="tel:"] {
+  color: $brand;
+  font-weight: 600;
+  text-decoration: none;
+}
+section#contact a[href^="tel:"]:hover,
+section#contact a[href^="tel:"]:focus-visible {
+  color: $brand-dark;
+  text-decoration: underline;
 }

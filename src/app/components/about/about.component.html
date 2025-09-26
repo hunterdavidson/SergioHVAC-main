@@ -1,8 +1,12 @@
 <section class="page-section" id="about" style="background-color:#f1f1f1;">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-heading text-uppercase">{{ heading }}</h2>
-      <h3 class="section-subheading">{{ subheading }}</h3>
+      <h2 class="section-heading text-uppercase">
+        {{ heading || "Our Story" }}
+      </h2>
+      <h3 class="section-subheading text-muted">
+        {{ subheading || "Local roots, hands‑on craftsmanship, and a passion for comfort." }}
+      </h3>
     </div>
 
     <ul class="timeline">

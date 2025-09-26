@@ -4,7 +4,7 @@
     <!-- Loading / Error -->
     <div *ngIf="loading" class="state-card">
       <div class="spinner-border" role="status" aria-label="Loading"></div>
-      <span class="ms-2">Loading settings…</span>
+      <span class="ms-2">Loading settings...</span>
     </div>
     <div *ngIf="!loading && error" class="state-card error">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="me-2" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v2h2v-2zm0-8h-2v6h2V10z"/></svg>
@@ -41,7 +41,7 @@
                      [(ngModel)]="draft.navbar!.phone"
                      name="navbarPhone"
                      placeholder="(555) 555-5555" />
-              <div class="form-text">Displayed as a “Call” action in the navbar.</div>
+              <div class="form-text">Displayed as a "Call" action in the navbar.</div>
             </div>
           </div>
         </div>
@@ -123,64 +123,82 @@
             </div>
           </div>
 
-          <hr class="my-3">
+          <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('services','homepage-cards')">
+            <button
+              type="button"
+              class="subsection-card__toggle"
+              (click)="toggleSubSection('services','homepage-cards')"
+              [attr.aria-expanded]="isSubSectionOpen('services','homepage-cards')"
+              id="toggle-services-home-cards"
+              [attr.aria-controls]="'section-services-home-cards'">
+              <span class="subsection-card__title">Homepage Service Cards</span>
+              <span class="subsection-card__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+              </span>
+            </button>
+            <div
+              *ngIf="isSubSectionOpen('services','homepage-cards')"
+              class="subsection-card__content"
+              id="section-services-home-cards"
+              role="region"
+              [attr.aria-labelledby]="'toggle-services-home-cards'">
 
-          <div class="row g-3">
-            <!-- AC -->
-            <div class="col-12 col-lg-4">
-              <div class="border rounded p-3 h-100">
-                <h6 class="mb-3">Air Conditioning</h6>
-                <label class="form-label">Title</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.ac.title" name="svcAcTitle" placeholder="AC Installation & Repair" />
-                <label class="form-label">Body</label>
-                <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.ac.body" name="svcAcBody"></textarea>
-                <label class="form-label">CTA</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.ac.cta" name="svcAcCta" placeholder="Get AC Help" />
-                <div class="form-check form-switch d-flex align-items-center gap-2">
-                  <input class="form-check-input" type="checkbox" id="svcAcHidden" [(ngModel)]="draft.services.ac.hidden" name="svcAcHidden" />
-                  <label class="form-check-label mb-0 ms-1" for="svcAcHidden">Hidden</label>
+              <div class="row g-3">
+                <!-- AC -->
+                <div class="col-12 col-lg-4">
+                  <div class="border rounded p-3 h-100">
+                    <h6 class="mb-3">Air Conditioning</h6>
+                    <label class="form-label">Title</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.ac.title" name="svcAcTitle" placeholder="AC Installation &amp; Repair" />
+                    <label class="form-label">Body</label>
+                    <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.ac.body" name="svcAcBody"></textarea>
+                    <label class="form-label">CTA</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.ac.cta" name="svcAcCta" placeholder="Get AC Help" />
+                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                      <input class="form-check-input" type="checkbox" id="svcAcHidden" [(ngModel)]="draft.services.ac.hidden" name="svcAcHidden" />
+                      <label class="form-check-label mb-0 ms-1" for="svcAcHidden">Hidden</label>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- HEATING -->
-            <div class="col-12 col-lg-4">
-              <div class="border rounded p-3 h-100">
-                <h6 class="mb-3">Heating</h6>
-                <label class="form-label">Title</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.heat.title" name="svcHeatTitle" placeholder="Heating Installation & Repair" />
-                <label class="form-label">Body</label>
-                <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.heat.body" name="svcHeatBody"></textarea>
-                <label class="form-label">CTA</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.heat.cta" name="svcHeatCta" placeholder="Get Heating Help" />
-                <div class="form-check form-switch d-flex align-items-center gap-2">
-                  <input class="form-check-input" type="checkbox" id="svcHeatHidden" [(ngModel)]="draft.services.heat.hidden" name="svcHeatHidden" />
-                  <label class="form-check-label mb-0 ms-1" for="svcHeatHidden">Hidden</label>
+                <!-- HEATING -->
+                <div class="col-12 col-lg-4">
+                  <div class="border rounded p-3 h-100">
+                    <h6 class="mb-3">Heating</h6>
+                    <label class="form-label">Title</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.heat.title" name="svcHeatTitle" placeholder="Heating Installation &amp; Repair" />
+                    <label class="form-label">Body</label>
+                    <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.heat.body" name="svcHeatBody"></textarea>
+                    <label class="form-label">CTA</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.heat.cta" name="svcHeatCta" placeholder="Get Heating Help" />
+                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                      <input class="form-check-input" type="checkbox" id="svcHeatHidden" [(ngModel)]="draft.services.heat.hidden" name="svcHeatHidden" />
+                      <label class="form-check-label mb-0 ms-1" for="svcHeatHidden">Hidden</label>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- MAINTENANCE -->
-            <div class="col-12 col-lg-4">
-              <div class="border rounded p-3 h-100">
-                <h6 class="mb-3">Maintenance</h6>
-                <label class="form-label">Title</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.maintenance.title" name="svcMaintTitle" placeholder="Seasonal Tune-Ups" />
-                <label class="form-label">Body</label>
-                <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.maintenance.body" name="svcMaintBody"></textarea>
-                <label class="form-label">CTA</label>
-                <input class="form-control mb-2" [(ngModel)]="draft.services.maintenance.cta" name="svcMaintCta" placeholder="Book a Tune-Up" />
-                <div class="form-check form-switch d-flex align-items-center gap-2">
-                  <input class="form-check-input" type="checkbox" id="svcMaintHidden" [(ngModel)]="draft.services.maintenance.hidden" name="svcMaintHidden" />
-                  <label class="form-check-label mb-0 ms-1" for="svcMaintHidden">Hidden</label>
+                <!-- MAINTENANCE -->
+                <div class="col-12 col-lg-4">
+                  <div class="border rounded p-3 h-100">
+                    <h6 class="mb-3">Maintenance</h6>
+                    <label class="form-label">Title</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.maintenance.title" name="svcMaintTitle" placeholder="Seasonal Tune-Ups" />
+                    <label class="form-label">Body</label>
+                    <textarea class="form-control mb-2" rows="3" [(ngModel)]="draft.services.maintenance.body" name="svcMaintBody"></textarea>
+                    <label class="form-label">CTA</label>
+                    <input class="form-control mb-2" [(ngModel)]="draft.services.maintenance.cta" name="svcMaintCta" placeholder="Book a Tune-Up" />
+                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                      <input class="form-check-input" type="checkbox" id="svcMaintHidden" [(ngModel)]="draft.services.maintenance.hidden" name="svcMaintHidden" />
+                      <label class="form-check-label mb-0 ms-1" for="svcMaintHidden">Hidden</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
       <!-- SERVICE PAGES -->
       <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('servicePages')">
         <button
@@ -202,241 +220,298 @@
           role="region"
           [attr.aria-labelledby]="'toggle-service-pages'">
 
-          <!-- AC Page -->
-          <div class="border rounded p-3 mb-3">
-            <h6 class="mb-3">AC — /services/ac</h6>
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label class="form-label">Heading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.ac.heading" name="svcPageAcHeading" />
-              </div>
-              <div class="col-12 col-md-6">
-                <label class="form-label">Subheading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.ac.subheading" name="svcPageAcSubheading" />
-              </div>
-              <div class="col-12">
-                <label class="form-label">Body</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.ac.body" name="svcPageAcBody"></textarea>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Hero Image</label>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'ac')" style="max-width: 340px;" />
-                  <ng-container *ngIf="draft.servicePages!.ac.heroUrl">
-                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.ac.heroUrl" target="_blank" rel="noopener">Open</a>
-                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('ac')">Remove</button>
-                    <img [src]="draft.servicePages!.ac.heroUrl" alt="AC hero preview" class="img-preview" />
-                  </ng-container>
-                </div>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Gallery (3 images)</label>
-                <div class="row g-3">
-                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.ac.gallery; let i = index">
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'ac', i)" />
-                      <ng-container *ngIf="g?.url">
-                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
-                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('ac', i)">Remove</button>
-                        <img [src]="g.url" alt="AC gallery preview" class="img-preview" />
-                      </ng-container>
-                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcAcAlt'+i" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('servicePages','ac')">
+            <button
+              type="button"
+              class="subsection-card__toggle"
+              (click)="toggleSubSection('servicePages','ac')"
+              [attr.aria-expanded]="isSubSectionOpen('servicePages','ac')"
+              id="toggle-service-page-ac"
+              [attr.aria-controls]="'section-service-page-ac'">
+              <span class="subsection-card__title">AC &mdash; /services/ac</span>
+              <span class="subsection-card__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+              </span>
+            </button>
+            <div
+              *ngIf="isSubSectionOpen('servicePages','ac')"
+              class="subsection-card__content"
+              id="section-service-page-ac"
+              role="region"
+              [attr.aria-labelledby]="'toggle-service-page-ac'">
+              <div class="border rounded p-3 mb-3">
+                          <h6 class="mb-3">AC &mdash; /services/ac</h6>
+                          <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Heading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.ac.heading" name="svcPageAcHeading" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Subheading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.ac.subheading" name="svcPageAcSubheading" />
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Body</label>
+                              <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.ac.body" name="svcPageAcBody"></textarea>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Hero Image</label>
+                              <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'ac')" style="max-width: 340px;" />
+                                <ng-container *ngIf="draft.servicePages!.ac.heroUrl">
+                                  <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.ac.heroUrl" target="_blank" rel="noopener">Open</a>
+                                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('ac')">Remove</button>
+                                  <img [src]="draft.servicePages!.ac.heroUrl" alt="AC hero preview" class="img-preview" />
+                                </ng-container>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Gallery (3 images)</label>
+                              <div class="row g-3">
+                                <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.ac.gallery; let i = index">
+                                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'ac', i)" />
+                                    <ng-container *ngIf="g?.url">
+                                      <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                                      <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('ac', i)">Remove</button>
+                                      <img [src]="g.url" alt="AC gallery preview" class="img-preview" />
+                                    </ng-container>
+                                    <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcAcAlt'+i" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-              <div class="col-12">
-                <label class="form-label">Features</label>
-                <div class="row g-2">
-                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.ac.features; let i = index">
-                    <input class="form-control" [(ngModel)]="draft.servicePages!.ac.features[i]" [name]="'svcAcFeat'+i" />
-                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('ac', i)">Remove</button>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('ac')">Add Feature</button>
-                  </div>
-                </div>
-              </div>
+                            <div class="col-12">
+                              <label class="form-label">Features</label>
+                              <div class="row g-2">
+                                <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.ac.features; let i = index">
+                                  <input class="form-control" [(ngModel)]="draft.servicePages!.ac.features[i]" [name]="'svcAcFeat'+i" />
+                                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('ac', i)">Remove</button>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('ac')">Add Feature</button>
+                                </div>
+                              </div>
+                            </div>
 
-              <div class="col-12">
-                <label class="form-label">FAQs</label>
-                <div class="row g-2">
-                  <div class="col-12" *ngFor="let f of (draft.servicePages!.ac.faqs || []); let i = index">
-                    <div class="border rounded p-2 d-flex flex-column gap-2">
-                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcAcFaqQ'+i" />
-                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcAcFaqA'+i"></textarea>
-                      <div class="d-flex justify-content-end">
-                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('ac', i)">Remove</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('ac')">Add FAQ</button>
-                  </div>
-                </div>
-              </div>
+                            <div class="col-12">
+                              <label class="form-label">FAQs</label>
+                              <div class="row g-2">
+                                <div class="col-12" *ngFor="let f of (draft.servicePages!.ac.faqs || []); let i = index">
+                                  <div class="border rounded p-2 d-flex flex-column gap-2">
+                                    <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcAcFaqQ'+i" />
+                                    <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcAcFaqA'+i"></textarea>
+                                    <div class="d-flex justify-content-end">
+                                      <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('ac', i)">Remove</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('ac')">Add FAQ</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
             </div>
           </div>
 
-          <!-- Heating Page -->
-          <div class="border rounded p-3 mb-3">
-            <h6 class="mb-3">Heating — /services/heating</h6>
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label class="form-label">Heading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.heat.heading" name="svcPageHeatHeading" />
-              </div>
-              <div class="col-12 col-md-6">
-                <label class="form-label">Subheading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.heat.subheading" name="svcPageHeatSubheading" />
-              </div>
-              <div class="col-12">
-                <label class="form-label">Body</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.heat.body" name="svcPageHeatBody"></textarea>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Hero Image</label>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'heat')" style="max-width: 340px;" />
-                  <ng-container *ngIf="draft.servicePages!.heat.heroUrl">
-                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.heat.heroUrl" target="_blank" rel="noopener">Open</a>
-                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('heat')">Remove</button>
-                    <img [src]="draft.servicePages!.heat.heroUrl" alt="Heat hero preview" class="img-preview" />
-                  </ng-container>
-                </div>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Gallery (3 images)</label>
-                <div class="row g-3">
-                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.heat.gallery; let i = index">
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'heat', i)" />
-                      <ng-container *ngIf="g?.url">
-                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
-                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('heat', i)">Remove</button>
-                        <img [src]="g.url" alt="Heating gallery preview" class="img-preview" />
-                      </ng-container>
-                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcHeatAlt'+i" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('servicePages','heat')">
+            <button
+              type="button"
+              class="subsection-card__toggle"
+              (click)="toggleSubSection('servicePages','heat')"
+              [attr.aria-expanded]="isSubSectionOpen('servicePages','heat')"
+              id="toggle-service-page-heat"
+              [attr.aria-controls]="'section-service-page-heat'">
+              <span class="subsection-card__title">Heating &mdash; /services/heating</span>
+              <span class="subsection-card__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+              </span>
+            </button>
+            <div
+              *ngIf="isSubSectionOpen('servicePages','heat')"
+              class="subsection-card__content"
+              id="section-service-page-heat"
+              role="region"
+              [attr.aria-labelledby]="'toggle-service-page-heat'">
+              <div class="border rounded p-3 mb-3">
+                          <h6 class="mb-3">Heating &mdash; /services/heating</h6>
+                          <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Heading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.heat.heading" name="svcPageHeatHeading" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Subheading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.heat.subheading" name="svcPageHeatSubheading" />
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Body</label>
+                              <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.heat.body" name="svcPageHeatBody"></textarea>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Hero Image</label>
+                              <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'heat')" style="max-width: 340px;" />
+                                <ng-container *ngIf="draft.servicePages!.heat.heroUrl">
+                                  <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.heat.heroUrl" target="_blank" rel="noopener">Open</a>
+                                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('heat')">Remove</button>
+                                  <img [src]="draft.servicePages!.heat.heroUrl" alt="Heat hero preview" class="img-preview" />
+                                </ng-container>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Gallery (3 images)</label>
+                              <div class="row g-3">
+                                <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.heat.gallery; let i = index">
+                                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'heat', i)" />
+                                    <ng-container *ngIf="g?.url">
+                                      <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                                      <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('heat', i)">Remove</button>
+                                      <img [src]="g.url" alt="Heating gallery preview" class="img-preview" />
+                                    </ng-container>
+                                    <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcHeatAlt'+i" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-              <div class="col-12">
-                <label class="form-label">Features</label>
-                <div class="row g-2">
-                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.heat.features; let i = index">
-                    <input class="form-control" [(ngModel)]="draft.servicePages!.heat.features[i]" [name]="'svcHeatFeat'+i" />
-                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('heat', i)">Remove</button>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('heat')">Add Feature</button>
-                  </div>
-                </div>
-              </div>
+                            <div class="col-12">
+                              <label class="form-label">Features</label>
+                              <div class="row g-2">
+                                <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.heat.features; let i = index">
+                                  <input class="form-control" [(ngModel)]="draft.servicePages!.heat.features[i]" [name]="'svcHeatFeat'+i" />
+                                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('heat', i)">Remove</button>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('heat')">Add Feature</button>
+                                </div>
+                              </div>
+                            </div>
 
-              <div class="col-12">
-                <label class="form-label">FAQs</label>
-                <div class="row g-2">
-                  <div class="col-12" *ngFor="let f of (draft.servicePages!.heat.faqs || []); let i = index">
-                    <div class="border rounded p-2 d-flex flex-column gap-2">
-                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcHeatFaqQ'+i" />
-                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcHeatFaqA'+i"></textarea>
-                      <div class="d-flex justify-content-end">
-                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('heat', i)">Remove</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('heat')">Add FAQ</button>
-                  </div>
-                </div>
-              </div>
+                            <div class="col-12">
+                              <label class="form-label">FAQs</label>
+                              <div class="row g-2">
+                                <div class="col-12" *ngFor="let f of (draft.servicePages!.heat.faqs || []); let i = index">
+                                  <div class="border rounded p-2 d-flex flex-column gap-2">
+                                    <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcHeatFaqQ'+i" />
+                                    <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcHeatFaqA'+i"></textarea>
+                                    <div class="d-flex justify-content-end">
+                                      <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('heat', i)">Remove</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('heat')">Add FAQ</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
             </div>
           </div>
 
-          <!-- Maintenance Page -->
-  <div class="border rounded p-3 mb-2">
-            <h6 class="mb-3">Maintenance — /services/maintenance</h6>
-            <div class="row g-3">
-              <div class="col-12 col-md-6">
-                <label class="form-label">Heading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.heading" name="svcPageMaintHeading" />
-              </div>
-              <div class="col-12 col-md-6">
-                <label class="form-label">Subheading</label>
-                <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.subheading" name="svcPageMaintSubheading" />
-              </div>
-              <div class="col-12">
-                <label class="form-label">Body</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.maintenance.body" name="svcPageMaintBody"></textarea>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Hero Image</label>
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                  <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'maintenance')" style="max-width: 340px;" />
-                  <ng-container *ngIf="draft.servicePages!.maintenance.heroUrl">
-                    <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.maintenance.heroUrl" target="_blank" rel="noopener">Open</a>
-                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('maintenance')">Remove</button>
-                    <img [src]="draft.servicePages!.maintenance.heroUrl" alt="Maintenance hero preview" class="img-preview" />
-                  </ng-container>
-                </div>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Gallery (3 images)</label>
-                <div class="row g-3">
-                  <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.maintenance.gallery; let i = index">
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                      <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'maintenance', i)" />
-                      <ng-container *ngIf="g?.url">
-                        <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
-                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('maintenance', i)">Remove</button>
-                        <img [src]="g.url" alt="Maintenance gallery preview" class="img-preview" />
-                      </ng-container>
-                      <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcMaintAlt'+i" />
+          <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('servicePages','maintenance')">
+            <button
+              type="button"
+              class="subsection-card__toggle"
+              (click)="toggleSubSection('servicePages','maintenance')"
+              [attr.aria-expanded]="isSubSectionOpen('servicePages','maintenance')"
+              id="toggle-service-page-maint"
+              [attr.aria-controls]="'section-service-page-maint'">
+              <span class="subsection-card__title">Maintenance &mdash; /services/maintenance</span>
+              <span class="subsection-card__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+              </span>
+            </button>
+            <div
+              *ngIf="isSubSectionOpen('servicePages','maintenance')"
+              class="subsection-card__content"
+              id="section-service-page-maint"
+              role="region"
+              [attr.aria-labelledby]="'toggle-service-page-maint'">
+              <div class="border rounded p-3 mb-2">
+                          <h6 class="mb-3">Maintenance &mdash; /services/maintenance</h6>
+                          <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Heading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.heading" name="svcPageMaintHeading" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                              <label class="form-label">Subheading</label>
+                              <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.subheading" name="svcPageMaintSubheading" />
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Body</label>
+                              <textarea class="form-control" rows="3" [(ngModel)]="draft.servicePages!.maintenance.body" name="svcPageMaintBody"></textarea>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Hero Image</label>
+                              <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <input type="file" accept="image/*" class="form-control" (change)="onServiceHeroSelected($event, 'maintenance')" style="max-width: 340px;" />
+                                <ng-container *ngIf="draft.servicePages!.maintenance.heroUrl">
+                                  <a class="btn btn-outline-secondary btn-sm" [href]="draft.servicePages!.maintenance.heroUrl" target="_blank" rel="noopener">Open</a>
+                                  <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceHero('maintenance')">Remove</button>
+                                  <img [src]="draft.servicePages!.maintenance.heroUrl" alt="Maintenance hero preview" class="img-preview" />
+                                </ng-container>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Gallery (3 images)</label>
+                              <div class="row g-3">
+                                <div class="col-12 col-md-4" *ngFor="let g of draft.servicePages!.maintenance.gallery; let i = index">
+                                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <input type="file" accept="image/*" class="form-control" (change)="onServiceGallerySelected($event, 'maintenance', i)" />
+                                    <ng-container *ngIf="g?.url">
+                                      <a class="btn btn-outline-secondary btn-sm" [href]="g.url" target="_blank" rel="noopener">Open</a>
+                                      <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearServiceGallery('maintenance', i)">Remove</button>
+                                      <img [src]="g.url" alt="Maintenance gallery preview" class="img-preview" />
+                                    </ng-container>
+                                    <input type="text" class="form-control" placeholder="Alt text" [(ngModel)]="g.alt" [name]="'svcMaintAlt'+i" />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-12">
+                              <label class="form-label">Features</label>
+                              <div class="row g-2">
+                                <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.maintenance.features; let i = index">
+                                  <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.features[i]" [name]="'svcMaintFeat'+i" />
+                                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('maintenance', i)">Remove</button>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('maintenance')">Add Feature</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-12">
+                              <label class="form-label">FAQs</label>
+                              <div class="row g-2">
+                                <div class="col-12" *ngFor="let f of (draft.servicePages!.maintenance.faqs || []); let i = index">
+                                  <div class="border rounded p-2 d-flex flex-column gap-2">
+                                    <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcMaintFaqQ'+i" />
+                                    <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcMaintFaqA'+i"></textarea>
+                                    <div class="d-flex justify-content-end">
+                                      <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('maintenance', i)">Remove</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('maintenance')">Add FAQ</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="col-12">
-                <label class="form-label">Features</label>
-                <div class="row g-2">
-                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of draft.servicePages!.maintenance.features; let i = index">
-                    <input class="form-control" [(ngModel)]="draft.servicePages!.maintenance.features[i]" [name]="'svcMaintFeat'+i" />
-                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFeature('maintenance', i)">Remove</button>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFeature('maintenance')">Add Feature</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12">
-                <label class="form-label">FAQs</label>
-                <div class="row g-2">
-                  <div class="col-12" *ngFor="let f of (draft.servicePages!.maintenance.faqs || []); let i = index">
-                    <div class="border rounded p-2 d-flex flex-column gap-2">
-                      <input class="form-control" placeholder="Question" [(ngModel)]="f.q" [name]="'svcMaintFaqQ'+i" />
-                      <textarea class="form-control" rows="2" placeholder="Answer" [(ngModel)]="f.a" [name]="'svcMaintFaqA'+i"></textarea>
-                      <div class="d-flex justify-content-end">
-                        <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeServiceFaq('maintenance', i)">Remove</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addServiceFaq('maintenance')">Add FAQ</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-      </div>
-    </div>
-
-      
       <!-- ABOUT -->
       <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('about')">
         <button
@@ -473,32 +548,52 @@
 
           <div class="row g-3">
             <div class="col-12 col-md-4" *ngFor="let item of draft.about.items; let i = index">
-              <div class="border rounded p-3 h-100">
-                <label class="form-label">Item {{ i + 1 }} Year</label>
-                <input class="form-control mb-2" [(ngModel)]="item.year" [name]="'aboutYear'+i" placeholder="2022" />
-                <label class="form-label">Title</label>
-                <input class="form-control mb-2" [(ngModel)]="item.title" [name]="'aboutTitle'+i" />
-                <label class="form-label">Body</label>
-                <textarea class="form-control mb-2" rows="3" [(ngModel)]="item.body" [name]="'aboutBody'+i"></textarea>
-                <label class="form-label">Accent Color</label>
-                <select class="form-control" [(ngModel)]="item.color" [name]="'aboutColor'+i">
-                  <option [ngValue]="undefined">Default</option>
-                  <option value="blue">Blue</option>
-                  <option value="red">Red</option>
-                </select>
-                <div class="form-check form-switch d-flex align-items-center gap-2 mt-2">
-                  <input class="form-check-input" type="checkbox"
-                         [id]="'aboutHidden'+i"
-                         [(ngModel)]="item.hidden"
-                         [name]="'aboutHidden'+i" />
-                  <label class="form-check-label mb-0 ms-1" [for]="'aboutHidden'+i">Hidden</label>
+              <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('about','item'+i)">
+                <button
+                  type="button"
+                  class="subsection-card__toggle"
+                  (click)="toggleSubSection('about','item'+i)"
+                  [attr.aria-expanded]="isSubSectionOpen('about','item'+i)"
+                  [id]="'toggle-about-item-'+i"
+                  [attr.aria-controls]="'section-about-item-'+i">
+                  <span class="subsection-card__title">Timeline Story {{ i + 1 }}</span>
+                  <span class="subsection-card__chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+                  </span>
+                </button>
+                <div
+                  *ngIf="isSubSectionOpen('about','item'+i)"
+                  class="subsection-card__content"
+                  [id]="'section-about-item-'+i"
+                  role="region"
+                  [attr.aria-labelledby]="'toggle-about-item-'+i">
+                <div class="border rounded p-3 h-100">
+                                <label class="form-label">Item {{ i + 1 }} Year</label>
+                                <input class="form-control mb-2" [(ngModel)]="item.year" [name]="'aboutYear'+i" placeholder="2022" />
+                                <label class="form-label">Title</label>
+                                <input class="form-control mb-2" [(ngModel)]="item.title" [name]="'aboutTitle'+i" />
+                                <label class="form-label">Body</label>
+                                <textarea class="form-control mb-2" rows="3" [(ngModel)]="item.body" [name]="'aboutBody'+i"></textarea>
+                                <label class="form-label">Accent Color</label>
+                                <select class="form-control" [(ngModel)]="item.color" [name]="'aboutColor'+i">
+                                  <option [ngValue]="undefined">Default</option>
+                                  <option value="blue">Blue</option>
+                                  <option value="red">Red</option>
+                                </select>
+                                <div class="form-check form-switch d-flex align-items-center gap-2 mt-2">
+                                  <input class="form-check-input" type="checkbox"
+                                         [id]="'aboutHidden'+i"
+                                         [(ngModel)]="item.hidden"
+                                         [name]="'aboutHidden'+i" />
+                                  <label class="form-check-label mb-0 ms-1" [for]="'aboutHidden'+i">Hidden</label>
+                                </div>
+                              </div>
+                            </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-      </div>
 
       <!-- TEAM -->
       <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('team')">
@@ -536,45 +631,65 @@
 
           <div class="row g-3">
             <div class="col-12 col-lg-4" *ngFor="let mem of draft.team.members; let idx = index">
-              <div class="border rounded p-3 h-100">
-                <h6 class="mb-3">Member {{ idx + 1 }}</h6>
+              <div class="subsection-card" [class.subsection-card--open]="isSubSectionOpen('team','member'+idx)">
+                <button
+                  type="button"
+                  class="subsection-card__toggle"
+                  (click)="toggleSubSection('team','member'+idx)"
+                  [attr.aria-expanded]="isSubSectionOpen('team','member'+idx)"
+                  [id]="'toggle-team-member-'+idx"
+                  [attr.aria-controls]="'section-team-member-'+idx">
+                  <span class="subsection-card__title">Team Member {{ idx + 1 }}</span>
+                  <span class="subsection-card__chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+                  </span>
+                </button>
+                <div
+                  *ngIf="isSubSectionOpen('team','member'+idx)"
+                  class="subsection-card__content"
+                  [id]="'section-team-member-'+idx"
+                  role="region"
+                  [attr.aria-labelledby]="'toggle-team-member-'+idx">
+                <div class="border rounded p-3 h-100">
+                                <h6 class="mb-3">Member {{ idx + 1 }}</h6>
 
-                <label class="form-label">Name</label>
-                <input class="form-control mb-2" [(ngModel)]="mem.name" [name]="'teamName'+idx" />
+                                <label class="form-label">Name</label>
+                                <input class="form-control mb-2" [(ngModel)]="mem.name" [name]="'teamName'+idx" />
 
-                <label class="form-label">Role</label>
-                <input class="form-control mb-2" [(ngModel)]="mem.role" [name]="'teamRole'+idx" />
+                                <label class="form-label">Role</label>
+                                <input class="form-control mb-2" [(ngModel)]="mem.role" [name]="'teamRole'+idx" />
 
-                <label class="form-label">Icon (fallback avatar)</label>
-                <select class="form-select mb-2" [(ngModel)]="mem.icon" [name]="'teamIcon'+idx">
-                  <option value="">Default (User)</option>
-                  <option value="user">User</option>
-                  <option value="wrench">Tools</option>
-                  <option value="snowflake">Snowflake</option>
-                  <option value="fire">Fire</option>
-                  <option value="star">Star</option>
-                </select>
+                                <label class="form-label">Icon (fallback avatar)</label>
+                                <select class="form-select mb-2" [(ngModel)]="mem.icon" [name]="'teamIcon'+idx">
+                                  <option value="">Default (User)</option>
+                                  <option value="user">User</option>
+                                  <option value="wrench">Tools</option>
+                                  <option value="snowflake">Snowflake</option>
+                                  <option value="fire">Fire</option>
+                                  <option value="star">Star</option>
+                                </select>
 
-                <div class="form-check form-switch d-flex align-items-center gap-2 mb-2">
-                  <input class="form-check-input" type="checkbox" [id]="'teamHidden'+idx" [(ngModel)]="mem.hidden" [name]="'teamHidden'+idx" />
-                  <label class="form-check-label mb-0 ms-1" [for]="'teamHidden'+idx">Hidden</label>
-                </div>
+                                <div class="form-check form-switch d-flex align-items-center gap-2 mb-2">
+                                  <input class="form-check-input" type="checkbox" [id]="'teamHidden'+idx" [(ngModel)]="mem.hidden" [name]="'teamHidden'+idx" />
+                                  <label class="form-check-label mb-0 ms-1" [for]="'teamHidden'+idx">Hidden</label>
+                                </div>
 
-                <label class="form-label">Photo</label>
-                <div class="d-flex align-items-center gap-3 flex-wrap mb-2">
-                  <input type="file" accept="image/*" class="form-control" (change)="onTeamSelected($event, idx)" style="max-width: 320px;" />
-                  <ng-container *ngIf="mem.photoUrl">
-                    <a class="btn btn-outline-secondary btn-sm" [href]="mem.photoUrl" target="_blank" rel="noopener">Open</a>
-                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearTeamPhoto(idx)">Remove</button>
-                    <img [src]="mem.photoUrl" alt="Team preview" style="max-height:72px;border-radius:8px;border:1px solid #e5e7eb;" />
-                  </ng-container>
+                                <label class="form-label">Photo</label>
+                                <div class="d-flex align-items-center gap-3 flex-wrap mb-2">
+                                  <input type="file" accept="image/*" class="form-control" (change)="onTeamSelected($event, idx)" style="max-width: 320px;" />
+                                  <ng-container *ngIf="mem.photoUrl">
+                                    <a class="btn btn-outline-secondary btn-sm" [href]="mem.photoUrl" target="_blank" rel="noopener">Open</a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="clearTeamPhoto(idx)">Remove</button>
+                                    <img [src]="mem.photoUrl" alt="Team preview" style="max-height:72px;border-radius:8px;border:1px solid #e5e7eb;" />
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-      </div>
 
       <!-- CONTACT -->
       <div class="card shadow-sm mb-4 section-card" [class.section-card--open]="isSectionOpen('contact')">
@@ -650,12 +765,12 @@
             <div class="col-12 col-md-8">
               <label class="form-label">Google Review Link (Leave a Review)</label>
               <input type="url" class="form-control" [(ngModel)]="draft.reviews!.googleReviewUrl" name="reviewsUrl" placeholder="https://search.google.com/local/writereview?placeid=..." />
-              <div class="form-text">Paste your “Write a review” link. The home page widget will use this.</div>
+              <div class="form-text">Paste your "Write a review" link. The home page widget will use this.</div>
             </div>
             <div class="col-12 col-md-6">
               <label class="form-label">Google Place ID (optional)</label>
               <input type="text" class="form-control" [(ngModel)]="draft.reviews!.googlePlaceId" name="reviewsPlaceId" placeholder="ChIJxxxxxxxxxxxxxxxxxx" />
-              <div class="form-text">If set, we’ll fetch recent Google reviews on your site. If empty, we try to read the placeid from the review link.</div>
+              <div class="form-text">If set, we'll fetch recent Google reviews on your site. If empty, we try to read the placeid from the review link.</div>
             </div>
           </div>
         </div>
@@ -781,7 +896,7 @@
               <div class="col-12">
                 <label class="form-label">Inline Images</label>
                 <input type="file" class="form-control" (change)="onBlogInlineSelected($event, i)" accept="image/*" />
-                <div class="form-text">Upload images to embed in your article. Click “Insert” to append an &lt;img&gt; tag to Content (HTML).</div>
+                <div class="form-text">Upload images to embed in your article. Click "Insert" to append an &lt;img&gt; tag to Content (HTML).</div>
                 <div class="d-flex flex-wrap gap-2 mt-2">
                   <div class="border rounded p-2" *ngFor="let img of (p.inlineImages || []); let k = index" style="width:180px;">
                     <img [src]="img" alt="Inline image" style="width:100%;height:100px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" />
@@ -848,47 +963,69 @@
             <strong>Tiers</strong>
             <button class="btn btn-sm btn-outline-secondary" type="button" (click)="addPlanTier()">Add Tier</button>
           </div>
-          <div class="border rounded p-3 mb-2" *ngFor="let t of (draft.plans!.tiers || []); let i = index">
-            <div class="row g-2">
-              <div class="col-6 col-md-3">
-                <label class="form-label">Name</label>
-                <input class="form-control" [(ngModel)]="t.name" [name]="'planName'+i" />
-              </div>
-              <div class="col-6 col-md-3">
-                <label class="form-label">Price</label>
-                <input type="number" class="form-control" [(ngModel)]="t.price" [name]="'planPrice'+i" />
-              </div>
-              <div class="col-6 col-md-3">
-                <label class="form-label">Interval</label>
-                <input class="form-control" [(ngModel)]="t.interval" [name]="'planInterval'+i" placeholder="per visit / per year" />
-              </div>
-              <div class="col-6 col-md-3">
-                <label class="form-label">CTA Text</label>
-                <input class="form-control" [(ngModel)]="t.cta" [name]="'planCta'+i" />
-              </div>
-              <div class="col-12 col-md-4 d-flex align-items-end">
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" [ngModel]="t.mostPopular === true" (ngModelChange)="t.mostPopular = $event" [name]="'planPopular'+i" />
-                  <label class="form-check-label ms-2">Most Popular</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <label class="form-label">Features</label>
-                <div class="row g-2">
-                  <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of (t.features || []); let j = index">
-                    <input class="form-control" [(ngModel)]="t.features[j]" [name]="'planFeat'+i+'_'+j" />
-                    <button class="btn btn-outline-danger btn-sm" type="button" (click)="t.features.splice(j,1)">Remove</button>
-                  </div>
-                  <div class="col-12">
-                    <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addPlanFeature(i)">Add Feature</button>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 text-end">
-                <button class="btn btn-outline-danger btn-sm" type="button" (click)="draft.plans!.tiers.splice(i,1)">Delete Tier</button>
+          <div class="subsection-card" *ngFor="let t of (draft.plans!.tiers || []); let i = index" [class.subsection-card--open]="isSubSectionOpen('plans','tier'+i)">
+            <button
+              type="button"
+              class="subsection-card__toggle"
+              (click)="toggleSubSection('plans','tier'+i)"
+              [attr.aria-expanded]="isSubSectionOpen('plans','tier'+i)"
+              [id]="'toggle-plan-tier-'+i"
+              [attr.aria-controls]="'section-plan-tier-'+i">
+              <span class="subsection-card__title">{{ t.name || ('Tier ' + (i + 1)) }}</span>
+              <span class="subsection-card__chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5 5 8.5l1.41-1.41L12 12.67l5.59-5.58L19 8.5z"/></svg>
+              </span>
+            </button>
+            <div
+              *ngIf="isSubSectionOpen('plans','tier'+i)"
+              class="subsection-card__content"
+              [id]="'section-plan-tier-'+i"
+              role="region"
+              [attr.aria-labelledby]="'toggle-plan-tier-'+i">
+              <div class="border rounded p-3 mb-2">
+                          <div class="row g-2">
+                            <div class="col-6 col-md-3">
+                              <label class="form-label">Name</label>
+                              <input class="form-control" [(ngModel)]="t.name" [name]="'planName'+i" />
+                            </div>
+                            <div class="col-6 col-md-3">
+                              <label class="form-label">Price</label>
+                              <input type="number" class="form-control" [(ngModel)]="t.price" [name]="'planPrice'+i" />
+                            </div>
+                            <div class="col-6 col-md-3">
+                              <label class="form-label">Interval</label>
+                              <input class="form-control" [(ngModel)]="t.interval" [name]="'planInterval'+i" placeholder="per visit / per year" />
+                            </div>
+                            <div class="col-6 col-md-3">
+                              <label class="form-label">CTA Text</label>
+                              <input class="form-control" [(ngModel)]="t.cta" [name]="'planCta'+i" />
+                            </div>
+                            <div class="col-12 col-md-4 d-flex align-items-end">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" [ngModel]="t.mostPopular === true" (ngModelChange)="t.mostPopular = $event" [name]="'planPopular'+i" />
+                                <label class="form-check-label ms-2">Most Popular</label>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <label class="form-label">Features</label>
+                              <div class="row g-2">
+                                <div class="col-12 d-flex align-items-center gap-2" *ngFor="let f of (t.features || []); let j = index">
+                                  <input class="form-control" [(ngModel)]="t.features[j]" [name]="'planFeat'+i+'_'+j" />
+                                  <button class="btn btn-outline-danger btn-sm" type="button" (click)="t.features.splice(j,1)">Remove</button>
+                                </div>
+                                <div class="col-12">
+                                  <button class="btn btn-outline-secondary btn-sm" type="button" (click)="addPlanFeature(i)">Add Feature</button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 text-end">
+                              <button class="btn btn-outline-danger btn-sm" type="button" (click)="draft.plans!.tiers.splice(i,1)">Delete Tier</button>
+                            </div>
+                          </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
@@ -960,7 +1097,7 @@
               <input type="number" step="0.01" class="form-control" [(ngModel)]="draft.estimate!.accessMultipliers!.difficult" name="estAccessDifficult" />
             </div>
 
-            <div class="col-12"><strong>Per-Job Labor</strong> <span class="text-muted small">(calculator uses 3‑person default)</span></div>
+            <div class="col-12"><strong>Per-Job Labor</strong> <span class="text-muted small">(calculator uses 3-person default)</span></div>
             <div class="col-12 col-md-3">
               <label class="form-label">Per Worker (per job)</label>
               <input type="number" class="form-control" [(ngModel)]="draft.estimate!.perJob!.perWorkerPerJob" name="estPerJobSingle" />
@@ -997,7 +1134,7 @@
             {{ saveError }}
           </span>
           <button class="btn btn-outline-secondary" (click)="save()" [disabled]="saving">
-            {{ saving ? 'Saving…' : 'Save Changes' }}
+            {{ saving ? 'Saving...' : 'Save Changes' }}
           </button>
         </div>
       </div>

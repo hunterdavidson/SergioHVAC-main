@@ -1,0 +1,39 @@
+<section class="page-section" id="plans">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">
+        {{ heading || "Maintenance Plans" }}
+      </h2>
+      <h3 class="section-subheading text-muted">
+        {{ subheading || "Prevent breakdowns and keep comfort steady all year" }}
+      </h3>
+    </div>
+
+    <div class="plan-overview__grid" *ngIf="tiers.length; else noPlans">
+      <article class="plan-card" *ngFor="let tier of tiers; let i = index" [class.plan-card--popular]="tier.mostPopular" [ngClass]="planAccent(i)">
+        <div class="plan-card__badge" *ngIf="tier.mostPopular">Most Popular</div>
+        <h3 class="plan-card__title">{{ tier.name }}</h3>
+        <div class="plan-card__price">
+          <span class="plan-card__amount">{{ tier.price | currency:'USD':'symbol':'1.0-0' }}</span>
+          <span class="plan-card__interval">{{ tier.interval || "per visit" }}</span>
+        </div>
+        <ul class="plan-card__features">
+          <li *ngFor="let feature of tier.features">{{ feature }}</li>
+        </ul>
+        <div class="plan-card__footer">
+          <a class="plan-card__cta-button text-uppercase" [ngClass]="planCtaClass(i)" routerLink="/maintenance-plan" [queryParams]="{ plan: tier.name }">See plan details</a>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #noPlans>
+      <div class="plan-overview__empty text-center">Plans will appear here once they are published.</div>
+    </ng-template>
+
+    <div class="text-center mt-4">
+      <a class="btn btn-outline-secondary btn-sm text-uppercase" routerLink="/maintenance-plan">Compare all plans</a>
+    </div>
+  </div>
+</section>
+
+

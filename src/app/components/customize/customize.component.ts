@@ -14,6 +14,8 @@ const SECTION_KEYS = [
   'about',
   'team',
   'contact',
+  'footer',
+  'legal',
   'reviews',
   'education',
   'blog',
@@ -60,6 +62,21 @@ export class CustomizeComponent implements OnInit, OnDestroy {
     this.sectionState[key] = !this.sectionState[key];
   }
 
+  private subSectionState: Record<string, boolean> = {};
+
+  isSubSectionOpen(section: SectionKey, subKey: string): boolean {
+    return !!this.subSectionState[this.composeSubSectionKey(section, subKey)];
+  }
+
+  toggleSubSection(section: SectionKey, subKey: string) {
+    const key = this.composeSubSectionKey(section, subKey);
+    this.subSectionState[key] = !this.subSectionState[key];
+  }
+
+  private composeSubSectionKey(section: SectionKey, subKey: string): string {
+    return `${section}::${subKey}`;
+  }
+
   // --- Lifecycle -----------------------------------------------------------
   async ngOnInit() {
     // Keep this admin customization screen out of the index
@@ -95,6 +112,14 @@ export class CustomizeComponent implements OnInit, OnDestroy {
     this.draft.navbar ||= { phone: '(XXX) XXX-XXXX' };
     this.draft.home ||= { headline: '', subhead: '', ctaText: '' };
 
+    const footer: any = this.draft.footer = (this.draft.footer as any) || { companyName: '', tagline: '', address: '', phone: '', email: '', legalNotice: '', links: [], social: [] };
+    footer.links = footer.links || [];
+    footer.social = footer.social || [];
+
+    const legal: any = this.draft.legal = (this.draft.legal as any) || { privacy: { title: '', updatedOn: '', contentHtml: '' }, terms: { title: '', updatedOn: '', contentHtml: '' } };
+    legal.privacy = legal.privacy || { title: '', updatedOn: '', contentHtml: '' };
+    legal.terms = legal.terms || { title: '', updatedOn: '', contentHtml: '' };
+
     this.draft.reviews ||= { rating: 5.0, count: 0, googlePlaceId: '', googleReviewUrl: '', testimonials: [] } as any;
     this.draft.education ||= { heading: 'HVAC Education & Tips', subheading: 'How‑tos and maintenance tips', videos: [] } as any;
     this.draft.blog ||= { posts: [] } as any;
@@ -126,6 +151,33 @@ export class CustomizeComponent implements OnInit, OnDestroy {
     try {
       // tiny sanitization
       if (this.draft.navbar?.phone) this.draft.navbar.phone = this.draft.navbar.phone.trim();
+      if (Array.isArray(this.draft.footer?.links)) {
+        this.draft.footer.links = this.draft.footer.links
+          .map(link => ({
+            label: (link?.label || '').trim(),
+            url: (link?.url || '').trim(),
+          }))
+          .filter(link => link.label || link.url);
+      }
+      if (Array.isArray(this.draft.footer?.social)) {
+        this.draft.footer.social = this.draft.footer.social
+          .map(item => ({
+            label: (item?.label || '').trim(),
+            url: (item?.url || '').trim(),
+            icon: (item?.icon || '').trim(),
+          }))
+          .filter(item => item.label || item.url);
+      }
+      if (this.draft.legal?.privacy) {
+        this.draft.legal.privacy.title = (this.draft.legal.privacy.title || '').trim();
+        this.draft.legal.privacy.updatedOn = (this.draft.legal.privacy.updatedOn || '').trim();
+        this.draft.legal.privacy.contentHtml = (this.draft.legal.privacy.contentHtml || '').trim();
+      }
+      if (this.draft.legal?.terms) {
+        this.draft.legal.terms.title = (this.draft.legal.terms.title || '').trim();
+        this.draft.legal.terms.updatedOn = (this.draft.legal.terms.updatedOn || '').trim();
+        this.draft.legal.terms.contentHtml = (this.draft.legal.terms.contentHtml || '').trim();
+      }
 
       // Persist
       await this.settingsSvc.save(this.draft);
@@ -139,6 +191,30 @@ export class CustomizeComponent implements OnInit, OnDestroy {
     } finally {
       this.saving = false;
     }
+  }
+
+  addFooterLink() {
+    const footer: any = this.draft.footer;
+    footer.links = footer.links || [];
+    footer.links.push({ label: '', url: '' });
+  }
+
+  removeFooterLink(idx: number) {
+    const footer: any = this.draft.footer;
+    footer.links = footer.links || [];
+    footer.links.splice(idx, 1);
+  }
+
+  addFooterSocial() {
+    const footer: any = this.draft.footer;
+    footer.social = footer.social || [];
+    footer.social.push({ label: '', url: '', icon: '' });
+  }
+
+  removeFooterSocial(idx: number) {
+    const footer: any = this.draft.footer;
+    footer.social = footer.social || [];
+    footer.social.splice(idx, 1);
   }
 
   // --- FAQs helpers -------------------------------------------------------

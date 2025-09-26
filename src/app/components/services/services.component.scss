@@ -1,13 +1,62 @@
+.service-box {
+  --accent: #6c91c2;
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 16px 32px rgba(15, 35, 95, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+  height: 100%;
+  border-top: 5px solid var(--accent);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.service-box:hover,
+.service-box:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 36px rgba(15, 35, 95, 0.16);
+}
+
+.service-box--ac { --accent: #6c91c2; }
+.service-box--heat { --accent: #ec5b56; }
+.service-box--maint { --accent: #1f8a70; }
+
+.service-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.service-box p {
+  color: #4b5563;
+  margin-bottom: 0;
+}
+
+.service-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.service-actions .btn-service {
+  width: 100%;
+}
+
 .service-icon {
   width: 4.5rem;
   height: 4.5rem;
-  border-radius: 50%;
+  border-radius: 1.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  box-shadow: 0 12px 20px rgba(15, 35, 95, 0.18);
+  background: var(--accent);
 }
 
-.bg-brand { background: #6C91C2; }
-.bg-danger { background: #E64545; }
-
+.service-icon svg { filter: drop-shadow(0 4px 10px rgba(0,0,0,.12)); }

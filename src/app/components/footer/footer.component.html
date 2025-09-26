@@ -1,0 +1,63 @@
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <ng-container *ngIf="footer as info; else fallbackBrand">
+        <div class="footer-brand">
+          <h2 class="footer-heading">{{ info.companyName || "SV HVAC Services" }}</h2>
+          <p class="footer-tagline" *ngIf="formatText(info.tagline) as tagline">{{ tagline }}</p>
+          <p class="footer-line" *ngIf="formatText(info.address) as address">{{ address }}</p>
+          <p class="footer-line" *ngIf="info.phone">
+            <a class="footer-link" [href]="phoneHref(info.phone) || '#'">{{ info.phone }}</a>
+          </p>
+          <p class="footer-line" *ngIf="info.email">
+            <a class="footer-link" [href]="'mailto:' + info.email">{{ info.email }}</a>
+          </p>
+          <p class="footer-notice" *ngIf="formatText(info.legalNotice) as notice">{{ notice }}</p>
+        </div>
+      </ng-container>
+      <ng-template #fallbackBrand>
+        <div class="footer-brand">
+          <h2 class="footer-heading">SV HVAC Services</h2>
+          <p class="footer-tagline">Reliable heating and cooling across the DFW Metroplex.</p>
+        </div>
+      </ng-template>
+
+      <div class="footer-links" *ngIf="footer?.links?.length">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul>
+          <li *ngFor="let link of footer!.links; let i = index; trackBy: trackByIndex">
+            <ng-container *ngIf="isInternal(link.url); else externalLink">
+              <a [routerLink]="link.url">{{ link.label || link.url }}</a>
+            </ng-container>
+            <ng-template #externalLink>
+              <a [href]="link.url" target="_blank" rel="noopener">{{ link.label || link.url }}</a>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-social" *ngIf="footer?.social?.length">
+        <h3 class="footer-title">Connect</h3>
+        <ul>
+          <li *ngFor="let social of footer!.social; let i = index; trackBy: trackByIndex">
+            <a [href]="social.url" target="_blank" rel="noopener">
+              <span class="social-icon" [attr.data-icon]="(social.icon || social.label || '').toLowerCase()">
+                {{ (social.icon || social.label || "?").slice(0, 1).toUpperCase() }}
+              </span>
+              <span class="social-label">{{ social.label || social.url }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {{ currentYear }} {{ footer?.companyName || "SV HVAC Services" }}. All rights reserved.</span>
+      <div class="footer-bottom__links">
+        <a [routerLink]="'/privacy-policy'">Privacy Policy</a>
+        <a [routerLink]="'/terms-of-service'">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+

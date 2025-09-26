@@ -1,0 +1,43 @@
+.legal-page {
+  padding: 3rem 0;
+}
+
+.legal-page h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.legal-updated {
+  color: #6b7280;
+  margin-bottom: 1.75rem;
+}
+
+.legal-content {
+  color: #1f2937;
+  line-height: 1.7;
+}
+
+.legal-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.legal-content ul {
+  margin: 0 0 1.5rem 1.25rem;
+}
+
+.legal-content li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .legal-page {
+    padding: 2.5rem 0;
+  }
+  .legal-page h1 {
+    font-size: 2rem;
+  }
+}

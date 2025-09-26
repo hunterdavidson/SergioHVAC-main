@@ -1,8 +1,8 @@
 <section class="page-section section-light" *ngIf="!activeVideo; else videoDetail">
   <div class="container">
     <div class="text-center mb-4">
-      <h1 class="section-heading text-uppercase">{{ settings.value.education?.heading || 'HVAC Education & Tips' }}</h1>
-      <h3 class="section-subheading text-muted">{{ settings.value.education?.subheading || 'Simple how‑tos to help your system run better' }}</h3>
+      <h1 class="section-heading text-uppercase">{{ settings.value.education?.heading || "HVAC Education & Tips" }}</h1>
+      <h3 class="section-subheading text-muted">{{ settings.value.education?.subheading || "Simple how‑tos to help your system run better" }}</h3>
     </div>
 
     <div class="video-grid">
@@ -11,8 +11,8 @@
           <iframe [src]="embedUrl(v.url)" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <div class="content">
-          <h3 class="h5 mb-1">{{ v.title || 'Helpful HVAC Tip' }}</h3>
-          <p class="text-muted mb-1">{{ v.description || '' }}</p>
+          <h3 class="h5 mb-1">{{ v.title || "Helpful HVAC Tip" }}</h3>
+          <p class="text-muted mb-1">{{ v.description || "" }}</p>
           <p class="mb-0"><a [href]="v.url" target="_blank" rel="noopener">Watch on YouTube</a></p>
         </div>
       </div>
@@ -24,7 +24,7 @@
   <section class="page-section section-light">
     <div class="container">
       <div class="text-center mb-4">
-        <h1 class="section-heading text-uppercase">{{ activeVideo?.title || 'HVAC Education Video' }}</h1>
+        <h1 class="section-heading text-uppercase">{{ activeVideo?.title || "HVAC Education Video" }}</h1>
         <h3 class="section-subheading text-muted" *ngIf="activeVideo?.description">{{ activeVideo?.description }}</h3>
       </div>
       <div class="video-card">

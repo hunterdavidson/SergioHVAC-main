@@ -1,16 +1,17 @@
-<section class="service-hero" [style.--accent]="colorByKey()">
+﻿<div class="service-detail" [ngClass]="'service-detail--' + key" [ngStyle]="accentStyle">
+<section class="service-hero">
   <img *ngIf="heroUrl" class="hero-bg" [ngSrc]="heroUrl" [alt]="page.heading || 'Service hero'" priority decoding="async" sizes="100vw" fill>
   <div class="overlay" aria-hidden="true"></div>
   <div class="container text-center">
-    <h1 class="text-white text-uppercase mb-3 masthead-heading">{{ page.heading }} in Dallas–Fort Worth</h1>
+    <h1 class="text-white text-uppercase mb-3 masthead-heading">{{ page.heading }} in Dallas-Fort Worth</h1>
     <h3 class="text-white-50 masthead-subheading">{{ page.subheading }}</h3>
     <div class="mt-3">
-      <a class="btn btn-xl text-uppercase dynamic-button" [routerLink]="[]" fragment="contact">Request a Free Quote</a>
+      <a class="btn btn-xl text-uppercase dynamic-button" routerLink="/contact">Request a Free Quote</a>
     </div>
   </div>
 </section>
 
-<section class="page-section" id="service-content">
+<section class="page-section service-section" id="service-content">
   <div class="container">
     <div class="row g-4 align-items-start">
       <div class="col-12 col-lg-7">
@@ -18,7 +19,7 @@
         <p class="lead mb-3">{{ page.body }}</p>
         <ul class="feature-list mt-3">
           <li *ngFor="let f of (page.features || []); trackBy: trackByIdx">
-            <span class="check" aria-hidden="true">✓</span>
+            <span class="check" aria-hidden="true">&#10003;</span>
             <span>{{ f }}</span>
           </li>
         </ul>
@@ -33,11 +34,11 @@
       <div class="col-12 col-lg-5">
         <div class="info-card p-4 rounded shadow-sm">
           <h3 class="h5 mb-2">Need help today?</h3>
-          <p class="text-muted mb-1">Call now or request a free quote and we’ll get right back to you.</p>
-          <p class="text-muted small mb-3">Serving Dallas–Fort Worth Area</p>
-          <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-sm dynamic-button text-uppercase" [routerLink]="[]" fragment="contact">Free Quote</a>
-            <a class="btn btn-sm btn-outline-secondary text-uppercase" [href]="'tel:'+ (settings.value.navbar?.phone || '')">Call {{ settings.value.navbar?.phone }}</a>
+          <p class="text-muted mb-1">Call now or request a free quote and we'll get right back to you.</p>
+          <p class="text-muted small mb-3">Serving Dallas-Fort Worth Area</p>
+          <div class="cta-group">
+            <a class="btn-service" [ngClass]="solidButtonClass()" routerLink="/contact">Free Quote</a>
+            <a class="btn-service btn-service--outline" [ngClass]="outlineButtonClass()" [href]="'tel:' + (settings.value.navbar?.phone || '')">Call {{ settings.value.navbar?.phone }}</a>
           </div>
         </div>
       </div>
@@ -45,7 +46,7 @@
   </div>
 </section>
 
-<section class="page-section" *ngIf="(page.faqs || []).length">
+<section class="page-section service-section section-soft" *ngIf="(page.faqs || []).length">
   <div class="container">
     <div class="text-center mb-4">
       <h2 class="section-heading text-uppercase">FAQs</h2>
@@ -63,7 +64,7 @@
   </div>
 </section>
 
-<section class="page-section section-light" *ngIf="(page.gallery || []).length">
+<section class="page-section service-section section-light" *ngIf="(page.gallery || []).length">
   <div class="container">
     <div class="text-center mb-4">
       <h2 class="section-heading text-uppercase">Gallery</h2>
@@ -94,7 +95,10 @@
 <!-- Lightbox overlay -->
 <div class="lightbox" *ngIf="activeImage as img" (click)="closeImage()">
   <img [src]="img.url" [alt]="img.alt" (click)="$event.stopPropagation()">
-  <button class="close" aria-label="Close" (click)="closeImage()">×</button>
+  <button class="close" aria-label="Close" (click)="closeImage()">&times;</button>
   <div class="caption" *ngIf="img.alt">{{ img.alt }}</div>
   <div class="hint">Click anywhere to close</div>
   </div>
+
+</div>
+

@@ -13,7 +13,7 @@
         </a>
         <div class="body">
           <h2 class="h5 mb-1"><a [routerLink]="['/blog', p.slug]">{{ p.title }}</a></h2>
-          <p class="text-muted small mb-2">{{ p.date || '' }}<span *ngIf="p.author"> · {{ p.author }}</span><span *ngIf="p.readMins"> · {{ p.readMins }} min read</span></p>
+          <p class="text-muted small mb-2">{{ p.date || "" }}<span *ngIf="p.author"> · {{ p.author }}</span><span *ngIf="p.readMins"> · {{ p.readMins }} min read</span></p>
           <p class="mb-2 text-muted">{{ p.summary }}</p>
           <a class="btn btn-sm btn-outline-secondary" [routerLink]="['/blog', p.slug]">Read More</a>
         </div>

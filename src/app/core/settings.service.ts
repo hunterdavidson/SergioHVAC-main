@@ -120,6 +120,20 @@ export type SiteSettings = {
     cta?: string;
     phoneLead?: string;
   };
+  footer?: {
+    companyName?: string;
+    tagline?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+    links: Array<{ label: string; url: string }>;
+    social: Array<{ label: string; url: string; icon?: string }>;
+    legalNotice?: string;
+  };
+  legal?: {
+    privacy: { title: string; updatedOn?: string; contentHtml: string };
+    terms: { title: string; updatedOn?: string; contentHtml: string };
+  };
   navbar?: {
     phone?: string; // "(555) 555-5555"
   };
@@ -298,8 +312,12 @@ const DEFAULT_SETTINGS: SiteSettings = {
   },
   about: {
     heading: 'About Us',
-    subheading: 'A quick timeline of our story.',
-    items: [{}, {}, {}],
+    subheading: 'Family-owned and serving neighbors across DFW since 2018.',
+    items: [
+      { year: '2018', title: 'Opened our family-run garage shop', body: 'Sergio and Maria launched SV HVAC from the family garage with one truck, focused on neighbors-first service and honest pricing.', color: 'blue', icon: 'wrench' },
+      { year: '2020', title: 'Neighbors spread the word', body: 'Church friends, realtors, and school parents started sharing our name, letting us hire our first techs and add a second van.', color: 'red', icon: 'user' },
+      { year: '2023', title: 'Still family, now full-service', body: 'We now handle installs, tune-ups, and indoor air upgrades across DFW while keeping the same small-business care on every visit.', color: 'blue', icon: 'star' },
+    ],
   },
   team: {
     heading: 'Meet the Team',
@@ -308,9 +326,80 @@ const DEFAULT_SETTINGS: SiteSettings = {
   },
   contact: {
     heading: 'Request Service',
-    subheading: 'Tell us what you need and we’ll get right back to you.',
+    subheading: 'Tell us what you need and we\'ll get right back to you.',
     cta: 'Request Service Now',
     phoneLead: 'Prefer to talk?',
+  },
+  footer: {
+    companyName: 'SV HVAC Services',
+    tagline: 'Family-owned comfort pros serving Dallas-Fort Worth.',
+    address: '123 Main St, Grapevine, TX 76051',
+    phone: '(817) 724-5507',
+    email: 'hello@svhvac.com',
+    links: [
+      { label: 'Home', url: '/' },
+      { label: 'Services', url: '/services' },
+      { label: 'Maintenance Plans', url: '/maintenance-plan' },
+      { label: 'Privacy Policy', url: '/privacy-policy' },
+      { label: 'Terms & Conditions', url: '/terms-of-service' }
+    ],
+    social: [
+      { label: 'Facebook', url: 'https://www.facebook.com/svhvac', icon: 'facebook' },
+      { label: 'Instagram', url: 'https://www.instagram.com/svhvac', icon: 'instagram' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/company/svhvac', icon: 'linkedin' }
+    ],
+    legalNotice: 'Licensed & insured | TACLB000000 | Serving the Dallas-Fort Worth Metroplex',
+  },
+  legal: {
+    privacy: {
+      title: 'Privacy Policy',
+      updatedOn: 'September 20, 2025',
+      contentHtml: [
+        '<p>SV HVAC Services LLC ("SV HVAC", "we", "our") respects your privacy. This policy explains how we collect, use, and protect information when you visit our site or request service.</p>',
+        '<h2>Information We Collect</h2>',
+        '<ul>',
+        '  <li>Contact details you share when requesting service (name, phone, email, address, preferred times).</li>',
+        '  <li>Project notes that help us prepare a quote or perform work (equipment type, photos, comfort concerns).</li>',
+        '  <li>Communications like call logs or emails related to your service request.</li>',
+        '  <li>Website analytics gathered through cookies so we understand site performance and marketing.</li>',
+        '</ul>',
+        '<h2>How We Use Information</h2>',
+        '<p>We use your details to respond to requests, schedule work, provide estimates, process payments, and send helpful updates or maintenance reminders. You can opt out of marketing messages at any time.</p>',
+        '<h2>Sharing & Service Providers</h2>',
+        '<p>We do not sell personal information. We may share it with trusted partners who support our business, such as scheduling software or financing providers. Those partners must safeguard the data and use it only for the intended purpose.</p>',
+        '<h2>Cookies & Analytics</h2>',
+        '<p>We may use cookies or similar tools to measure website performance. You can adjust browser settings to limit cookies, though some features may be affected.</p>',
+        '<h2>Retention & Security</h2>',
+        '<p>Service records are kept only as long as needed to support our work, meet legal obligations, or resolve disputes. We implement reasonable safeguards, but no system is completely secure.</p>',
+        '<h2>Your Choices</h2>',
+        '<p>You can request updates or deletion of your information by emailing <a href="mailto:hello@svhvac.com">hello@svhvac.com</a>.</p>',
+      ].join('\n'),
+    },
+    terms: {
+      title: 'Terms & Conditions',
+      updatedOn: 'September 20, 2025',
+      contentHtml: [
+        '<p>These Terms & Conditions govern your use of the SV HVAC Services website and any proposals, estimates, or service agreements we provide.</p>',
+        '<h2>Scope of Services</h2>',
+        '<p>We provide residential and light commercial HVAC inspection, repair, maintenance, and replacement services according to the scope approved on your estimate or work order.</p>',
+        '<h2>Estimates & Approvals</h2>',
+        '<p>Pricing is based on conditions known at the time of the estimate. Unforeseen issues or code requirements may require a revised quote. Work begins after written or electronic approval.</p>',
+        '<h2>Access & Site Conditions</h2>',
+        '<p>Customers must provide safe, unobstructed access to equipment and work areas. Unsafe conditions may require rescheduling or added charges.</p>',
+        '<h2>Scheduling & Cancellations</h2>',
+        '<p>If you need to reschedule or cancel, please give at least 24 hours notice. Missed appointments may be subject to a trip charge.</p>',
+        '<h2>Payments & Financing</h2>',
+        '<p>Payment terms are listed on your estimate or invoice. Deposits may be required for equipment orders. Balances are due upon substantial completion unless other arrangements are made in writing.</p>',
+        '<h2>Warranties</h2>',
+        '<p>Manufacturer warranties apply to equipment and materials. SV HVAC Services provides a workmanship warranty as described on your invoice. Damage caused by misuse, lack of maintenance, or acts of nature is not covered.</p>',
+        '<h2>Limitation of Liability</h2>',
+        '<p>To the fullest extent allowed by law, our liability is limited to the amount paid for the specific service. We are not liable for incidental or consequential damages.</p>',
+        '<h2>Permits & Code Compliance</h2>',
+        '<p>We obtain required HVAC permits and follow applicable codes. Property owners are responsible for any HOA or landlord approvals.</p>',
+        '<h2>Contact</h2>',
+        '<p>Questions about these terms? Email <a href="mailto:hello@svhvac.com">hello@svhvac.com</a> or call (817) 724-5507.</p>',
+      ].join('\n'),
+    },
   },
   navbar: {
     phone: '(817) 724-5507',
@@ -624,6 +713,28 @@ export class SettingsService {
         members: input?.team?.members?.length ? input.team.members : base.team.members,
       },
       contact: { ...base.contact, ...(input?.contact ?? {}) },
+      footer: {
+        ...base.footer,
+        ...(input?.footer ?? {}),
+        links: Array.isArray(input?.footer?.links)
+          ? input.footer.links.map(link => ({ ...link }))
+          : (base.footer?.links ?? []).map(link => ({ ...link })),
+        social: Array.isArray(input?.footer?.social)
+          ? input.footer.social.map(item => ({ ...item }))
+          : (base.footer?.social ?? []).map(item => ({ ...item })),
+      },
+      legal: {
+        privacy: {
+          title: input?.legal?.privacy?.title ?? base.legal!.privacy.title ?? 'Privacy Policy',
+          updatedOn: input?.legal?.privacy?.updatedOn ?? base.legal!.privacy.updatedOn,
+          contentHtml: input?.legal?.privacy?.contentHtml ?? base.legal!.privacy.contentHtml,
+        },
+        terms: {
+          title: input?.legal?.terms?.title ?? base.legal!.terms.title ?? 'Terms & Conditions',
+          updatedOn: input?.legal?.terms?.updatedOn ?? base.legal!.terms.updatedOn,
+          contentHtml: input?.legal?.terms?.contentHtml ?? base.legal!.terms.contentHtml,
+        },
+      },
       navbar: { ...base.navbar, ...(input?.navbar ?? {}) },
       estimate: {
         ...base.estimate,
@@ -699,6 +810,13 @@ export class SettingsService {
       (out.servicePages as any)[key] = page;
     }
 
+    out.footer ??= structuredClone(base.footer!);
+    out.footer.links ??= [];
+    out.footer.social ??= [];
+        out.legal ??= structuredClone(base.legal!);
+    out.legal.privacy ??= structuredClone(base.legal!.privacy);
+    out.legal.terms ??= structuredClone(base.legal!.terms);
+
     out.reviews ??= structuredClone(base.reviews!);
     out.education ??= structuredClone(base.education!);
     out.blog ??= structuredClone(base.blog!);
@@ -723,3 +841,8 @@ export class SettingsService {
     }
   }
 }
+
+
+
+
+

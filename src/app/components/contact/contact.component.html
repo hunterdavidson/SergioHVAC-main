@@ -2,10 +2,10 @@
   <div class="container">
     <div class="text-center">
       <h2 class="section-heading text-uppercase mb-2">{{ settings.contact.heading }}</h2>
-      <h3 class="section-subheading text-white mb-2">{{ settings.contact.subheading }}</h3>
-      <p class="mt-1 text-white">
+      <h3 class="section-subheading mb-2">{{ settings.contact.subheading }}</h3>
+      <p class="mt-1 contact-lead">
         {{ settings.contact.phoneLead }}
-        <a [href]="'tel:'+settings.navbar?.phone" class="fw-bold text-white">{{ settings.navbar?.phone }}</a>
+        <a [href]="'tel:'+settings.navbar?.phone" class="fw-bold contact-phone">{{ settings.navbar?.phone }}</a>
       </p>
     </div>
 
@@ -14,48 +14,45 @@
       <input type="text" name="hp" [(ngModel)]="hp" tabindex="-1" autocomplete="off"
              aria-hidden="true"
              style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;opacity:0;pointer-events:none;" />
-      <div class="row">
+
+      <div class="row g-3 g-lg-4 form-grid">
         <!-- Name -->
         <div class="col-md-6">
           <label for="name" class="visually-hidden">Name</label>
-            <input type="text" id="name" name="name" class="form-control mt-4"
-                   placeholder="Name *" required autocomplete="name"
-                   [(ngModel)]="formData.name" #name="ngModel" #nameEl />
+          <input type="text" id="name" name="name" class="form-control"
+                 placeholder="Name *" required autocomplete="name"
+                 [(ngModel)]="formData.name" #name="ngModel" #nameEl />
           <div class="text-danger small" *ngIf="(name.invalid && (name.dirty || name.touched)) || fieldErrors.name">
-              {{ fieldErrors.name || (name.errors?.['required'] ? 'Please enter your name.' : '') }}
-            </div>
+            {{ fieldErrors.name || (name.errors?.['required'] ? 'Please enter your name.' : '') }}
           </div>
+        </div>
 
         <!-- Email -->
         <div class="col-md-6">
           <label for="email" class="visually-hidden">Email</label>
-            <input type="email" id="email" name="email" class="form-control mt-4"
-                   placeholder="Email *" required email autocomplete="email"
-                   [(ngModel)]="formData.email" #email="ngModel" />
+          <input type="email" id="email" name="email" class="form-control"
+                 placeholder="Email *" required email autocomplete="email"
+                 [(ngModel)]="formData.email" #email="ngModel" />
           <div class="text-danger small" *ngIf="(email.invalid && (email.dirty || email.touched)) || fieldErrors.email">
-              {{ fieldErrors.email || (email.errors?.['required'] ? 'Please enter your email address.' : (email.errors?.['email'] ? 'Please enter a valid email address.' : '')) }}
-            </div>
+            {{ fieldErrors.email || (email.errors?.['required'] ? 'Please enter your email address.' : (email.errors?.['email'] ? 'Please enter a valid email address.' : '')) }}
           </div>
         </div>
 
-      <!-- Phone -->
-      <div class="row">
-        <div class="col-md-12">
+        <!-- Phone -->
+        <div class="col-md-6">
           <label for="phone" class="visually-hidden">Phone</label>
-            <input type="tel" id="phone" name="phone" class="form-control mt-4"
-                   placeholder="Phone *" required pattern="^[0-9\-\+\s\(\)]{7,15}$" autocomplete="tel"
-                   [(ngModel)]="formData.phone" #phone="ngModel" (input)="onPhoneInput($event)" />
+          <input type="tel" id="phone" name="phone" class="form-control"
+                 placeholder="Phone *" required pattern="^[0-9\-\+\s\(\)]{7,15}$" autocomplete="tel"
+                 [(ngModel)]="formData.phone" #phone="ngModel" (input)="onPhoneInput($event)" />
           <div class="text-danger small" *ngIf="(phone.invalid && (phone.dirty || phone.touched)) || fieldErrors.phone">
-              {{ fieldErrors.phone || (phone.errors?.['required'] ? 'Please enter your phone number.' : (phone.errors?.['pattern'] ? 'Please enter a valid phone number.' : '')) }}
+            {{ fieldErrors.phone || (phone.errors?.['required'] ? 'Please enter your phone number.' : (phone.errors?.['pattern'] ? 'Please enter a valid phone number.' : '')) }}
           </div>
         </div>
-      </div>
 
-      <!-- Service details (optional helpers) -->
-      <div class="row">
+        <!-- Service Type -->
         <div class="col-md-6 is-placeholder">
           <label for="serviceType" class="visually-hidden">Service Type</label>
-          <select id="serviceType" name="serviceType" class="form-control mt-4"
+          <select id="serviceType" name="serviceType" class="form-control"
                   [(ngModel)]="formData.serviceType"
                   [ngClass]="{ 'is-placeholder': !formData.serviceType }"
                   [style.color]="!formData.serviceType ? '#6c757d' : '#212529'">
@@ -67,45 +64,39 @@
             <option value="Other">Other</option>
           </select>
         </div>
+
+        <!-- Maintenance Plan -->
         <div class="col-md-6">
           <label for="plan" class="visually-hidden">Plan</label>
-          <select id="plan" name="plan" class="form-control mt-4"
-                  [(ngModel)]="formData.plan"
+          <select id="plan" name="plan" class="form-control"
+                  [(ngModel)]="formData.plan" (ngModelChange)="onPlanChange($event)"
                   [ngClass]="{ 'is-placeholder': !formData.plan }"
                   [style.color]="!formData.plan ? '#6c757d' : '#212529'">
             <option value="" class="placeholder-option">Select a Maintenance Plan (optional)</option>
             <option *ngFor="let t of (settings.plans?.tiers || [])" [value]="t.name">{{ t.name }}</option>
           </select>
+          <div class="contact-prefill" *ngIf="prefilledPlan" role="status" aria-live="polite">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.08 5.7-5.7 1.4 1.42Z" />
+            </svg>
+            <span>We pre-selected the {{ prefilledPlan }} plan. Adjust it if you need something different.</span>
+          </div>
         </div>
-      </div>
 
-      <div class="row">
+        <!-- ZIP Code -->
         <div class="col-md-6">
           <label for="zip" class="visually-hidden">ZIP Code</label>
           <div class="field-wrap">
-            <input type="text" id="zip" name="zip" class="form-control mt-4" placeholder="ZIP code (optional)"
+            <input type="text" id="zip" name="zip" class="form-control" placeholder="ZIP code (optional)"
                    pattern="^\d{5}(?:-\d{4})?$" [(ngModel)]="formData.zip" #zip="ngModel" />
             <div class="field-error" *ngIf="fieldErrors.zip">{{ fieldErrors.zip }}</div>
           </div>
-        </div>
-        <div class="col-md-6">
-          <label for="contactTime" class="visually-hidden">Best Time</label>
-          <select id="contactTime" name="contactTime" class="form-control mt-4"
-                  [(ngModel)]="formData.contactTime"
-                  [ngClass]="{ 'is-placeholder': !formData.contactTime }"
-                  [style.color]="!formData.contactTime ? '#6c757d' : '#212529'">
-            <option value="" class="placeholder-option">Best Time to Contact (optional)</option>
-            <option>Anytime</option>
-            <option>Morning</option>
-            <option>Afternoon</option>
-            <option>Evening</option>
-          </select>
         </div>
       </div>
 
       <!-- Message -->
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
           <label for="message" class="visually-hidden">Message</label>
           <div class="field-wrap">
             <textarea id="message" name="message" class="form-control mt-4" rows="5"
@@ -129,10 +120,10 @@
           {{ settings.contact.cta }}
         </button>
 
-        <p class="text-white mt-3" *ngIf="isSubmitted">Thank you! Your request was sent. We’ll follow up shortly.</p>
+        <p class="contact-success mt-3" *ngIf="isSubmitted">Thank you! Your request was sent. We'll follow up shortly.</p>
         <p class="text-danger mt-3" *ngIf="error && !isSubmitted">{{ error }}</p>
 
-        <p class="text-white-50 mt-2">
+        <p class="contact-footnote mt-2">
           By submitting, you agree we may contact you about your request.
         </p>
       </div>

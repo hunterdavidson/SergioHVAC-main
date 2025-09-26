@@ -12,19 +12,19 @@
     <div class="row h-100 align-items-center justify-content-center text-center">
       <div class="col-lg-10 hero-inner">
         <h1 class="masthead-heading text-white text-uppercase mb-4">
-          {{ settings.value.home.headline || 'Need HVAC Service Today? We’re Just a Click Away' }}
+          {{ headline || "Need HVAC Service Today? We're Just a Click Away" }}
         </h1>
 
         <h3 class="masthead-subheading text-white mb-4">
-          {{ settings.value.home.subhead || 'Reliable, Fast, and Local — Book Your Appointment in Minutes' }}
+          {{ subhead || "Reliable, Fast, and Local - Book Your Appointment in Minutes" }}
         </h3>
 
         <div class="hero-cta">
           <a
             class="btn btn-xl text-uppercase dynamic-button mt-3"
-            href="#contact"
+            routerLink="/contact"
           >
-            {{ settings.value.home.ctaText || 'Schedule Your Free Quote' }}
+            {{ ctaText || "Schedule Your Free Quote" }}
           </a>
 
           <a
@@ -42,3 +42,4 @@
     </div>
   </div>
 </section>
+

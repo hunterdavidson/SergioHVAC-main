@@ -4,22 +4,21 @@ import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent, pathMatch: 'full' },
+  {
+    path: 'services',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('./components/services-landing/services-landing.component').then(m => m.ServicesLandingComponent)
+      },
+      {
+        path: ':slug',
+        loadComponent: () => import('./components/service-detail/service-detail.component').then(m => m.ServiceDetailComponent)
+      }
+    ]
+  },
   // Service detail pages
-  {
-    path: 'services/ac',
-    loadComponent: () => import('./components/service-detail/service-detail.component').then(m => m.ServiceDetailComponent),
-    data: { serviceKey: 'ac' }
-  },
-  {
-    path: 'services/heating',
-    loadComponent: () => import('./components/service-detail/service-detail.component').then(m => m.ServiceDetailComponent),
-    data: { serviceKey: 'heat' }
-  },
-  {
-    path: 'services/maintenance',
-    loadComponent: () => import('./components/service-detail/service-detail.component').then(m => m.ServiceDetailComponent),
-    data: { serviceKey: 'maintenance' }
-  },
   {
     path: 'estimate',
     loadComponent: () => import('./estimate/estimate-calculator.component').then(m => m.EstimateCalculatorComponent),
@@ -30,6 +29,9 @@ export const routes: Routes = [
   { path: 'blog', loadComponent: () => import('./components/blog/blog-list.component').then(m => m.BlogListComponent) },
   { path: 'blog/:slug', loadComponent: () => import('./components/blog/blog-post.component').then(m => m.BlogPostComponent) },
   { path: 'maintenance-plan', loadComponent: () => import('./components/plans/plans.component').then(m => m.PlansComponent) },
+  { path: 'about', loadComponent: () => import('./components/about-page/about-page.component').then(m => m.AboutPageComponent) },
+  { path: 'team', loadComponent: () => import('./components/team-page/team-page.component').then(m => m.TeamPageComponent) },
+  { path: 'contact', loadComponent: () => import('./components/contact-page/contact-page.component').then(m => m.ContactPageComponent) },
   // If you have separate pages you can add routes for them; if not, the homepage anchors are fine.
 
   { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },

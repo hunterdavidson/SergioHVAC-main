@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MobileCtaComponent } from './components/mobile-cta/mobile-cta.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { SettingsService } from './core/settings.service';
 import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, MobileCtaComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, MobileCtaComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

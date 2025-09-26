@@ -1,0 +1,19 @@
+﻿:host {
+  display: block;
+  padding: clamp(2rem, 5vw, 3rem) 0 0;
+}
+
+:host ::ng-deep #contact {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+:host ::ng-deep app-contact {
+  display: block;
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+:host ::ng-deep app-footer .site-footer {
+  padding-top: 0;
+}
